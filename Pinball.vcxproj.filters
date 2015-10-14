@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Tools from Prog2">
+      <UniqueIdentifier>{f5ccff75-7e57-4f47-ad87-76a89ea6448a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules">
+      <UniqueIdentifier>{b53857f3-0785-42c0-ae47-46ad15435470}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App">
+      <UniqueIdentifier>{3a18a2b8-3a59-48f0-b20f-23377f2da9d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{7b4f56de-2a1d-4994-a5c4-05ada0884e8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools from Prog2\PugiXML">
+      <UniqueIdentifier>{1c18aa2b-65de-4697-b781-26cc821be057}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Motor2D\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Motor2D\p2Log.cpp">
+      <Filter>Tools from Prog2</Filter>
+    </ClCompile>
+    <ClCompile Include="Motor2D\Audio.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Motor2D\FileSystem.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Motor2D\Input.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Motor2D\Render.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Motor2D\Textures.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Motor2D\Window.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Motor2D\App.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="Motor2D\Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Motor2D\PugiXml\src\pugixml.cpp">
+      <Filter>Tools from Prog2\PugiXML</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Motor2D\DList.h">
+      <Filter>Tools from Prog2</Filter>
+    </ClInclude>
+    <ClInclude Include="Motor2D\DynArray.h">
+      <Filter>Tools from Prog2</Filter>
+    </ClInclude>
+    <ClInclude Include="Motor2D\p2Defs.h">
+      <Filter>Tools from Prog2</Filter>
+    </ClInclude>
+    <ClInclude Include="Motor2D\p2Log.h">
+      <Filter>Tools from Prog2</Filter>
+    </ClInclude>
+    <ClInclude Include="Motor2D\p2SString.h">
+      <Filter>Tools from Prog2</Filter>
+    </ClInclude>
+    <ClInclude Include="Motor2D\Point2d.h">
+      <Filter>Tools from Prog2</Filter>
+    </ClInclude>
+    <ClInclude Include="Motor2D\Audio.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Motor2D\FileSystem.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Motor2D\Input.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Motor2D\Module.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Motor2D\Render.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Motor2D\Textures.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Motor2D\Window.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Motor2D\App.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="Motor2D\Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Motor2D\PugiXml\src\pugiconfig.hpp">
+      <Filter>Tools from Prog2\PugiXML</Filter>
+    </ClInclude>
+    <ClInclude Include="Motor2D\PugiXml\src\pugixml.hpp">
+      <Filter>Tools from Prog2\PugiXML</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Game\config.xml">
+      <Filter>Resource Files</Filter>
+    </Xml>
+  </ItemGroup>
+</Project>
