@@ -80,6 +80,7 @@
     <ClCompile Include="Motor2D\FileSystem.cpp" />
     <ClCompile Include="Motor2D\Input.cpp" />
     <ClCompile Include="Motor2D\main.cpp" />
+    <ClCompile Include="Motor2D\Physics.cpp" />
     <ClCompile Include="Motor2D\p2Log.cpp" />
     <ClCompile Include="Motor2D\PugiXml\src\pugixml.cpp" />
     <ClCompile Include="Motor2D\Render.cpp" />
@@ -95,6 +96,7 @@
     <ClInclude Include="Motor2D\FileSystem.h" />
     <ClInclude Include="Motor2D\Input.h" />
     <ClInclude Include="Motor2D\Module.h" />
+    <ClInclude Include="Motor2D\Physics.h" />
     <ClInclude Include="Motor2D\p2Defs.h" />
     <ClInclude Include="Motor2D\p2Log.h" />
     <ClInclude Include="Motor2D\p2SString.h" />

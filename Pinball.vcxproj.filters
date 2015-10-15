@@ -59,6 +59,9 @@
     <ClCompile Include="Motor2D\PugiXml\src\pugixml.cpp">
       <Filter>Tools from Prog2\PugiXML</Filter>
     </ClCompile>
+    <ClCompile Include="Motor2D\Physics.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Motor2D\DList.h">
@@ -111,6 +114,9 @@
     </ClInclude>
     <ClInclude Include="Motor2D\PugiXml\src\pugixml.hpp">
       <Filter>Tools from Prog2\PugiXML</Filter>
+    </ClInclude>
+    <ClInclude Include="Motor2D\Physics.h">
+      <Filter>Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -131,7 +131,7 @@ bool Audio::playMusic(const char* path, float fade_time)
 
 	// Setting volume to half the maximum
 	Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
-	LOG("%d", Mix_VolumeMusic(-1));
+	
 	LOG("Successfully playing %s", path);
 	return ret;
 }
