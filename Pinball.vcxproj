@@ -39,12 +39,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(ProjectDir)Motor2D\SDL\include\;$(ProjectDir)Motor2D\SDL_image\include\;$(ProjectDir)Motor2D\SDL_mixer\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)Motor2D\SDL\libx86\;$(ProjectDir)Moto2D\SDL_image\libx86\;$(ProjectDir)Moto2D\SDL_mixer\libx86\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(ProjectDir)Motor2D\SDL\include\;$(ProjectDir)Motor2D\SDL_image\include\;$(ProjectDir)Motor2D\SDL_mixer\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)Motor2D\SDL\libx86\;$(ProjectDir)Moto2D\SDL_image\libx86\;$(ProjectDir)Moto2D\SDL_mixer\libx86\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -55,7 +55,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>$(ProjectDir)Motor2D\SDL\libx86\SDL2.lib;$(ProjectDir)Motor2D\SDL\libx86\SDL2main.lib;$(ProjectDir)Motor2D\SDL_image\libx86\SDL2_image.lib;$(ProjectDir)Motor2D\SDL_mixer\libx86\SDL2_mixer.lib;$(ProjectDir)Motor2D\PhysFS\libx86\physfs.lib;$(ProjectDir)Motor2D\PhysFS\libx86\physfs.exp;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)Motor2D\SDL\libx86\SDL2.lib;$(ProjectDir)Motor2D\SDL\libx86\SDL2main.lib;$(ProjectDir)Motor2D\SDL_image\libx86\SDL2_image.lib;$(ProjectDir)Motor2D\SDL_mixer\libx86\SDL2_mixer.lib;$(ProjectDir)Motor2D\PhysFS\libx86\physfs.lib;$(ProjectDir)Motor2D\PhysFS\libx86\physfs.exp;$(ProjectDir)Motor2D\Box2D\libx86\Debug\Box2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -71,7 +71,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>$(ProjectDir)Motor2D\SDL\libx86\SDL2.lib;$(ProjectDir)Motor2D\SDL\libx86\SDL2main.lib;$(ProjectDir)Motor2D\SDL_image\libx86\SDL2_image.lib;$(ProjectDir)Motor2D\SDL_mixer\libx86\SDL2_mixer.lib;$(ProjectDir)Motor2D\PhysFS\libx86\physfs.lib;$(ProjectDir)Motor2D\PhysFS\libx86\physfs.exp;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(ProjectDir)Motor2D\SDL\libx86\SDL2.lib;$(ProjectDir)Motor2D\SDL\libx86\SDL2main.lib;$(ProjectDir)Motor2D\SDL_image\libx86\SDL2_image.lib;$(ProjectDir)Motor2D\SDL_mixer\libx86\SDL2_mixer.lib;$(ProjectDir)Motor2D\PhysFS\libx86\physfs.lib;$(ProjectDir)Motor2D\PhysFS\libx86\physfs.exp;$(ProjectDir)Motor2D\Box2D\libx86\Debug\Box2D.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

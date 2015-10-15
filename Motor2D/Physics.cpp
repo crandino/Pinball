@@ -110,8 +110,8 @@ PhysBody* Physics::createCircle(int x, int y, int radius)
 	// PhysBody está creat per mostrar objectes del Box2D a altres 
 	// mòduls. Però no el Box2D directament.
 	PhysBody* pbody = new PhysBody();
-	pbody->body->SetUserData(pbody);
 	pbody->body = b;
+	pbody->body->SetUserData((void*)pbody);	
 	pbody->width = pbody->height = radius;
 
 	return pbody;
@@ -134,8 +134,8 @@ PhysBody* Physics::createRectangle(int x, int y, int width, int height)
 	b->CreateFixture(&fixture);
 
 	PhysBody* pbody = new PhysBody();
-	pbody->body->SetUserData(pbody);
 	pbody->body = b;
+	pbody->body->SetUserData(pbody);	
 	pbody->width = width * 0.5f;
 	pbody->height = height * 0.5f;
 
@@ -169,8 +169,8 @@ PhysBody* Physics::createChain(int x, int y, int* points, int size)
 	delete p;
 
 	PhysBody* pbody = new PhysBody();
-	pbody->body->SetUserData(pbody);
 	pbody->body = b;
+	pbody->body->SetUserData(pbody);	
 	pbody->width = pbody->height = 0;
 
 	return pbody;
@@ -277,7 +277,7 @@ void Physics::beginContact(b2Contact *contact)
 	LOG("Collision!");
 	// TODO 7: Call the listeners that are not NULL
 
-	PhysBody *bodyA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
+	//PhysBody *bodyA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
 
 	//if (bodyA->module != NULL)
 }
