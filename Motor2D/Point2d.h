@@ -91,4 +91,78 @@ public:
 
 typedef Point2d<int> iPoint;
 
+template<class TYPE>
+class Vector2d : public Point2d<TYPE>
+{
+public:
+
+	Vector2d() : Point2d()
+	{}
+
+	Vector2d(const Point2d& p) : Point2d(p)
+	{}
+
+	Vector2d(TYPE x, TYPE y) : Point2d(x, y)
+	{}
+
+	void normalize()
+	{
+		float m = x * x + y * y;
+		if (m > 0.0f)
+		{
+			float inv_m = 1 / sqrtf(m);
+			x *= inv_m;
+			y *= inv_m;
+		}
+	}
+
+	float length() const
+	{
+		return sqrtf(float((x*x) + (y*y)));
+	}
+
+	Vector2d operator -(const TYPE v) const
+	{
+		Vector2d<TYPE> r;
+
+		r.x = x - v.x;
+		r.y = y - v.y;
+
+		return(r);
+	}
+
+	Vector2d& operator*=(float a)
+	{
+		x *= a;
+		y *= a;
+		return(*this);
+	}
+
+	Vector2d& operator*(float a)
+	{
+		Vector2d<TYPE> r;
+
+		r.x = x * a;
+		r.y = y * a;
+
+		return r;
+	}
+
+	Vector2d& operator/=(float a)
+	{
+		float f = 1.0f / a;
+		x *= f;
+		y *= f;
+		return(*this);
+	}
+
+	TYPE dot(const Vector2d<TYPE>& v) const
+	{
+		return(x * v.x + y * v.y);
+	}
+};
+
+typedef Vector2d<int> iVector;
+typedef Vector2d<float> fVector;
+
 #endif // !__Point2d_H__

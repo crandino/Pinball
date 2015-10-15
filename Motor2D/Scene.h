@@ -3,16 +3,14 @@
 
 #include "Module.h"
 
-struct SDL_Texture;
+class PhysBody;
 
 class Scene : public Module
 {
 public:
 
 	Scene();
-
-	// Destructor
-	virtual ~Scene();
+    ~Scene();
 
 	// Called before render is available
 	bool awake(pugi::xml_node&);
@@ -32,8 +30,23 @@ public:
 	// Called before quitting
 	bool cleanUp();
 
-private:
+	void onCollision(PhysBody*, PhysBody*);
 
+	// ----------------
+
+	DList<PhysBody*> circles;
+	DList<PhysBody*> boxes;
+	DList<PhysBody*> ricks;
+
+	PhysBody *sensor;
+	bool sensed;
+
+	SDL_Texture *circle;
+	SDL_Texture *box;
+	SDL_Texture *rick;
+	uint bonus_fx;
+	iPoint ray;
+	bool ray_on;
 };
 
 #endif // __SCENE_H__

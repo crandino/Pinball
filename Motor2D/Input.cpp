@@ -150,6 +150,16 @@ void Input::getMousePosition(int& x, int& y)
 	y = mouse_y;
 }
 
+int Input::getMouseX()
+{
+	return mouse_x;
+}
+
+int Input::getMouseY()
+{
+	return mouse_y;
+}
+
 void Input::getMouseMotion(int& x, int& y)
 {
 	x = mouse_motion_x;
