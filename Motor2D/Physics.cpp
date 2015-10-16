@@ -37,6 +37,7 @@ c3 = &mi_clase;      --> Veu els metodo1, metodo2 i metodo3
 
 Physics::Physics()
 {
+	name.create("physics");
 	world = NULL;
 	debug = true;
 }
@@ -44,6 +45,17 @@ Physics::Physics()
 // Destructor
 Physics::~Physics()
 {
+}
+
+bool Physics::awake(pugi::xml_node& node)
+{
+	bool ret = true;
+	
+	time_step = (1.0f / node.attribute("step_per_second").as_float());
+	velocity_iter = node.attribute("velocity_iter").as_int();
+	position_iter = node.attribute("position_iter").as_int();
+
+	return ret;
 }
 
 bool Physics::start()
@@ -78,7 +90,7 @@ bool Physics::start()
 
 bool Physics::preUpdate()
 {
-	world->Step(1.0f / 60.0f, 6, 2);
+	world->Step(time_step, velocity_iter, position_iter);
 
 	// TODO: HomeWork
 	/*

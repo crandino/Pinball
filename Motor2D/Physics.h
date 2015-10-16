@@ -38,6 +38,7 @@ public:
 	Physics();
 	~Physics();
 
+	bool awake(pugi::xml_node&);
 	bool start();
 	bool preUpdate();
 	bool postUpdate();
@@ -54,4 +55,8 @@ private:
 
 	bool debug;
 	b2World* world;
+
+	float32 time_step;
+	int32 velocity_iter;
+	int32 position_iter;
 };
