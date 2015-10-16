@@ -136,7 +136,7 @@ bool Scene::update(float dt)
 		int x, y;
 		c->data->getPosition(x, y);
 		if (c->data->contains(app->input->getMouseX(), app->input->getMouseY()))
-			app->render->Blit(circle, x, y, NULL, 1.0f, c->data->getRotation());
+			app->render->blit(circle, x, y, NULL, 1.0f, c->data->getRotation());
 		c = c->next;
 	}
 
@@ -146,7 +146,7 @@ bool Scene::update(float dt)
 	{
 		int x, y;
 		c->data->getPosition(x, y);
-		app->render->Blit(box, x, y, NULL, 1.0f, c->data->getRotation());
+		app->render->blit(box, x, y, NULL, 1.0f, c->data->getRotation());
 		if (ray_on)
 		{
 			int hit = c->data->rayCast(ray.x, ray.y, mouse.x, mouse.y, normal.x, normal.y);
@@ -162,7 +162,7 @@ bool Scene::update(float dt)
 	{
 		int x, y;
 		c->data->getPosition(x, y);
-		app->render->Blit(rick, x, y, NULL, 1.0f, c->data->getRotation());
+		app->render->blit(rick, x, y, NULL, 1.0f, c->data->getRotation());
 		c = c->next;
 	}
 
@@ -173,10 +173,10 @@ bool Scene::update(float dt)
 		destination.normalize();
 		destination *= ray_hit;
 
-		app->render->DrawLine(ray.x, ray.y, ray.x + destination.x, ray.y + destination.y, 255, 255, 255);
+		app->render->drawLine(ray.x, ray.y, ray.x + destination.x, ray.y + destination.y, 255, 255, 255);
 
 		if (normal.x != 0.0f)
-			app->render->DrawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
+			app->render->drawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
 
 
