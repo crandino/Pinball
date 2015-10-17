@@ -14,7 +14,7 @@
 class PhysBody
 {
 public:
-	PhysBody() : body(NULL), module(NULL)
+	PhysBody() : body(NULL), module(NULL), texture(NULL)
 	{}
 
 	void getPosition(int& x, int &y) const;
@@ -27,6 +27,7 @@ public:
 	b2Body* body;
 	// TODO 6: Add a pointer to a module that might want to listen to a collision from this body
 	Module *module;	
+	SDL_Texture *texture;
 };
 
 // Module --------------------------------------
@@ -48,6 +49,9 @@ public:
 	PhysBody* createRectangle(int x, int y, int width, int height);
 	PhysBody* createRectangleSensor(int x, int y, int width, int height);
 	PhysBody* createChain(int x, int y, int* points, int size);
+
+	// CRZ 
+	PhysBody* createBall(int x, int y, int radius, SDL_Texture*);
 
 	void beginContact(b2Contact *contact);
 

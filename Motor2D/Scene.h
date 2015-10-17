@@ -37,6 +37,7 @@ public:
 	DList<PhysBody*> circles;
 	DList<PhysBody*> boxes;
 	DList<PhysBody*> ricks;
+	DList<PhysBody*> balls;
 
 	PhysBody *sensor;
 	bool sensed;
@@ -44,6 +45,7 @@ public:
 	SDL_Texture *circle;
 	SDL_Texture *box;
 	SDL_Texture *rick;
+	SDL_Texture *pinball_ball;
 	uint bonus_fx;
 	iPoint ray;
 	bool ray_on;

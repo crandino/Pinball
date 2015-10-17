@@ -43,6 +43,7 @@ bool Scene::start()
 	circle = app->tex->Load("textures/wheel.png");
 	box = app->tex->Load("textures/crate.png");
 	rick = app->tex->Load("textures/rick_head.png");
+	pinball_ball = app->tex->Load("textures/pinball_ball.png");
 
 	return true;
 }
@@ -74,6 +75,12 @@ bool Scene::update(float dt)
 	if (app->input->getKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(app->physics->createCircle(app->input->getMouseX(), app->input->getMouseY(), 25));
+	}
+
+	// Creation of circles, boxes and Rick's heads.
+	if (app->input->getKey(SDL_SCANCODE_5) == KEY_DOWN)
+	{
+		balls.add(app->physics->createBall(app->input->getMouseX(), app->input->getMouseY(), 6, pinball_ball));
 	}
 
 	if (app->input->getKey(SDL_SCANCODE_2) == KEY_DOWN)
@@ -163,6 +170,16 @@ bool Scene::update(float dt)
 		int x, y;
 		c->data->getPosition(x, y);
 		app->render->blit(rick, x, y, NULL, 1.0f, c->data->getRotation());
+		c = c->next;
+	}
+
+	c = balls.getFirst();
+
+	while (c != NULL)
+	{
+		int x, y;
+		c->data->getPosition(x, y);
+		app->render->blit(c->data->texture, x, y, NULL, 1.0f, c->data->getRotation());
 		c = c->next;
 	}
 

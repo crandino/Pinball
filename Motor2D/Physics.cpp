@@ -188,6 +188,30 @@ PhysBody* Physics::createChain(int x, int y, int* points, int size)
 	return pbody;
 }
 
+PhysBody* Physics::createBall(int x, int y, int radius, SDL_Texture *texture)
+{
+	b2BodyDef body_def;
+	body_def.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body_def.type = b2_dynamicBody;
+
+	b2Body *b = world->CreateBody(&body_def);
+	b2CircleShape ball_shape;
+	ball_shape.m_radius = PIXEL_TO_METERS(radius);
+
+	b2FixtureDef fixture_def;
+	fixture_def.shape = &ball_shape;
+	fixture_def.density = 1.0f;
+	b->CreateFixture(&fixture_def);
+
+	PhysBody *pbody = new PhysBody();
+	pbody->body = b;
+	pbody->body->SetUserData(pbody);
+	pbody->texture = texture;
+	pbody->width = pbody->height = radius * 2;
+	
+	return pbody;
+}
+
 // 
 bool Physics::postUpdate()
 {
