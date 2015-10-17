@@ -77,7 +77,6 @@ bool Scene::update(float dt)
 		circles.add(app->physics->createCircle(app->input->getMouseX(), app->input->getMouseY(), 25));
 	}
 
-	// Creation of circles, boxes and Rick's heads.
 	if (app->input->getKey(SDL_SCANCODE_5) == KEY_DOWN)
 	{
 		balls.add(app->physics->createBall(app->input->getMouseX(), app->input->getMouseY(), 6, pinball_ball));

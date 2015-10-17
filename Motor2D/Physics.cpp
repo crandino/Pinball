@@ -207,7 +207,7 @@ PhysBody* Physics::createBall(int x, int y, int radius, SDL_Texture *texture)
 	pbody->body = b;
 	pbody->body->SetUserData(pbody);
 	pbody->texture = texture;
-	pbody->width = pbody->height = radius * 2;
+	pbody->width = pbody->height = radius;
 	
 	return pbody;
 }
