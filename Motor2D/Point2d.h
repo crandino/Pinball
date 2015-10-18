@@ -79,7 +79,7 @@ public:
 	{
 		TYPE dx = x - p.x;
 		TYPE dy = y - p.y;
-		return sqrt(dx*dx + dy*dy);
+		return sqrtf((float)(dx*dx + dy*dy));
 	}
 
 	bool isClosedTo(const Point2d &p, float delta) const

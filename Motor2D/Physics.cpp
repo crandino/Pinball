@@ -356,6 +356,7 @@ int PhysBody::rayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 	b2RayCastInput input;
 	input.p1.Set(PIXEL_TO_METERS(x1), PIXEL_TO_METERS(y1));
 	input.p2.Set(PIXEL_TO_METERS(x2), PIXEL_TO_METERS(y2));
+	input.maxFraction = 1.0f;
 
 	b2RayCastOutput output;
 

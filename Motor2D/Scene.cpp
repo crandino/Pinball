@@ -37,7 +37,7 @@ bool Scene::awake(pugi::xml_node &node)
 // Called before the first frame
 bool Scene::start()
 {
-	app->audio->playMusic("sounds/music/Bad.ogg");
+	//app->audio->playMusic("sounds/music/Bad.ogg");
 	app->audio->loadFx("sounds/fx/bonus.wav");
 
 	circle = app->tex->Load("textures/wheel.png");
