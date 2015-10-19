@@ -40,10 +40,11 @@ bool Scene::start()
 	//app->audio->playMusic("sounds/music/Bad.ogg");
 	app->audio->loadFx("sounds/fx/bonus.wav");
 
-	circle = app->tex->Load("textures/wheel.png");
-	box = app->tex->Load("textures/crate.png");
-	rick = app->tex->Load("textures/rick_head.png");
-	pinball_ball = app->tex->Load("textures/pinball_ball.png");
+	circle = app->tex->loadTexture("textures/wheel.png");
+	box = app->tex->loadTexture("textures/crate.png");
+	rick = app->tex->loadTexture("textures/rick_head.png");
+	pinball_ball = app->tex->loadTexture("textures/pinball_ball.png");
+	pinball_level = app->tex->loadTexture("textures/pinball_level.png");
 
 	return true;
 }
@@ -63,6 +64,9 @@ bool Scene::update(float dt)
 
 	if (app->input->getKey(SDL_SCANCODE_S) == KEY_DOWN)
 		app->saveGame("save_game.xml");
+
+	// Pinball level
+	app->render->blit(pinball_level, 0, 0);
 
 	// RayCast
 	if (app->input->getKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
@@ -194,7 +198,6 @@ bool Scene::update(float dt)
 		if (normal.x != 0.0f)
 			app->render->drawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
-
 
 	if (app->input->getKey(SDL_SCANCODE_KP_PLUS) == KEY_UP)
 		app->audio->volumeUp();

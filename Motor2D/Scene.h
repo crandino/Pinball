@@ -46,6 +46,8 @@ public:
 	SDL_Texture *box;
 	SDL_Texture *rick;
 	SDL_Texture *pinball_ball;
+	SDL_Texture *pinball_level;
+
 	uint bonus_fx;
 	iPoint ray;
 	bool ray_on;
