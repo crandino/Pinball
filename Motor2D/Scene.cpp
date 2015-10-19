@@ -37,8 +37,8 @@ bool Scene::awake(pugi::xml_node &node)
 // Called before the first frame
 bool Scene::start()
 {
-	//app->audio->playMusic("sounds/music/Bad.ogg");
-	app->audio->loadFx("sounds/fx/bonus.wav");
+	app->audio->playMusic("sounds/music/pinball_theme.ogg");
+	//app->audio->loadFx("sounds/fx/bonus.wav");
 
 	circle = app->tex->loadTexture("textures/wheel.png");
 	box = app->tex->loadTexture("textures/crate.png");
@@ -67,6 +67,21 @@ bool Scene::update(float dt)
 
 	// Pinball level
 	app->render->blit(pinball_level, 0, 0);
+
+	// Pivot 0, 0
+	int pinball_level[18] = {
+		238, 458,
+		237, 452,
+		270, 396,
+		276, 395,
+		281, 399,
+		281, 442,
+		278, 445,
+		244, 461,
+		241, 390
+	};
+
+	app->physics->createChain(pinball_level[0], pinball_level[1], pinball_level, 18);
 
 	// RayCast
 	if (app->input->getKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
