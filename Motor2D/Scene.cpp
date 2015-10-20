@@ -81,8 +81,6 @@ bool Scene::update(float dt)
 		241, 390
 	};
 
-	app->physics->createChain(pinball_level[0], pinball_level[1], pinball_level, 18);
-
 	// RayCast
 	if (app->input->getKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
