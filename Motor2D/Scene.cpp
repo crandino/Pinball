@@ -46,8 +46,18 @@ bool Scene::start()
 	pinball_ball = app->tex->loadTexture("textures/pinball_ball.png");
 	pinball_level = app->tex->loadTexture("textures/pinball_level.png");
 
-	// Pivot 0, 0
-	int pinball_level[16] = {
+	int triangle1[16] = {
+		122, 393,
+		158, 452,
+		156, 456,
+		152, 459,
+		117, 443,
+		114, 440,
+		114, 398,
+		116, 394
+	};
+	
+	int triangle2[16] = {
 		237, 451,
 		271, 395,
 		276, 394,
@@ -58,7 +68,51 @@ bool Scene::start()
 		237, 457
 	};
 
-	walls.add(app->physics->createWall(0, 0, pinball_level, 16));
+	int triangle3[16] = {
+		352, 393,
+		388, 452,
+		386, 457,
+		380, 459,
+		347, 443,
+		345, 440,
+		345, 399,
+		347, 394
+	};
+
+	int triangle4[16] = {
+		478, 458,
+		510, 443,
+		514, 439,
+		514, 396,
+		509, 393,
+		504, 395,
+		471, 451,
+		472, 456
+	};
+
+	int bottom_part[30] = {
+		231, 529,
+		231, 493,
+		249, 484,
+		250, 472,
+		299, 450,
+		307, 442,
+		308, 433,
+		312, 430,
+		316, 433,
+		318, 442,
+		324, 449,
+		374, 472,
+		375, 484,
+		393, 493,
+		393, 528
+	};
+
+	walls.add(app->physics->createWall(0, 0, triangle1, 16));
+	walls.add(app->physics->createWall(0, 0, triangle2, 16));
+	walls.add(app->physics->createWall(0, 0, triangle3, 16));
+	walls.add(app->physics->createWall(0, 0, triangle4, 16));
+	walls.add(app->physics->createWall(0, 0, bottom_part, 30));
 
 	return true;
 }
