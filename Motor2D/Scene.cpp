@@ -108,11 +108,35 @@ bool Scene::start()
 		393, 528
 	};
 
+	int left_L[16] = {
+		98, 449,
+		146, 471,
+		146, 476,
+		142, 478,
+		92, 454,
+		91, 395,
+		94, 392,
+		98, 395
+	};
+
+	int left_R[16] = {
+		536, 395,
+		536, 455,
+		485, 478,
+		480, 476,
+		482, 471,
+		529, 449,
+		529, 395,
+		533, 391
+	};
+
 	walls.add(app->physics->createWall(0, 0, triangle1, 16));
 	walls.add(app->physics->createWall(0, 0, triangle2, 16));
 	walls.add(app->physics->createWall(0, 0, triangle3, 16));
 	walls.add(app->physics->createWall(0, 0, triangle4, 16));
 	walls.add(app->physics->createWall(0, 0, bottom_part, 30));
+	walls.add(app->physics->createWall(0, 0, left_L, 16));
+	walls.add(app->physics->createWall(0, 0, left_R, 16));
 
 	return true;
 }
