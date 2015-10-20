@@ -7,11 +7,11 @@
 #include "p2Log.h"
 #include "math.h"
 
-//#ifdef _DEBUG
-//#pragma comment( lib, "Box2D/libx86/Debug/Box2D.lib" )
-//#else
-//#pragma comment( lib, "Box2D/libx86/Release/Box2D.lib" )
-//#endif
+#ifdef _DEBUG
+#pragma comment( lib, "Motor2D/Box2D/libx86/Debug/Box2D.lib" )
+#else
+#pragma comment( lib, "Motor2D/Box2D/libx86/Release/Box2D.lib" )
+#endif
 
 /*
 
@@ -64,26 +64,26 @@ bool Physics::start()
 
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));	
 	world->SetContactListener(this);
-	// TODO 3: You need to make ModulePhysics class a contact listener
-	// big static circle as "ground" in the middle of the screen
-	uint width, height;
-	app->win->getWindowSize(width, height);
-	int x = width / 2;
-	int y = height / 1.5f;
-	int diameter = width / 2;
+	//// TODO 3: You need to make ModulePhysics class a contact listener
+	//// big static circle as "ground" in the middle of the screen
+	//uint width, height;
+	//app->win->getWindowSize(width, height);
+	//int x = width / 2;
+	//int y = height / 1.5f;
+	//int diameter = width / 2;
 
-	b2BodyDef body;
-	body.type = b2_staticBody;
-	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	//b2BodyDef body;
+	//body.type = b2_staticBody;
+	//body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
-	b2Body* b = world->CreateBody(&body);
+	//b2Body* b = world->CreateBody(&body);
 
-	b2CircleShape shape;
-	shape.m_radius = PIXEL_TO_METERS(diameter) * 0.5f;
+	//b2CircleShape shape;
+	//shape.m_radius = PIXEL_TO_METERS(diameter) * 0.5f;
 
-	b2FixtureDef fixture;
-	fixture.shape = &shape;
-	b->CreateFixture(&fixture);
+	//b2FixtureDef fixture;
+	//fixture.shape = &shape;
+	//b->CreateFixture(&fixture);
 
 	return true;
 }
@@ -209,6 +209,40 @@ PhysBody* Physics::createBall(int x, int y, int radius, SDL_Texture *texture)
 	pbody->texture = texture;
 	pbody->width = pbody->height = radius;
 	
+	return pbody;
+}
+
+PhysBody* Physics::createWall(int x, int y, int *points, int size)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2ChainShape shape;
+	b2Vec2* p = new b2Vec2[size / 2];
+
+	for (int i = 0; i < size / 2; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+
+	shape.CreateLoop(p, size / 2);
+
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+
+	b->CreateFixture(&fixture);
+
+	delete p;
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	pbody->body->SetUserData(pbody);
+	pbody->width = pbody->height = 0;
+
 	return pbody;
 }
 

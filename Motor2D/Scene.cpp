@@ -46,6 +46,20 @@ bool Scene::start()
 	pinball_ball = app->tex->loadTexture("textures/pinball_ball.png");
 	pinball_level = app->tex->loadTexture("textures/pinball_level.png");
 
+	// Pivot 0, 0
+	int pinball_level[16] = {
+		237, 451,
+		271, 395,
+		276, 394,
+		280, 398,
+		280, 442,
+		278, 445,
+		245, 460,
+		237, 457
+	};
+
+	walls.add(app->physics->createWall(0, 0, pinball_level, 16));
+
 	return true;
 }
 
@@ -67,19 +81,6 @@ bool Scene::update(float dt)
 
 	// Pinball level
 	app->render->blit(pinball_level, 0, 0);
-
-	// Pivot 0, 0
-	int pinball_level[18] = {
-		238, 458,
-		237, 452,
-		270, 396,
-		276, 395,
-		281, 399,
-		281, 442,
-		278, 445,
-		244, 461,
-		241, 390
-	};
 
 	// RayCast
 	if (app->input->getKey(SDL_SCANCODE_SPACE) == KEY_DOWN)

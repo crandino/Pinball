@@ -52,6 +52,7 @@ public:
 
 	// CRZ 
 	PhysBody* createBall(int x, int y, int radius, SDL_Texture*);
+	PhysBody* createWall(int x, int y, int *points, int size);
 
 	void beginContact(b2Contact *contact);
 

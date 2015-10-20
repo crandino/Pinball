@@ -38,6 +38,7 @@ public:
 	DList<PhysBody*> boxes;
 	DList<PhysBody*> ricks;
 	DList<PhysBody*> balls;
+	DList<PhysBody*> walls;
 
 	PhysBody *sensor;
 	bool sensed;
