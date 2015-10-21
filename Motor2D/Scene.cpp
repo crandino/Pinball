@@ -38,7 +38,7 @@ bool Scene::awake(pugi::xml_node &node)
 bool Scene::start()
 {
 	app->audio->playMusic("sounds/music/pinball_theme.ogg");
-	//app->audio->loadFx("sounds/fx/bonus.wav");
+	app->audio->loadFx("sounds/fx/bonus.wav");
 
 	circle = app->tex->loadTexture("textures/wheel.png");
 	box = app->tex->loadTexture("textures/crate.png");
@@ -137,6 +137,8 @@ bool Scene::start()
 	walls.add(app->physics->createWall(0, 0, bottom_part, 30));
 	walls.add(app->physics->createWall(0, 0, left_L, 16));
 	walls.add(app->physics->createWall(0, 0, left_R, 16));
+
+	app->physics->createRoulette(312, 400, 4, 32, NULL);
 
 	return true;
 }
@@ -310,6 +312,27 @@ bool Scene::postUpdate()
 
 	return ret;
 }
+
+void Scene::onCollision(PhysBody* bodyA, PhysBody* bodyB)
+{
+	int x, y;
+
+	app->audio->playFx(bonus_fx);
+
+	/*
+	if(bodyA)
+	{
+	bodyA->GetPosition(x, y);
+	App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
+	}
+
+	if(bodyB)
+	{
+	bodyB->GetPosition(x, y);
+	App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
+	}*/
+}
+
 
 // Called before quitting
 bool Scene::cleanUp()

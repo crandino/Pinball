@@ -13,39 +13,17 @@
 #pragma comment( lib, "Motor2D/Box2D/libx86/Release/Box2D.lib" )
 #endif
 
-/*
-
-class A
-{ void metodo1 }
-
-class B
-{ void metodo2 }
-
-class C : public A, B
-{ void metodo3 }
-
-A* c1;
-B* c2;
-C* c3;
-C mi_clase;
-
-c1 = (A*)&mi_clase;  --> Només veu el metodo1
-c2 = (B*)&mi_clase;  --> Només veu el metodo2
-c3 = &mi_clase;      --> Veu els metodo1, metodo2 i metodo3
-
-*/
-
 Physics::Physics()
 {
 	name.create("physics");
+	mouse_joint = NULL;
 	world = NULL;
 	debug = true;
 }
 
 // Destructor
 Physics::~Physics()
-{
-}
+{ }
 
 bool Physics::awake(pugi::xml_node& node)
 {
@@ -64,27 +42,11 @@ bool Physics::start()
 
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));	
 	world->SetContactListener(this);
-	//// TODO 3: You need to make ModulePhysics class a contact listener
-	//// big static circle as "ground" in the middle of the screen
-	//uint width, height;
-	//app->win->getWindowSize(width, height);
-	//int x = width / 2;
-	//int y = height / 1.5f;
-	//int diameter = width / 2;
 
-	//b2BodyDef body;
-	//body.type = b2_staticBody;
-	//body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	//b2Body* b = world->CreateBody(&body);
-
-	//b2CircleShape shape;
-	//shape.m_radius = PIXEL_TO_METERS(diameter) * 0.5f;
-
-	//b2FixtureDef fixture;
-	//fixture.shape = &shape;
-	//b->CreateFixture(&fixture);
-
+	// Ground body is needed to create joints like mouse joint.
+	b2BodyDef bd;
+	ground = world->CreateBody(&bd);
+	
 	return true;
 }
 
@@ -92,12 +54,18 @@ bool Physics::preUpdate()
 {
 	world->Step(time_step, velocity_iter, position_iter);
 
-	// TODO: HomeWork
-	/*
-	for(b2Contact* c = world->GetContactList(); c; c = c->GetNext())
+	PhysBody *pb1, *pb2;
+
+	for (b2Contact *c = world->GetContactList(); c; c = c->GetNext())
 	{
+		if (c->GetFixtureA()->IsSensor() && c->IsTouching())
+		{
+			pb1 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
+			pb2 = (PhysBody*)c->GetFixtureA()->GetBody()->GetUserData();
+			if (pb1 && pb2 && pb1->listener)
+				pb1->listener->onCollision(pb1, pb2);
+		}
 	}
-	*/
 
 	return true;
 }
@@ -118,12 +86,9 @@ PhysBody* Physics::createCircle(int x, int y, int radius)
 
 	b->CreateFixture(&fixture);
 
-	// TODO 4: add a pointer to PhysBody as UserData to the body
-	// PhysBody está creat per mostrar objectes del Box2D a altres 
-	// mòduls. Però no el Box2D directament.
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
-	pbody->body->SetUserData((void*)pbody);	
+	b->SetUserData(pbody);	
 	pbody->width = pbody->height = radius;
 
 	return pbody;
@@ -147,7 +112,7 @@ PhysBody* Physics::createRectangle(int x, int y, int width, int height)
 
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
-	pbody->body->SetUserData(pbody);	
+	b->SetUserData(pbody);	
 	pbody->width = width * 0.5f;
 	pbody->height = height * 0.5f;
 
@@ -182,7 +147,7 @@ PhysBody* Physics::createChain(int x, int y, int* points, int size)
 
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
-	pbody->body->SetUserData(pbody);	
+	b->SetUserData(pbody);	
 	pbody->width = pbody->height = 0;
 
 	return pbody;
@@ -246,6 +211,37 @@ PhysBody* Physics::createWall(int x, int y, int *points, int size)
 	return pbody;
 }
 
+PhysBody* Physics::createRoulette(int x, int y, int width, int height, SDL_Texture *texture)
+{
+	b2BodyDef bd;
+	bd.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	bd.type = b2_dynamicBody;
+
+	b2Body *b = world->CreateBody(&bd);
+	b2PolygonShape box;
+	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
+
+	b2FixtureDef fixture;
+	fixture.shape = &box;
+	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->texture = texture;
+	pbody->width = width * 0.5f;
+	pbody->height = height * 0.5f;
+
+	/*b2RevoluteJointDef joint_def;
+	joint_def.Initialize(ground, b);
+
+	b2MotorJoint *motor_joint = (b2MotorJoint*)world->CreateJoint(&joint_def);
+*/
+	return pbody;
+}
+
 // 
 bool Physics::postUpdate()
 {
@@ -255,6 +251,8 @@ bool Physics::postUpdate()
 	if(!debug)
 		return true;
 
+	b2Vec2 mouse_position(0,0);
+	body_clicked = NULL;
 	// Bonus code: this will iterate all objects in the world and draw the circles
 	// You need to provide your own macro to translate meters to pixels
 	for(b2Body* b = world->GetBodyList(); b; b = b->GetNext())
@@ -324,6 +322,60 @@ bool Physics::postUpdate()
 				}
 				break;
 			}
+
+			if (app->input->getMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+			{
+				mouse_position.x = PIXEL_TO_METERS(app->input->getMouseX());
+				mouse_position.y = PIXEL_TO_METERS(app->input->getMouseY());
+				if (f->GetShape()->TestPoint(b->GetTransform(), mouse_position) == true)
+					body_clicked = f->GetBody();				
+			}
+		}
+	}
+
+	// If a body was selected we will attach a mouse joint to it
+	// so we can pull it around
+	// TODO 2: If a body was selected, create a mouse joint
+	// using mouse_joint class property
+
+	if (body_clicked != NULL)
+	{
+		b2MouseJointDef def;
+		def.bodyA = ground;
+		def.bodyB = body_clicked;
+		def.target = mouse_position;
+		def.dampingRatio = 0.5f;
+		def.frequencyHz = 2.0f;
+		def.maxForce = 100.0f * body_clicked->GetMass();
+
+		mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
+	}
+
+	// TODO 3: If the player keeps pressing the mouse button, update
+	// target position and draw a red line between both anchor points
+
+	if (mouse_joint != NULL && app->input->getMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
+	{
+		b2Vec2 posA, posB;
+		posA = mouse_joint->GetAnchorA();
+		posB.x = PIXEL_TO_METERS(app->input->getMouseX());
+		posB.y = PIXEL_TO_METERS(app->input->getMouseY());
+		mouse_joint->SetTarget(posB);
+
+		app->render->drawLine(METERS_TO_PIXELS(posA.x),
+								METERS_TO_PIXELS(posA.y),
+								METERS_TO_PIXELS(posB.x),
+								METERS_TO_PIXELS(posB.y),
+								255, 0, 0);
+	}
+
+	// TODO 4: If the player releases the mouse button, destroy the joint
+	if (mouse_joint != NULL && app->input->getMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+	{
+		if (mouse_joint != NULL)
+		{
+			world->DestroyJoint(mouse_joint);
+			mouse_joint = NULL;
 		}
 	}
 
@@ -344,12 +396,15 @@ bool Physics::cleanUp()
 
 void Physics::beginContact(b2Contact *contact)
 {
-	LOG("Collision!");
-	// TODO 7: Call the listeners that are not NULL
+	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
+	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
 
-	//PhysBody *bodyA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
+	if (physA && physA->listener != NULL)
+		physA->listener->onCollision(physA, physB);
 
-	//if (bodyA->module != NULL)
+	if (physB && physB->listener != NULL)
+		physB->listener->onCollision(physB, physA);
+	
 }
 
 void PhysBody::getPosition(int& x, int &y) const

@@ -14,7 +14,7 @@
 class PhysBody
 {
 public:
-	PhysBody() : body(NULL), module(NULL), texture(NULL)
+	PhysBody() : body(NULL), listener(NULL), texture(NULL)
 	{}
 
 	void getPosition(int& x, int &y) const;
@@ -25,8 +25,7 @@ public:
 public:
 	int width, height;
 	b2Body* body;
-	// TODO 6: Add a pointer to a module that might want to listen to a collision from this body
-	Module *module;	
+	Module *listener;	
 	SDL_Texture *texture;
 };
 
@@ -53,15 +52,20 @@ public:
 	// CRZ 
 	PhysBody* createBall(int x, int y, int radius, SDL_Texture*);
 	PhysBody* createWall(int x, int y, int *points, int size);
+	PhysBody* createRoulette(int x, int y, int width, int height, SDL_Texture*);
 
 	void beginContact(b2Contact *contact);
 
 private:
 
-	bool debug;
-	b2World* world;
+	bool				 debug;
+	b2World*			 world;
 
-	float32 time_step;
-	int32 velocity_iter;
-	int32 position_iter;
+	b2MouseJoint*  mouse_joint;
+	b2Body* 			ground;
+	b2Body*		  body_clicked;
+
+	float32			 time_step;
+	int32		 velocity_iter;
+	int32		 position_iter;
 };

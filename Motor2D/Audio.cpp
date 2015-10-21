@@ -177,10 +177,10 @@ bool Audio::playFx(unsigned int id, int repeat)
 
 void Audio::volumeUp()
 {
-	Mix_VolumeMusic(Mix_VolumeMusic(-1) + 5);
+	Mix_VolumeMusic(Mix_VolumeMusic(-1) + 8);
 	}
 
 void Audio::volumeDown()
 {
-	Mix_VolumeMusic(Mix_VolumeMusic(-1) - 5);
+	Mix_VolumeMusic(Mix_VolumeMusic(-1) - 8);
 }

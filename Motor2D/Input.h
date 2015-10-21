@@ -22,7 +22,8 @@ enum KeyState
 	KEY_IDLE = 0,
 	KEY_DOWN,
 	KEY_REPEAT,
-	KEY_UP
+	KEY_UP,
+	KEY_ERROR
 };
 
 class Input : public Module
@@ -56,9 +57,9 @@ public:
 		return keyboard[id];
 	}
 
-	KeyState getMouseButtonDown(int id) const
+	KeyState getMouseButton(uint id) const
 	{
-		return mouse_buttons[id - 1];
+		return (id < NUM_MOUSE_BUTTONS) ? mouse_buttons[id] : KEY_ERROR;
 	}
 
 	// Check if a certain window event happened

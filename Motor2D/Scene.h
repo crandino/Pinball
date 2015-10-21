@@ -40,6 +40,8 @@ public:
 	DList<PhysBody*> balls;
 	DList<PhysBody*> walls;
 
+	PhysBody *roulette;
+
 	PhysBody *sensor;
 	bool sensed;
 

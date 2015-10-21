@@ -10,6 +10,7 @@
 #include "PugiXml\src\pugixml.hpp"
 
 class App;
+class PhysBody;
 
 class Module
 {
@@ -69,6 +70,10 @@ public:
 	{
 		return true;
 	}
+
+	// On Collision
+	virtual void onCollision(PhysBody* bodyA, PhysBody* bodyB)
+	{ }
 
 public:
 
