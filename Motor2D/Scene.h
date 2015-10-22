@@ -40,7 +40,7 @@ public:
 	DList<PhysBody*> balls;
 	DList<PhysBody*> walls;
 
-	PhysBody *roulette;
+	PhysBody *flip;
 
 	PhysBody *sensor;
 	bool sensed;
@@ -50,6 +50,7 @@ public:
 	SDL_Texture *rick;
 	SDL_Texture *pinball_ball;
 	SDL_Texture *pinball_level;
+	SDL_Texture *flipper_tex;
 
 	uint bonus_fx;
 	iPoint ray;

@@ -52,8 +52,7 @@ public:
 	// CRZ 
 	PhysBody* createBall(int x, int y, int radius, SDL_Texture*);
 	PhysBody* createWall(int x, int y, int *points, int size);
-	PhysBody* createRoulette(int x, int y, int width, int height, SDL_Texture*);
-
+	PhysBody* createFlipper(int x, int y, int *points, int size, SDL_Texture*);
 	void beginContact(b2Contact *contact);
 
 private:

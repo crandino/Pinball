@@ -45,6 +45,7 @@ bool Scene::start()
 	rick = app->tex->loadTexture("textures/rick_head.png");
 	pinball_ball = app->tex->loadTexture("textures/pinball_ball.png");
 	pinball_level = app->tex->loadTexture("textures/pinball_level.png");
+	flipper_tex = app->tex->loadTexture("textures/flipper.png");
 
 	int triangle1[16] = {
 		122, 393,
@@ -130,7 +131,16 @@ bool Scene::start()
 		533, 391
 	};
 
-	walls.add(app->physics->createWall(0, 0, triangle1, 16));
+	int flipper[12] = {
+		35, 1,
+		2, 26,
+		2, 29,
+		6, 29,
+		41, 8,
+		41, 2
+	};
+
+	walls.add(app->physics->createWall(0, 0, triangle1, sizeof(triangle1) / sizeof(int) ));
 	walls.add(app->physics->createWall(0, 0, triangle2, 16));
 	walls.add(app->physics->createWall(0, 0, triangle3, 16));
 	walls.add(app->physics->createWall(0, 0, triangle4, 16));
@@ -138,7 +148,7 @@ bool Scene::start()
 	walls.add(app->physics->createWall(0, 0, left_L, 16));
 	walls.add(app->physics->createWall(0, 0, left_R, 16));
 
-	app->physics->createRoulette(312, 400, 4, 32, NULL);
+	flip = app->physics->createFlipper(0, 0, flipper, 12, flipper_tex);
 
 	return true;
 }
@@ -161,6 +171,10 @@ bool Scene::update(float dt)
 
 	// Pinball level
 	app->render->blit(pinball_level, 0, 0);
+
+	int x, y;
+	flip->getPosition(x, y);
+	app->render->blit(flipper_tex, x,y);
 
 	// RayCast
 	if (app->input->getKey(SDL_SCANCODE_SPACE) == KEY_DOWN)

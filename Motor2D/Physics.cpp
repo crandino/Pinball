@@ -211,34 +211,38 @@ PhysBody* Physics::createWall(int x, int y, int *points, int size)
 	return pbody;
 }
 
-PhysBody* Physics::createRoulette(int x, int y, int width, int height, SDL_Texture *texture)
+PhysBody* Physics::createFlipper(int x, int y, int* points, int size, SDL_Texture* texture)
 {
 	b2BodyDef bd;
 	bd.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 	bd.type = b2_dynamicBody;
 
 	b2Body *b = world->CreateBody(&bd);
-	b2PolygonShape box;
-	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
+
+	b2ChainShape shape;
+	b2Vec2* p = new b2Vec2[size / 2];
+
+	for (int i = 0; i < size / 2; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+
+	shape.CreateLoop(p, size / 2);
 
 	b2FixtureDef fixture;
-	fixture.shape = &box;
-	fixture.density = 1.0f;
+	fixture.shape = &shape;
 
 	b->CreateFixture(&fixture);
+
+	delete p;
 
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
 	b->SetUserData(pbody);
 	pbody->texture = texture;
-	pbody->width = width * 0.5f;
-	pbody->height = height * 0.5f;
+	pbody->width = pbody->height = 0;
 
-	/*b2RevoluteJointDef joint_def;
-	joint_def.Initialize(ground, b);
-
-	b2MotorJoint *motor_joint = (b2MotorJoint*)world->CreateJoint(&joint_def);
-*/
 	return pbody;
 }
 
@@ -363,10 +367,10 @@ bool Physics::postUpdate()
 		mouse_joint->SetTarget(posB);
 
 		app->render->drawLine(METERS_TO_PIXELS(posA.x),
-								METERS_TO_PIXELS(posA.y),
-								METERS_TO_PIXELS(posB.x),
-								METERS_TO_PIXELS(posB.y),
-								255, 0, 0);
+							  METERS_TO_PIXELS(posA.y),
+						      METERS_TO_PIXELS(posB.x),
+							  METERS_TO_PIXELS(posB.y),
+							  255, 0, 0);
 	}
 
 	// TODO 4: If the player releases the mouse button, destroy the joint
@@ -381,7 +385,6 @@ bool Physics::postUpdate()
 
 	return true;
 }
-
 
 // Called before quitting
 bool Physics::cleanUp()
