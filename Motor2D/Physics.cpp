@@ -243,6 +243,15 @@ PhysBody* Physics::createFlipper(int x, int y, int* points, int size, SDL_Textur
 	pbody->texture = texture;
 	pbody->width = pbody->height = 0;
 
+	b2RevoluteJointDef revoluteJointDef;
+	revoluteJointDef.bodyA = ground;
+	revoluteJointDef.bodyB = b;
+	revoluteJointDef.collideConnected = false;
+	revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(36), PIXEL_TO_METERS(5));
+	revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(475), PIXEL_TO_METERS(480));
+
+	b2RevoluteJoint *m_joint = (b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef);
+
 	return pbody;
 }
 

@@ -47,108 +47,18 @@ bool Scene::start()
 	pinball_level = app->tex->loadTexture("textures/pinball_level.png");
 	flipper_tex = app->tex->loadTexture("textures/flipper.png");
 
-	int triangle1[16] = {
-		122, 393,
-		158, 452,
-		156, 456,
-		152, 459,
-		117, 443,
-		114, 440,
-		114, 398,
-		116, 394
-	};
-	
-	int triangle2[16] = {
-		237, 451,
-		271, 395,
-		276, 394,
-		280, 398,
-		280, 442,
-		278, 445,
-		245, 460,
-		237, 457
-	};
-
-	int triangle3[16] = {
-		352, 393,
-		388, 452,
-		386, 457,
-		380, 459,
-		347, 443,
-		345, 440,
-		345, 399,
-		347, 394
-	};
-
-	int triangle4[16] = {
-		478, 458,
-		510, 443,
-		514, 439,
-		514, 396,
-		509, 393,
-		504, 395,
-		471, 451,
-		472, 456
-	};
-
-	int bottom_part[30] = {
-		231, 529,
-		231, 493,
-		249, 484,
-		250, 472,
-		299, 450,
-		307, 442,
-		308, 433,
-		312, 430,
-		316, 433,
-		318, 442,
-		324, 449,
-		374, 472,
-		375, 484,
-		393, 493,
-		393, 528
-	};
-
-	int left_L[16] = {
-		98, 449,
-		146, 471,
-		146, 476,
-		142, 478,
-		92, 454,
-		91, 395,
-		94, 392,
-		98, 395
-	};
-
-	int left_R[16] = {
-		536, 395,
-		536, 455,
-		485, 478,
-		480, 476,
-		482, 471,
-		529, 449,
-		529, 395,
-		533, 391
-	};
-
-	int flipper[12] = {
-		35, 1,
-		2, 26,
-		2, 29,
-		6, 29,
-		41, 8,
-		41, 2
-	};
+#include "ChainPoints.h"
 
 	walls.add(app->physics->createWall(0, 0, triangle1, sizeof(triangle1) / sizeof(int) ));
-	walls.add(app->physics->createWall(0, 0, triangle2, 16));
-	walls.add(app->physics->createWall(0, 0, triangle3, 16));
-	walls.add(app->physics->createWall(0, 0, triangle4, 16));
-	walls.add(app->physics->createWall(0, 0, bottom_part, 30));
-	walls.add(app->physics->createWall(0, 0, left_L, 16));
-	walls.add(app->physics->createWall(0, 0, left_R, 16));
+	walls.add(app->physics->createWall(0, 0, triangle2, sizeof(triangle2) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, triangle3, sizeof(triangle3) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, triangle4, sizeof(triangle4) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, bottom_part, sizeof(bottom_part) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, left_L, sizeof(left_L) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, left_R, sizeof(left_R) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, contour, sizeof(contour) / sizeof(int)));
 
-	flip = app->physics->createFlipper(0, 0, flipper, 12, flipper_tex);
+	flip = app->physics->createFlipper(0, 0, flipper, sizeof(flipper) / sizeof(int), flipper_tex);
 
 	return true;
 }

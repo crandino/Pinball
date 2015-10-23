@@ -118,6 +118,7 @@
     <ClInclude Include="Motor2D\Physics.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="Motor2D\ChainPoints.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Game\config.xml">
