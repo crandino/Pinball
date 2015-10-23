@@ -11,6 +11,7 @@
 #include "Scene.h"
 
 #include "Box2D\Box2D\Box2D.h"
+#include "ChainPoints.h"
 
 
 Scene::Scene() : Module()
