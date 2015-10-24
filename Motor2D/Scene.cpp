@@ -48,7 +48,6 @@ bool Scene::start()
 	pinball_level = app->tex->loadTexture("textures/pinball_level.png");
 	flipper_tex = app->tex->loadTexture("textures/flipper.png");
 
-#include "ChainPoints.h"
 
 	walls.add(app->physics->createWall(0, 0, triangle1, sizeof(triangle1) / sizeof(int) ));
 	walls.add(app->physics->createWall(0, 0, triangle2, sizeof(triangle2) / sizeof(int)));
@@ -60,6 +59,25 @@ bool Scene::start()
 	walls.add(app->physics->createWall(0, 0, contour, sizeof(contour) / sizeof(int)));
 
 	flip = app->physics->createFlipper(0, 0, flipper, sizeof(flipper) / sizeof(int), flipper_tex);
+	
+	//(35,6) is the local anchor of the flipper
+	int x, y; 
+	flip->getPosition(x, y);
+	x += 36, y += 5;
+	circles.add(app->physics->createCircle(x, y, 3));
+
+	PhysBody* joint = circles.getFirst()->data;
+	
+	def.bodyA = joint->body;
+	def.bodyB = flip->body;
+	b2Vec2 anchorA (0, 0);
+	b2Vec2 anchorB (36, 5);
+	def.localAnchorA = anchorA;
+	def.localAnchorB = anchorB;
+	def.referenceAngle = 0;
+	def.enableLimit = true;
+	def.lowerAngle = -45 * DEGTORAD;
+	def.upperAngle = 45 * DEGTORAD;
 
 	return true;
 }
@@ -83,6 +101,7 @@ bool Scene::update(float dt)
 	// Pinball level
 	app->render->blit(pinball_level, 0, 0);
 
+	// Fliper
 	int x, y;
 	flip->getPosition(x, y);
 	app->render->blit(flipper_tex, x,y);

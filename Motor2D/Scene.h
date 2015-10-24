@@ -42,6 +42,8 @@ public:
 
 	PhysBody *flip;
 
+	b2RevoluteJointDef def;
+
 	PhysBody *sensor;
 	bool sensed;
 
