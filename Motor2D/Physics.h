@@ -52,11 +52,13 @@ public:
 	// CRZ 
 	PhysBody* createBall(int x, int y, int radius, SDL_Texture*);
 	PhysBody* createWall(int x, int y, int *points, int size);
-	PhysBody* createFlipper(int x, int y, int *points, int size, SDL_Texture*);
+
+	PhysBody* createFlipper(SDL_Texture*);
 	PhysBody* createPropulsor(int x, int y, SDL_Texture*);
 	void beginContact(b2Contact *contact);
 
-	b2PrismaticJoint* propulsor_joint;
+	b2RevoluteJoint*		flip_joint;
+	b2PrismaticJoint*		propulsor_joint;
 
 private:
 
