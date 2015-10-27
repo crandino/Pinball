@@ -18,12 +18,12 @@ bool Player::start()
 	bool ret = true;
 
 	lifes = 3;
-	score = 2658410;
+	score = 0;
 
 	SDL_Rect r;
 	for (uint i = 0; i < 10; i++)
 	{
-		r = { (0, i * 8, 8, 12) };
+		r = { i * 8, 0, 8, 12 };
 		frames.pushBack(r);
 	}
 		
@@ -41,13 +41,16 @@ bool Player::update(float dt)
 void Player::blitScore()
 {
 	uint divisor = 10000000;
-	uint score_copy = score;
+	uint score_remain = score;
 	uint num_to_render = 0;
 
 	for (uint i = 0; i < 8; i++)
 	{
-		num_to_render = (int)(score_copy / divisor);
+		num_to_render = (int)(score_remain / divisor);
 		app->render->blit(numbers, 32 + (i * 8), 490, &frames[num_to_render]);
-		divisor /= 10; score_copy /= 10;
+		score_remain = score_remain - (divisor * num_to_render);
+		divisor /= 10; 
 	}
+	/*num_to_render = (int)(score_remain % 10);
+	app->render->blit(numbers, 32, 490, &frames[num_to_render]);*/
 }
