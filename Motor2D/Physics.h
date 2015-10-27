@@ -57,8 +57,8 @@ public:
 	PhysBody* createPropulsor(int x, int y, SDL_Texture*);
 	void beginContact(b2Contact *contact);
 
-	b2RevoluteJoint*	flip_joint;
-	b2PrismaticJoint* propulsor_joint;
+	b2RevoluteJoint*		flip_joint;
+	b2PrismaticJoint*		propulsor_joint;
 
 private:
 
@@ -68,7 +68,6 @@ private:
 	b2MouseJoint*  mouse_joint;
 	b2Body* 			ground;
 	b2Body*		  body_clicked;
-	//b2RevoluteJoint*	flip_joint;
 
 	float32			 time_step;
 	int32		 velocity_iter;
