@@ -52,8 +52,10 @@ public:
 	// CRZ 
 	PhysBody* createBall(int x, int y, int radius, SDL_Texture*);
 	PhysBody* createWall(int x, int y, int *points, int size);
-	PhysBody* createFlipper(int x, int y, int *points, int size, SDL_Texture*);
+	PhysBody* createFlipper(SDL_Texture*);
 	void beginContact(b2Contact *contact);
+
+	b2RevoluteJoint*	flip_joint;
 
 private:
 
@@ -63,6 +65,7 @@ private:
 	b2MouseJoint*  mouse_joint;
 	b2Body* 			ground;
 	b2Body*		  body_clicked;
+	//b2RevoluteJoint*	flip_joint;
 
 	float32			 time_step;
 	int32		 velocity_iter;
