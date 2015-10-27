@@ -47,37 +47,21 @@ bool Scene::start()
 	pinball_ball = app->tex->loadTexture("textures/pinball_ball.png");
 	pinball_level = app->tex->loadTexture("textures/pinball_level.png");
 	flipper_tex = app->tex->loadTexture("textures/flipper.png");
+	propulsor_tex = app->tex->loadTexture("textures/propulsor.png");
 
 
 	walls.add(app->physics->createWall(0, 0, triangle1, sizeof(triangle1) / sizeof(int) ));
 	walls.add(app->physics->createWall(0, 0, triangle2, sizeof(triangle2) / sizeof(int)));
 	walls.add(app->physics->createWall(0, 0, triangle3, sizeof(triangle3) / sizeof(int)));
 	walls.add(app->physics->createWall(0, 0, triangle4, sizeof(triangle4) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, bottom_part, sizeof(bottom_part) / sizeof(int)));
+	//walls.add(app->physics->createWall(0, 0, bottom_part, sizeof(bottom_part) / sizeof(int)));
 	walls.add(app->physics->createWall(0, 0, left_L, sizeof(left_L) / sizeof(int)));
 	walls.add(app->physics->createWall(0, 0, left_R, sizeof(left_R) / sizeof(int)));
 	walls.add(app->physics->createWall(0, 0, contour, sizeof(contour) / sizeof(int)));
 
 	flip = app->physics->createFlipper(0, 0, flipper, sizeof(flipper) / sizeof(int), flipper_tex);
+	propulsor = app->physics->createPropulsor(313, 534, propulsor_tex);
 	
-	//(35,6) is the local anchor of the flipper
-	int x, y; 
-	flip->getPosition(x, y);
-	x += 36, y += 5;
-	circles.add(app->physics->createCircle(x, y, 3));
-
-	PhysBody* joint = circles.getFirst()->data;
-	
-	def.bodyA = joint->body;
-	def.bodyB = flip->body;
-	b2Vec2 anchorA (0, 0);
-	b2Vec2 anchorB (36, 5);
-	def.localAnchorA = anchorA;
-	def.localAnchorB = anchorB;
-	def.referenceAngle = 0;
-	def.enableLimit = true;
-	def.lowerAngle = -45 * DEGTORAD;
-	def.upperAngle = 45 * DEGTORAD;
 
 	return true;
 }
@@ -105,6 +89,10 @@ bool Scene::update(float dt)
 	int x, y;
 	flip->getPosition(x, y);
 	app->render->blit(flipper_tex, x,y);
+
+	int a, b;
+	propulsor->getPosition(a, b);
+	app->render->blit(propulsor_tex, a, b);
 
 	// RayCast
 	if (app->input->getKey(SDL_SCANCODE_SPACE) == KEY_DOWN)

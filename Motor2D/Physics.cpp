@@ -255,6 +255,46 @@ PhysBody* Physics::createFlipper(int x, int y, int* points, int size, SDL_Textur
 	return pbody;
 }
 
+PhysBody* Physics::createPropulsor(int x, int y, SDL_Texture* texture)
+{
+	b2BodyDef bd;
+	bd.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	bd.type = b2_dynamicBody;
+
+	b2Body *b = world->CreateBody(&bd);
+
+	b2PolygonShape shape;
+
+	int width = 16, height = 31;
+	shape.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
+
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->texture = texture;
+	pbody->width = width * 0.5f;
+	pbody->height = height * 0.5f;
+
+	b2DistanceJointDef joint;
+	joint.bodyA = ground;
+	joint.bodyB = b;
+	joint.collideConnected = false;
+	//joint.frequencyHz = 1.0f;
+	//joint.dampingRatio = 0.0f;
+	joint.localAnchorB.Set(PIXEL_TO_METERS(8), PIXEL_TO_METERS(0));
+	joint.localAnchorA.Set(PIXEL_TO_METERS(313), PIXEL_TO_METERS(503));
+
+	propulsor_joint = (b2DistanceJoint*)world->CreateJoint(&joint);
+
+	return pbody;
+}
+
 // 
 bool Physics::postUpdate()
 {
