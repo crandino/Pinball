@@ -13,6 +13,7 @@ class Textures;
 class Audio;
 class FileSystem;
 class Physics;
+class Player;
 class Scene;
 
 class App
@@ -84,6 +85,7 @@ public:
 	Textures*			tex;
 	Audio*				audio;
 	Physics*			physics;
+	Player*				player;
 	Scene*				scene;
 	FileSystem*			fs;
 

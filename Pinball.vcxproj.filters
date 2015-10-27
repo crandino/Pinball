@@ -62,6 +62,9 @@
     <ClCompile Include="Motor2D\Physics.cpp">
       <Filter>Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Motor2D\Player.cpp">
+      <Filter>Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Motor2D\DList.h">
@@ -119,6 +122,9 @@
       <Filter>Modules</Filter>
     </ClInclude>
     <ClInclude Include="Motor2D\ChainPoints.h" />
+    <ClInclude Include="Motor2D\Player.h">
+      <Filter>Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Game\config.xml">

@@ -61,8 +61,7 @@ bool Scene::start()
 
 	flip = app->physics->createFlipper(flipper_tex);
 	propulsor = app->physics->createPropulsor(313, 534, propulsor_tex);
-
-
+	
 	return true;
 }
 
@@ -95,7 +94,7 @@ bool Scene::update(float dt)
 	// Fliper
 	int x, y;
 	flip->getPosition(x, y);
-	app->render->blit(flipper_tex, x ,y ,NULL, 1.0f, flip->getRotation() + (40 * DEGTORAD));
+	app->render->blit(flipper_tex, x, y, NULL, 1.0f, flip->getRotation());
 
 	int a, b;
 	propulsor->getPosition(a, b);
