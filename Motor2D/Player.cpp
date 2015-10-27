@@ -7,6 +7,7 @@
 Player::Player()
 {
 	name.create("player");
+	playing = false;
 }
 
 Player::~Player()

@@ -23,6 +23,7 @@ private:
 	uint					score;
 	DynArray<SDL_Rect>		frames;
 	SDL_Texture*			numbers;
+	bool					playing;
 	
 	void blitScore();
 };
