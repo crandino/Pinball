@@ -281,16 +281,22 @@ PhysBody* Physics::createPropulsor(int x, int y, SDL_Texture* texture)
 	pbody->width = width * 0.5f;
 	pbody->height = height * 0.5f;
 
-	b2DistanceJointDef joint;
-	joint.bodyA = ground;
-	joint.bodyB = b;
-	joint.collideConnected = false;
-	//joint.frequencyHz = 1.0f;
-	//joint.dampingRatio = 0.0f;
-	joint.localAnchorB.Set(PIXEL_TO_METERS(8), PIXEL_TO_METERS(0));
-	joint.localAnchorA.Set(PIXEL_TO_METERS(313), PIXEL_TO_METERS(503));
+	b2Vec2 vec(b->GetPosition());
 
-	propulsor_joint = (b2DistanceJoint*)world->CreateJoint(&joint);
+	b2PrismaticJointDef jointDef;
+	b2Vec2 worldAxis(1.0f, 0.0f);
+	jointDef.bodyA = ground;
+	jointDef.bodyB = b;
+	jointDef.localAnchorA.Set(vec.x, vec.y);
+	jointDef.localAxisA.Set(0, -1);
+	jointDef.lowerTranslation = -1.0f;
+	jointDef.upperTranslation = 1.0f;
+	jointDef.enableLimit = true;
+	jointDef.maxMotorForce = 10.0f;
+	jointDef.motorSpeed = 1.0f;
+	jointDef.enableMotor = true;
+
+	propulsor_joint = (b2PrismaticJoint*)world->CreateJoint(&jointDef);
 
 	return pbody;
 }

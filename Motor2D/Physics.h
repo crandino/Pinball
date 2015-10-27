@@ -56,7 +56,7 @@ public:
 	PhysBody* createPropulsor(int x, int y, SDL_Texture*);
 	void beginContact(b2Contact *contact);
 
-	b2DistanceJoint* propulsor_joint;
+	b2PrismaticJoint* propulsor_joint;
 
 private:
 
