@@ -292,7 +292,7 @@ PhysBody* Physics::createPropulsor(int x, int y, SDL_Texture* texture)
 	jointDef.lowerTranslation = -1.0f;
 	jointDef.upperTranslation = 1.0f;
 	jointDef.enableLimit = true;
-	jointDef.maxMotorForce = 10.0f;
+	jointDef.maxMotorForce = 20.0f;
 	jointDef.motorSpeed = 1.0f;
 	jointDef.enableMotor = true;
 

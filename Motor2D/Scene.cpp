@@ -60,7 +60,7 @@ bool Scene::start()
 	walls.add(app->physics->createWall(0, 0, contour, sizeof(contour) / sizeof(int)));
 
 	flip = app->physics->createFlipper(0, 0, flipper, sizeof(flipper) / sizeof(int), flipper_tex);
-	propulsor = app->physics->createPropulsor(313, 434, propulsor_tex);
+	propulsor = app->physics->createPropulsor(313, 534, propulsor_tex);
 	
 
 	return true;
