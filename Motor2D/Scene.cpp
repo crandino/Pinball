@@ -47,17 +47,20 @@ bool Scene::start()
 	pinball_ball = app->tex->loadTexture("textures/pinball_ball.png");
 	pinball_level = app->tex->loadTexture("textures/pinball_level.png");
 	flipper_tex = app->tex->loadTexture("textures/flipper.png");
-	
+	propulsor_tex = app->tex->loadTexture("textures/propulsor.png");
+
 	walls.add(app->physics->createWall(0, 0, triangle1, sizeof(triangle1) / sizeof(int) ));
 	walls.add(app->physics->createWall(0, 0, triangle2, sizeof(triangle2) / sizeof(int)));
 	walls.add(app->physics->createWall(0, 0, triangle3, sizeof(triangle3) / sizeof(int)));
 	walls.add(app->physics->createWall(0, 0, triangle4, sizeof(triangle4) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, bottom_part, sizeof(bottom_part) / sizeof(int)));
+	//walls.add(app->physics->createWall(0, 0, bottom_part, sizeof(bottom_part) / sizeof(int)));
 	walls.add(app->physics->createWall(0, 0, left_L, sizeof(left_L) / sizeof(int)));
 	walls.add(app->physics->createWall(0, 0, left_R, sizeof(left_R) / sizeof(int)));
 	walls.add(app->physics->createWall(0, 0, contour, sizeof(contour) / sizeof(int)));
 
+
 	flip = app->physics->createFlipper(flipper_tex);
+	propulsor = app->physics->createPropulsor(313, 534, propulsor_tex);
 	
 	return true;
 }
@@ -92,6 +95,10 @@ bool Scene::update(float dt)
 	int x, y;
 	flip->getPosition(x, y);
 	app->render->blit(flipper_tex, x ,y ,NULL, 1.0f, flip->getRotation() + (40 * DEGTORAD));
+
+	int a, b;
+	propulsor->getPosition(a, b);
+	app->render->blit(propulsor_tex, a, b);
 
 	// RayCast
 	if (app->input->getKey(SDL_SCANCODE_SPACE) == KEY_DOWN)

@@ -41,6 +41,7 @@ public:
 	DList<PhysBody*> walls;
 
 	PhysBody *flip;
+	PhysBody *propulsor;
 
 	b2RevoluteJointDef def;
 
@@ -53,6 +54,7 @@ public:
 	SDL_Texture *pinball_ball;
 	SDL_Texture *pinball_level;
 	SDL_Texture *flipper_tex;
+	SDL_Texture *propulsor_tex;
 
 	uint bonus_fx;
 	iPoint ray;
