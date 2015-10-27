@@ -44,16 +44,11 @@ public:
 	bool postUpdate();
 	bool cleanUp();
 
-	PhysBody* createCircle(int x, int y, int radius);
-	PhysBody* createRectangle(int x, int y, int width, int height);
-	PhysBody* createRectangleSensor(int x, int y, int width, int height);
-	PhysBody* createChain(int x, int y, int* points, int size);
-
 	// CRZ 
 	PhysBody* createBall(int x, int y, int radius, SDL_Texture*);
 	PhysBody* createWall(int x, int y, int *points, int size);
 
-	PhysBody* createFlipper(SDL_Texture*);
+	//DList<PhysBody*> createFlipper(SDL_Texture*);
 	PhysBody* createPropulsor(int x, int y, SDL_Texture*);
 	void beginContact(b2Contact *contact);
 

@@ -34,24 +34,17 @@ public:
 
 	// ----------------
 
-	DList<PhysBody*> circles;
-	DList<PhysBody*> boxes;
-	DList<PhysBody*> ricks;
-	DList<PhysBody*> balls;
 	DList<PhysBody*> walls;
+	DList<PhysBody*> flippers;
 
-	PhysBody *flip;
 	PhysBody *propulsor;
+	PhysBody *ball;
 
-	b2RevoluteJointDef def;
 
 	PhysBody *sensor;
 	bool sensed;
 
-	SDL_Texture *circle;
-	SDL_Texture *box;
-	SDL_Texture *rick;
-	SDL_Texture *pinball_ball;
+	SDL_Texture *pinball_ball_tex;
 	SDL_Texture *pinball_level;
 	SDL_Texture *flipper_tex;
 	SDL_Texture *propulsor_tex;

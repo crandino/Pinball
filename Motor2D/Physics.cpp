@@ -70,89 +70,6 @@ bool Physics::preUpdate()
 	return true;
 }
 
-PhysBody* Physics::createCircle(int x, int y, int radius)
-{
-	b2BodyDef body;
-	body.type = b2_dynamicBody;
-	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	b2Body* b = world->CreateBody(&body);
-
-	b2CircleShape shape;
-	shape.m_radius = PIXEL_TO_METERS(radius);
-	b2FixtureDef fixture;
-	fixture.shape = &shape;
-	fixture.density = 1.0f;
-
-	b->CreateFixture(&fixture);
-
-	PhysBody* pbody = new PhysBody();
-	pbody->body = b;
-	b->SetUserData(pbody);	
-	pbody->width = pbody->height = radius;
-
-	return pbody;
-}
-
-PhysBody* Physics::createRectangle(int x, int y, int width, int height)
-{
-	b2BodyDef body;
-	body.type = b2_dynamicBody;
-	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	b2Body* b = world->CreateBody(&body);
-	b2PolygonShape box;
-	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
-
-	b2FixtureDef fixture;
-	fixture.shape = &box;
-	fixture.density = 1.0f;
-
-	b->CreateFixture(&fixture);
-
-	PhysBody* pbody = new PhysBody();
-	pbody->body = b;
-	b->SetUserData(pbody);	
-	pbody->width = width * 0.5f;
-	pbody->height = height * 0.5f;
-
-	return pbody;
-}
-
-PhysBody* Physics::createChain(int x, int y, int* points, int size)
-{
-	b2BodyDef body;
-	body.type = b2_dynamicBody;
-	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	b2Body* b = world->CreateBody(&body);
-
-	b2ChainShape shape;
-	b2Vec2* p = new b2Vec2[size / 2];
-
-	for(int i = 0; i < size / 2; ++i)
-	{
-		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
-		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
-	}
-
-	shape.CreateLoop(p, size / 2);
-
-	b2FixtureDef fixture;
-	fixture.shape = &shape;
-
-	b->CreateFixture(&fixture);
-
-	delete p;
-
-	PhysBody* pbody = new PhysBody();
-	pbody->body = b;
-	b->SetUserData(pbody);	
-	pbody->width = pbody->height = 0;
-
-	return pbody;
-}
-
 PhysBody* Physics::createBall(int x, int y, int radius, SDL_Texture *texture)
 {
 	b2BodyDef body_def;
@@ -165,7 +82,7 @@ PhysBody* Physics::createBall(int x, int y, int radius, SDL_Texture *texture)
 
 	b2FixtureDef fixture_def;
 	fixture_def.shape = &ball_shape;
-	fixture_def.density = 1.0f;
+	fixture_def.density = 0.01f;
 	b->CreateFixture(&fixture_def);
 
 	PhysBody *pbody = new PhysBody();
@@ -211,7 +128,7 @@ PhysBody* Physics::createWall(int x, int y, int *points, int size)
 	return pbody;
 }
 
-PhysBody* Physics::createFlipper(SDL_Texture* texture)
+/*DList<PhysBody*> Physics::createFlipper(SDL_Texture* texture)
 {
 	// Dimensions for rotor and flipper
 	b2Vec2 rotor_pos(476, 477);
@@ -271,7 +188,7 @@ PhysBody* Physics::createFlipper(SDL_Texture* texture)
 	flip_joint = (b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef);
 
 	return pbody;
-}
+}*/
 
 PhysBody* Physics::createPropulsor(int x, int y, SDL_Texture* texture)
 {

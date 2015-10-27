@@ -17,7 +17,6 @@
 Scene::Scene() : Module()
 {
 	name.create("scene");
-	circle = box = rick = NULL;
 	ray_on = false;
 	sensed = false;
 }
@@ -41,17 +40,15 @@ bool Scene::start()
 	app->audio->playMusic("sounds/music/pinball_theme.ogg");
 	app->audio->loadFx("sounds/fx/bonus.wav");
 
-	circle = app->tex->loadTexture("textures/wheel.png");
-	box = app->tex->loadTexture("textures/crate.png");
-	rick = app->tex->loadTexture("textures/rick_head.png");
-	pinball_ball = app->tex->loadTexture("textures/pinball_ball.png");
+	
+	pinball_ball_tex = app->tex->loadTexture("textures/pinball_ball.png");
 	pinball_level = app->tex->loadTexture("textures/pinball_level.png");
-	flipper_tex = app->tex->loadTexture("textures/flipper.png");
+	//flipper_tex = app->tex->loadTexture("textures/flipper.png");
 	propulsor_tex = app->tex->loadTexture("textures/propulsor.png");
 
 	walls.add(app->physics->createWall(0, 0, triangle1, sizeof(triangle1) / sizeof(int) ));
-	//walls.add(app->physics->createWall(0, 0, triangle2, sizeof(triangle2) / sizeof(int)));
-	//walls.add(app->physics->createWall(0, 0, triangle3, sizeof(triangle3) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, triangle2, sizeof(triangle2) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, triangle3, sizeof(triangle3) / sizeof(int)));
 	walls.add(app->physics->createWall(0, 0, triangle4, sizeof(triangle4) / sizeof(int)));
 	//walls.add(app->physics->createWall(0, 0, bottom_part, sizeof(bottom_part) / sizeof(int)));
 	walls.add(app->physics->createWall(0, 0, left_L, sizeof(left_L) / sizeof(int)));
@@ -59,8 +56,9 @@ bool Scene::start()
 	walls.add(app->physics->createWall(0, 0, contour, sizeof(contour) / sizeof(int)));
 
 
-	flip = app->physics->createFlipper(flipper_tex);
+	//flippers = app->physics->createFlipper(flipper_tex);
 	propulsor = app->physics->createPropulsor(313, 534, propulsor_tex);
+	ball = app->physics->createBall(313, 526, 6, pinball_ball_tex);
 
 
 	return true;
@@ -92,14 +90,17 @@ bool Scene::update(float dt)
 	// Pinball level
 	app->render->blit(pinball_level, 0, 0);
 
-	// Fliper
-	int x, y;
-	flip->getPosition(x, y);
-	app->render->blit(flipper_tex, x ,y ,NULL, 1.0f, flip->getRotation() + (40 * DEGTORAD));
+	//Point for update propulsor & ball
+	Point2d<int> upd;
 
-	int a, b;
-	propulsor->getPosition(a, b);
-	app->render->blit(propulsor_tex, a, b);
+	//Propulsor
+	propulsor->getPosition(upd.x, upd.y);
+	app->render->blit(propulsor->texture, upd.x, upd.y);
+
+	//Ball
+	ball->getPosition(upd.x, upd.y);
+	app->render->blit(ball->texture, upd.x, upd.y, NULL, 1.0f, ball->getRotation());
+
 
 	// RayCast
 	if (app->input->getKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
@@ -108,116 +109,16 @@ bool Scene::update(float dt)
 		app->input->getMousePosition(ray.x, ray.y);
 	}
 
-	// Creation of circles, boxes and Rick's heads.
-	if (app->input->getKey(SDL_SCANCODE_1) == KEY_DOWN)
-	{
-		circles.add(app->physics->createCircle(app->input->getMouseX(), app->input->getMouseY(), 25));
-	}
-
+	//Create Balls
 	if (app->input->getKey(SDL_SCANCODE_5) == KEY_DOWN)
-	{
-		balls.add(app->physics->createBall(app->input->getMouseX(), app->input->getMouseY(), 6, pinball_ball));
-	}
-
-	if (app->input->getKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-		boxes.add(app->physics->createRectangle(app->input->getMouseX(), app->input->getMouseY(), 100, 50));
-	}
-
-	if (app->input->getKey(SDL_SCANCODE_3) == KEY_DOWN)
-	{
-		// Pivot 0, 0
-		int rick_head[64] = {
-			14, 36,
-			42, 40,
-			40, 0,
-			75, 30,
-			88, 4,
-			94, 39,
-			111, 36,
-			104, 58,
-			107, 62,
-			117, 67,
-			109, 73,
-			110, 85,
-			106, 91,
-			109, 99,
-			103, 104,
-			100, 115,
-			106, 121,
-			103, 125,
-			98, 126,
-			95, 137,
-			83, 147,
-			67, 147,
-			53, 140,
-			46, 132,
-			34, 136,
-			38, 126,
-			23, 123,
-			30, 114,
-			10, 102,
-			29, 90,
-			0, 75,
-			30, 62
-		};
-
-		ricks.add(app->physics->createChain(app->input->getMouseX(), app->input->getMouseY(), rick_head, 64));
-	}
-
+		app->physics->createBall(app->input->getMouseX(), app->input->getMouseY(), 6, pinball_ball_tex);
+	
+	//Mouse
 	iPoint mouse;
 	app->input->getMousePosition(mouse.x, mouse.y);
 	int ray_hit = ray.distanceTo(mouse);
 
 	fVector normal(0.0f, 0.0f);
-
-	// All draw functions
-	doubleNode<PhysBody*> *c = circles.getFirst();
-
-	while (c != NULL)
-	{
-		int x, y;
-		c->data->getPosition(x, y);
-		if (c->data->contains(app->input->getMouseX(), app->input->getMouseY()))
-			app->render->blit(circle, x, y, NULL, 1.0f, c->data->getRotation());
-		c = c->next;
-	}
-
-	c = boxes.getFirst();
-
-	while (c != NULL)
-	{
-		int x, y;
-		c->data->getPosition(x, y);
-		app->render->blit(box, x, y, NULL, 1.0f, c->data->getRotation());
-		if (ray_on)
-		{
-			int hit = c->data->rayCast(ray.x, ray.y, mouse.x, mouse.y, normal.x, normal.y);
-			if (hit >= 0)
-				ray_hit = hit;
-		}
-		c = c->next;
-	}
-
-	c = ricks.getFirst();
-
-	while (c != NULL)
-	{
-		int x, y;
-		c->data->getPosition(x, y);
-		app->render->blit(rick, x, y, NULL, 1.0f, c->data->getRotation());
-		c = c->next;
-	}
-
-	c = balls.getFirst();
-
-	while (c != NULL)
-	{
-		int x, y;
-		c->data->getPosition(x, y);
-		app->render->blit(c->data->texture, x, y, NULL, 1.0f, c->data->getRotation());
-		c = c->next;
-	}
 
 	// ray -----------------
 	if (ray_on == true)
