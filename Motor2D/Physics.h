@@ -21,6 +21,7 @@ public:
 	float getRotation() const;
 	bool contains(int x, int y) const;
 	int rayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const;
+	void push(float x, float y);
 
 public:
 	int width, height;

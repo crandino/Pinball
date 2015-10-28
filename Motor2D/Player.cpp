@@ -2,6 +2,8 @@
 #include "App.h"
 #include "Textures.h"
 #include "Render.h"
+#include "Input.h"
+#include "Physics.h"
 #include "SDL\include\SDL.h"
 
 Player::Player()
