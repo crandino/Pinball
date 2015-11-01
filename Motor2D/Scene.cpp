@@ -41,16 +41,18 @@ bool Scene::start()
 	pinball_level = app->tex->loadTexture("textures/pinball_level.png");
 	propulsor_tex = app->tex->loadTexture("textures/propulsor.png");
 
-	walls.add(app->physics->createWall(0, 0, triangle1, sizeof(triangle1) / sizeof(int) ));
-	walls.add(app->physics->createWall(0, 0, triangle2, sizeof(triangle2) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, triangle3, sizeof(triangle3) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, triangle4, sizeof(triangle4) / sizeof(int)));
-	//walls.add(app->physics->createWall(0, 0, bottom_part, sizeof(bottom_part) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, left_L, sizeof(left_L) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, left_R, sizeof(left_R) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, contour, sizeof(contour) / sizeof(int)));
-
 	app->physics->createFlippers();
+
+	//walls.add(app->physics->createWall(0, 0, triangle1, sizeof(triangle1) / sizeof(int) ));
+	//walls.add(app->physics->createWall(0, 0, triangle2, sizeof(triangle2) / sizeof(int)));
+	//walls.add(app->physics->createWall(0, 0, triangle3, sizeof(triangle3) / sizeof(int)));
+	//walls.add(app->physics->createWall(0, 0, triangle4, sizeof(triangle4) / sizeof(int)));
+	////walls.add(app->physics->createWall(0, 0, bottom_part, sizeof(bottom_part) / sizeof(int)));
+	//walls.add(app->physics->createWall(0, 0, left_L, sizeof(left_L) / sizeof(int)));
+	//walls.add(app->physics->createWall(0, 0, left_R, sizeof(left_R) / sizeof(int)));
+	//walls.add(app->physics->createWall(0, 0, contour, sizeof(contour) / sizeof(int)));
+
+	
 	propulsor = app->physics->createPropulsor(313, 484, propulsor_tex);
 
 	return true;
