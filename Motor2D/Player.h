@@ -3,8 +3,8 @@
 
 #include "Module.h"
 #include "DynArray.h"
+#include "SDL\include\SDL.h"
 
-struct SDL_Rect;
 struct SDL_Texture;
 
 class Player : public Module
@@ -21,18 +21,26 @@ private:
 
 	uint					lifes;
 	uint					score;
+	uint					hi_score;
 	DynArray<SDL_Rect>		frames;
 
 	bool					playing;
 	bool					gameover;
 
+	PhysBody*				ball;
+
 	SDL_Texture*			numbers;
+	SDL_Texture*			numbers_hi;
 	SDL_Texture*			intro_tex;
 	SDL_Texture*			gameover_tex;
+	SDL_Texture*			pinball_ball_tex;
+	SDL_Texture*			life_tex;
 	
-	
+	SDL_Rect				play_button;
+	SDL_Rect				replay_button;
+
 	void blitScore();
-	void blitHiScore();
+	void blitLifes();
 };
 
 

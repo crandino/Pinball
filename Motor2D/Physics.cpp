@@ -10,7 +10,6 @@
 #include "p2Log.h"
 #include "math.h"
 
-
 #ifdef _DEBUG
 #pragma comment( lib, "Motor2D/Box2D/libx86/Debug/Box2D.lib" )
 #else

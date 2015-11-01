@@ -38,7 +38,6 @@ bool Scene::start()
 {
 	app->audio->playMusic("sounds/music/pinball_theme.ogg");
 
-	pinball_ball_tex = app->tex->loadTexture("textures/pinball_ball.png");
 	pinball_level = app->tex->loadTexture("textures/pinball_level.png");
 	propulsor_tex = app->tex->loadTexture("textures/propulsor.png");
 
@@ -53,7 +52,6 @@ bool Scene::start()
 
 	app->physics->createFlippers();
 	propulsor = app->physics->createPropulsor(313, 484, propulsor_tex);
-	ball = app->physics->createBall(313, 476, 6, pinball_ball_tex);
 
 	return true;
 }
@@ -109,20 +107,12 @@ bool Scene::update(float dt)
 	propulsor->getPosition(upd.x, upd.y);
 	app->render->blit(propulsor->texture, upd.x, upd.y);
 
-	//Ball
-	ball->getPosition(upd.x, upd.y);
-	app->render->blit(ball->texture, upd.x, upd.y, NULL, 1.0f, ball->getRotation());
-
 	// RayCast
 	if (app->input->getKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		ray_on = !ray_on;
 		app->input->getMousePosition(ray.x, ray.y);
 	}
-
-	//Create Balls
-	if (app->input->getKey(SDL_SCANCODE_5) == KEY_DOWN)
-		app->physics->createBall(app->input->getMouseX(), app->input->getMouseY(), 6, pinball_ball_tex);
 
 	static float push_force = 0.0f;
 
