@@ -35,14 +35,11 @@ public:
 	// ----------------
 
 	DList<PhysBody*> walls;
-
 	PhysBody *propulsor;
-	PhysBody *ball;
-
+	
 	PhysBody *sensor;
 	bool sensed;
 
-	SDL_Texture *pinball_ball_tex;
 	SDL_Texture *pinball_level;
 	SDL_Texture *propulsor_tex;
 
