@@ -4,6 +4,7 @@
 #include "Textures.h"
 #include "Render.h"
 #include "Physics.h"
+#include "Scene.h"
 #include "Point2d.h"
 #include "DynArray.h"
 #include "p2Log.h"
@@ -305,12 +306,12 @@ PhysBody* Physics::createPropulsor(int x, int y, SDL_Texture* texture)
 
 	b->CreateFixture(&fixture);
 
-	PhysBody* pbody = new PhysBody();
-	pbody->body = b;
-	b->SetUserData(pbody);
-	pbody->texture = texture;
-	pbody->width = width * 0.5f;
-	pbody->height = height * 0.5f;
+	app->scene->propulsor = new PhysBody();
+	app->scene->propulsor->body = b;
+	app->scene->propulsor->body->SetUserData(app->scene->propulsor);
+	app->scene->propulsor->texture = texture;
+	app->scene->propulsor->width = width * 0.5f;
+	app->scene->propulsor->height = height * 0.5f;
 
 	b2Vec2 vec(b->GetPosition());
 
@@ -320,8 +321,8 @@ PhysBody* Physics::createPropulsor(int x, int y, SDL_Texture* texture)
 	jointDef.bodyB = b;
 	jointDef.localAnchorA.Set(vec.x, vec.y);
 	jointDef.localAxisA.Set(0, -1);
-	jointDef.lowerTranslation = -1.0f;
-	jointDef.upperTranslation = 1.0f;
+	jointDef.lowerTranslation = -0.5f;
+	jointDef.upperTranslation = 0.0f;
 	jointDef.enableLimit = true;
 	jointDef.maxMotorForce = 20.0f;
 	jointDef.motorSpeed = 1.0f;
@@ -329,7 +330,7 @@ PhysBody* Physics::createPropulsor(int x, int y, SDL_Texture* texture)
 
 	propulsor_joint = (b2PrismaticJoint*)world->CreateJoint(&jointDef);
 
-	return pbody;
+	return app->scene->propulsor;
 }
 
 // 
@@ -550,4 +551,9 @@ int PhysBody::rayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 	}
 
 	return ret;
+}
+
+void PhysBody::push(float x, float y)
+{
+	body->ApplyForceToCenter(b2Vec2(x, y), true);
 }

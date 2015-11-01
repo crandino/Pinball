@@ -51,10 +51,9 @@ bool Scene::start()
 	walls.add(app->physics->createWall(0, 0, left_R, sizeof(left_R) / sizeof(int)));
 	walls.add(app->physics->createWall(0, 0, contour, sizeof(contour) / sizeof(int)));
 
-
 	app->physics->createFlippers();
-	propulsor = app->physics->createPropulsor(313, 534, propulsor_tex);
-	ball = app->physics->createBall(313, 526, 6, pinball_ball_tex);
+	propulsor = app->physics->createPropulsor(313, 484, propulsor_tex);
+	ball = app->physics->createBall(313, 476, 6, pinball_ball_tex);
 
 	return true;
 }
@@ -124,6 +123,25 @@ bool Scene::update(float dt)
 	//Create Balls
 	if (app->input->getKey(SDL_SCANCODE_5) == KEY_DOWN)
 		app->physics->createBall(app->input->getMouseX(), app->input->getMouseY(), 6, pinball_ball_tex);
+
+	static float push_force = 0.0f;
+
+	if (app->input->getKey(SDL_SCANCODE_DOWN) == KEY_DOWN || app->input->getKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	{
+		push_force += 175.0f;
+		propulsor->push(0, push_force);
+	}
+
+	else if (app->input->getKey(SDL_SCANCODE_DOWN) == KEY_UP)
+	{
+		push_force = -500.0f;
+		propulsor->push(0, push_force);
+	}
+
+	else
+		push_force = 0.0f;
+
+	
 	
 	//Mouse
 	iPoint mouse;
