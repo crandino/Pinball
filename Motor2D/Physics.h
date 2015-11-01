@@ -10,6 +10,13 @@
 #define METERS_TO_PIXELS(m) ((int) floor(PIXELS_PER_METER * m))
 #define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
 
+enum BODY_TYPE
+{
+	DYNAMIC,
+	STATIC,
+	KINEMATIC
+};
+
 // Small class to return to other modules to track position and rotation of physics bodies
 class PhysBody
 {
@@ -46,8 +53,9 @@ public:
 	bool cleanUp();
 
 	// CRZ 
-	PhysBody* createBall(int x, int y, int radius, SDL_Texture*);
+	PhysBody* createBall(int x, int y, int radius, SDL_Texture* texture);
 	PhysBody* createWall(int x, int y, int *points, int size);
+	PhysBody* createBouncer(int x, int y, int radius, float density, float restitution);
 
 	PhysBody* createPropulsor(int x, int y, SDL_Texture*);
 	void createFlippers();
