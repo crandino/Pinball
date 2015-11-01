@@ -23,10 +23,10 @@ public:
 	int rayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const;
 
 public:
-	int width, height;
-	b2Body* body;
-	Module *listener;	
-	SDL_Texture *texture;
+	int				width, height;
+	b2Body*					 body;
+	Module*				 listener;	
+	SDL_Texture*		  texture;
 };
 
 // Module --------------------------------------
@@ -48,12 +48,15 @@ public:
 	PhysBody* createBall(int x, int y, int radius, SDL_Texture*);
 	PhysBody* createWall(int x, int y, int *points, int size);
 
-	//DList<PhysBody*> createFlipper(SDL_Texture*);
 	PhysBody* createPropulsor(int x, int y, SDL_Texture*);
+	void createFlippers();
 	void beginContact(b2Contact *contact);
 
-	b2RevoluteJoint*		flip_joint;
-	b2PrismaticJoint*		propulsor_joint;
+	DList<PhysBody*>			right_flippers;
+	DList<PhysBody*>			left_flippers;
+	DList<b2RevoluteJoint*>		right_joints_flippers;
+	DList<b2RevoluteJoint*>		left_joints_flippers;
+	b2PrismaticJoint*			propulsor_joint;
 
 private:
 
@@ -67,4 +70,8 @@ private:
 	float32			 time_step;
 	int32		 velocity_iter;
 	int32		 position_iter;
+
+	SDL_Texture*	left_flip_tex;
+	SDL_Texture*	right_flip_tex;
+	
 };

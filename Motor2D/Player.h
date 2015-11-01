@@ -22,10 +22,17 @@ private:
 	uint					lifes;
 	uint					score;
 	DynArray<SDL_Rect>		frames;
-	SDL_Texture*			numbers;
+
 	bool					playing;
+	bool					gameover;
+
+	SDL_Texture*			numbers;
+	SDL_Texture*			intro_tex;
+	SDL_Texture*			gameover_tex;
+	
 	
 	void blitScore();
+	void blitHiScore();
 };
 
 

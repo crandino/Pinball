@@ -17,9 +17,13 @@ bool Player::start()
 {
 	bool ret = true;
 
+	// We set variables
 	lifes = 3;
 	score = 0;
+	playing = false;
+	gameover = false;
 
+	// We set the corresponding frames for score numbers
 	SDL_Rect r;
 	for (uint i = 0; i < 10; i++)
 	{
@@ -35,6 +39,8 @@ bool Player::start()
 bool Player::update(float dt)
 {
 	blitScore();
+	blitHiScore();
+
 	return true;
 }
 
@@ -51,6 +57,9 @@ void Player::blitScore()
 		score_remain = score_remain - (divisor * num_to_render);
 		divisor /= 10; 
 	}
-	/*num_to_render = (int)(score_remain % 10);
-	app->render->blit(numbers, 32, 490, &frames[num_to_render]);*/
+}
+
+void Player::blitHiScore()
+{
+	
 }

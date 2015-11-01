@@ -13,7 +13,6 @@
 #include "Box2D\Box2D\Box2D.h"
 #include "ChainPoints.h"
 
-
 Scene::Scene() : Module()
 {
 	name.create("scene");
@@ -38,12 +37,9 @@ bool Scene::awake(pugi::xml_node &node)
 bool Scene::start()
 {
 	app->audio->playMusic("sounds/music/pinball_theme.ogg");
-	app->audio->loadFx("sounds/fx/bonus.wav");
 
-	
 	pinball_ball_tex = app->tex->loadTexture("textures/pinball_ball.png");
 	pinball_level = app->tex->loadTexture("textures/pinball_level.png");
-	//flipper_tex = app->tex->loadTexture("textures/flipper.png");
 	propulsor_tex = app->tex->loadTexture("textures/propulsor.png");
 
 	walls.add(app->physics->createWall(0, 0, triangle1, sizeof(triangle1) / sizeof(int) ));
@@ -56,7 +52,7 @@ bool Scene::start()
 	walls.add(app->physics->createWall(0, 0, contour, sizeof(contour) / sizeof(int)));
 
 
-	//flippers = app->physics->createFlipper(flipper_tex);
+	app->physics->createFlippers();
 	propulsor = app->physics->createPropulsor(313, 534, propulsor_tex);
 	ball = app->physics->createBall(313, 526, 6, pinball_ball_tex);
 
@@ -79,20 +75,33 @@ bool Scene::update(float dt)
 	if (app->input->getKey(SDL_SCANCODE_S) == KEY_DOWN)
 		app->saveGame("save_game.xml");
 
-	if (app->input->getKey(SDL_SCANCODE_M) == KEY_DOWN)
-	{
-		app->physics->flip_joint->EnableMotor(true);
-		app->physics->flip_joint->SetMaxMotorTorque(20.0f);
-		app->physics->flip_joint->SetMotorSpeed(360 * DEGTORAD);
-	}
+	//if (app->input->getKey(SDL_SCANCODE_M) == KEY_DOWN)
+	//{
+	//	app->physics->flip_joint->EnableMotor(true);
+	//	app->physics->flip_joint->SetMaxMotorTorque(20.0f);
+	//	app->physics->flip_joint->SetMotorSpeed(360 * DEGTORAD);
+	//}
 		
-	// Pinball level
+	// Pinball level rendering
 	app->render->blit(pinball_level, 0, 0);
 
-	//// Fliper
-	//int x, y;
-	//flip->getPosition(x, y);
-	//app->render->blit(flipper_tex, x, y, NULL, 1.0f, flip->getRotation());
+	//// Flippers rendering
+	int x, y;
+	doubleNode<PhysBody*> *flip_item = app->physics->left_flippers.getFirst();
+	while (flip_item != NULL)
+	{
+		flip_item->data->getPosition(x, y);
+		app->render->blit(flip_item->data->texture, x, y, NULL, 1.0f, flip_item->data->getRotation());
+		flip_item = flip_item->next;
+	}	
+
+	flip_item = app->physics->right_flippers.getFirst();
+	while (flip_item != NULL)
+	{
+		flip_item->data->getPosition(x, y);
+		app->render->blit(flip_item->data->texture, x, y, NULL, 1.0f, flip_item->data->getRotation());
+		flip_item = flip_item->next;
+	}
 
 	//Point for update propulsor & ball
 	Point2d<int> upd;

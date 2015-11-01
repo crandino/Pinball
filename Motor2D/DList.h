@@ -3,6 +3,10 @@
 
 #include <assert.h>
 
+#ifndef NULL
+#define NULL 0
+#endif
+
 template <class TYPE>
 void swap(TYPE &a, TYPE &b) {
 

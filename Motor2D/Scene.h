@@ -35,18 +35,15 @@ public:
 	// ----------------
 
 	DList<PhysBody*> walls;
-	DList<PhysBody*> flippers;
 
 	PhysBody *propulsor;
 	PhysBody *ball;
-
 
 	PhysBody *sensor;
 	bool sensed;
 
 	SDL_Texture *pinball_ball_tex;
 	SDL_Texture *pinball_level;
-	SDL_Texture *flipper_tex;
 	SDL_Texture *propulsor_tex;
 
 	uint bonus_fx;
