@@ -59,12 +59,12 @@ public:
 	PhysBody* createBouncer(int x, int y, int *points, int size, float density, float restitution);
 
 	PhysBody* createPropulsor(int x, int y, SDL_Texture*);
-	void createFlippers();
+	PhysBody* createRoulette(int x, int y, int width, int height, SDL_Texture*);
+	
+	void createFlippers();	
 	PhysBody *createLeftFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle);
 	PhysBody *createRightFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle);
 	b2RevoluteJoint *createFlipperJoint(b2Body *rotor, b2Body *stick, float32 &lower_angle, float32 &upper_angle);
-
-	void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
 
 	void activateLeftFlippers();
 	void activateRightFlippers();
@@ -73,6 +73,7 @@ public:
 
 	b2PolygonShape *polyFromPoints(b2PolygonShape *shape, int *points, int size);
 	void beginContact(b2Contact *contact);
+	void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
 
 	DList<PhysBody*>			right_flippers;
 	DList<PhysBody*>			left_flippers;

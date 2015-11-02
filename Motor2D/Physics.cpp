@@ -21,7 +21,7 @@ Physics::Physics()
 	name.create("physics");
 	mouse_joint = NULL;
 	world = NULL;
-	debug = true;
+	debug = false;
 }
 
 // Destructor
@@ -53,7 +53,7 @@ bool Physics::start()
 	// We load textures for flippers and propulsor.
 	left_flip_tex = app->tex->loadTexture("textures/left_flipper.png");
 	right_flip_tex = app->tex->loadTexture("textures/right_flipper.png");
-		
+			
 	return true;
 }
 
@@ -98,6 +98,58 @@ PhysBody* Physics::createBall(int x, int y, int radius, SDL_Texture *texture)
 	pbody->texture = texture;
 	pbody->width = pbody->height = radius;
 	
+	return pbody;
+}
+
+PhysBody *Physics::createRoulette(int x, int y, int width, int height, SDL_Texture *texture)
+{
+	// Rotor of the roulette
+	float32 radius = 5;
+	b2BodyDef rotor_def;
+	rotor_def.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	rotor_def.type = b2_staticBody;
+	b2Body *rotor = world->CreateBody(&rotor_def);
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(radius);
+	b2FixtureDef rotor_fixture;
+	rotor_fixture.shape = &shape;
+	rotor->CreateFixture(&rotor_fixture);
+
+	b2BodyDef stick_def;
+	stick_def.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	stick_def.type = b2_kinematicBody;
+	stick_def.fixedRotation = true;
+	stick_def.angularVelocity = 80.0f * DEGTORAD;
+	b2Body *stick = world->CreateBody(&stick_def);
+
+	b2PolygonShape box;
+	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height)  * 0.5f);
+	b2FixtureDef roulette_fixture;
+	roulette_fixture.density = 1.0f;
+	roulette_fixture.shape = &box;
+	stick->CreateFixture(&roulette_fixture);
+
+	// PhysBody declaration
+	PhysBody* pbody = new PhysBody();
+	pbody->body = stick;
+	stick->SetUserData(pbody);
+	pbody->texture = texture;
+	pbody->width = width * 0.5f;
+	pbody->height = height * 0.5f;
+
+	/*b2RevoluteJointDef revoluteJointDef;
+	revoluteJointDef.bodyA = rotor;
+	revoluteJointDef.bodyB = stick;
+	revoluteJointDef.collideConnected = false;
+	revoluteJointDef.enableLimit = false;
+	revoluteJointDef.enableMotor = true;
+	revoluteJointDef.motorSpeed = 120.0f * DEGTORAD;
+	revoluteJointDef.maxMotorTorque = 120.0f * DEGTORAD;
+	revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
+	revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
+
+	b2RevoluteJoint *rev = (b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef);*/
+
 	return pbody;
 }
 
@@ -202,32 +254,13 @@ b2PolygonShape *Physics::polyFromPoints(b2PolygonShape *shape, int *points, int 
 
 void Physics::createFlippers()
 {
-	// First left three flippers, from left to right.
-	// Then, the remaining right three flippers, left to right
-	// too.
-
-	left_flippers.add(createLeftFlipper(b2Vec2(77, 301), 0.0f , 52.0f));
+	left_flippers.add(createLeftFlipper(b2Vec2(78, 301), 0.0f , 52.0f));
 	left_flippers.add(createLeftFlipper(b2Vec2(152, 479), -24.0f , 26.0f));
 	left_flippers.add(createLeftFlipper(b2Vec2(382, 479), -24.0f, 26.0f));
 
 	right_flippers.add(createRightFlipper(b2Vec2(244, 479), -26.0f, 24.0f));
 	right_flippers.add(createRightFlipper(b2Vec2(476, 479), -26.0f, 24.0f));
 	right_flippers.add(createRightFlipper(b2Vec2(552, 301), -52.0f, 0.0f));
-
-	/*DynArray<b2Vec2> rotor_pos;
-	rotor_pos.pushBack({  77, 301 });
-	rotor_pos.pushBack({ 150, 479 });
-	rotor_pos.pushBack({ 380, 479 });
-	rotor_pos.pushBack({ 245, 479 });
-	rotor_pos.pushBack({ 550, 301 });
-	rotor_pos.pushBack({ 476, 479});
-	DynArray<b2Vec2> stick_pos;
-	stick_pos.pushBack({  92, 313 });
-	stick_pos.pushBack({ 163, 477 });
-	stick_pos.pushBack({ 395, 477 });
-	stick_pos.pushBack({ 232, 477 });
-	stick_pos.pushBack({ 463, 477 });
-	stick_pos.pushBack({ 540, 313 });*/
 }
 
 PhysBody *Physics::createLeftFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle)

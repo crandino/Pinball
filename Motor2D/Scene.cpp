@@ -41,6 +41,7 @@ bool Scene::start()
 
 	pinball_level = app->tex->loadTexture("textures/pinball_level.png");
 	propulsor_tex = app->tex->loadTexture("textures/propulsor.png");
+	roulette_tex = app->tex->loadTexture("textures/roulette.png");
 
 	app->physics->createFlippers();
 
@@ -70,6 +71,7 @@ bool Scene::start()
 	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse4, sizeof(hypotenuse4) / sizeof(int), 1.0f, 1.2f));
 	
 	propulsor = app->physics->createPropulsor(313, 484, propulsor_tex);
+	roulette = app->physics->createRoulette(313, 124, 4, 34, roulette_tex);
 
 	return true;
 }
@@ -89,13 +91,6 @@ bool Scene::update(float dt)
 
 	if (app->input->getKey(SDL_SCANCODE_S) == KEY_DOWN)
 		app->saveGame("save_game.xml");
-
-	//if (app->input->getKey(SDL_SCANCODE_M) == KEY_DOWN)
-	//{
-	//	app->physics->flip_joint->EnableMotor(true);
-	//	app->physics->flip_joint->SetMaxMotorTorque(20.0f);
-	//	app->physics->flip_joint->SetMotorSpeed(360 * DEGTORAD);
-	//}
 		
 	// Pinball level rendering
 	app->render->blit(pinball_level, 0, 0);
@@ -124,6 +119,10 @@ bool Scene::update(float dt)
 	//Propulsor
 	propulsor->getPosition(pos.x, pos.y);
 	app->render->blit(propulsor->texture, pos.x, pos.y);
+
+	//Roulette
+	roulette->getPosition(pos.x, pos.y);
+	app->render->blit(roulette->texture, pos.x, pos.y, NULL, 1.0f, roulette->getRotation());
 
 	// RayCast
 	if (app->input->getKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
