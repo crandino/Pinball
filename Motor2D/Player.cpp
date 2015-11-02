@@ -29,7 +29,7 @@ bool Player::start()
 
 	// We set variables
 	lifes = 3;
-	score = 52684;
+	score = 0;
 	hi_score = 0;
 	playing = false;
 	gameover = false;

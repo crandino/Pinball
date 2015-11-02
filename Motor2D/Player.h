@@ -17,10 +17,11 @@ public:
 	bool start();
 	bool update(float dt);
 
+	uint					score;
+
 private:
 
 	uint					lifes;
-	uint					score;
 	uint					hi_score;
 	DynArray<SDL_Rect>		frames;
 

@@ -5,6 +5,7 @@
 #include "Textures.h"
 #include "FileSystem.h"
 #include "Physics.h"
+#include "Player.h"
 #include "Audio.h"
 #include "Render.h"
 #include "Window.h"
@@ -43,19 +44,30 @@ bool Scene::start()
 
 	app->physics->createFlippers();
 
-	//walls.add(app->physics->createWall(0, 0, triangle1, sizeof(triangle1) / sizeof(int) ));
-	//walls.add(app->physics->createWall(0, 0, triangle2, sizeof(triangle2) / sizeof(int)));
-	//walls.add(app->physics->createWall(0, 0, triangle3, sizeof(triangle3) / sizeof(int)));
-	//walls.add(app->physics->createWall(0, 0, triangle4, sizeof(triangle4) / sizeof(int)));
-	////walls.add(app->physics->createWall(0, 0, bottom_part, sizeof(bottom_part) / sizeof(int)));
-	//walls.add(app->physics->createWall(0, 0, left_L, sizeof(left_L) / sizeof(int)));
-	//walls.add(app->physics->createWall(0, 0, left_R, sizeof(left_R) / sizeof(int)));
-	//walls.add(app->physics->createWall(0, 0, contour, sizeof(contour) / sizeof(int)));
-	app->physics->createBouncer(404, 118, 11, 1.0f, 1.5f);
-	app->physics->createBouncer(446, 112, 11, 1.0f, 1.5f);
-	app->physics->createBouncer(433, 154, 11, 1.0f, 1.5f);
-	app->physics->createBouncer(113, 393, triangle_left, sizeof(triangle_left) / sizeof(int), 1.0f, 1.2f);
-	app->physics->createBouncer(236, 395, triangle_right, sizeof(triangle_right) / sizeof(int), 1.0f, 1.2f);
+	walls.add(app->physics->createWall(0, 0, triangle1, sizeof(triangle1) / sizeof(int) ));
+	walls.add(app->physics->createWall(0, 0, triangle2, sizeof(triangle2) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, triangle3, sizeof(triangle3) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, triangle4, sizeof(triangle4) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, left_L, sizeof(left_L) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, left_R, sizeof(left_R) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, contour, sizeof(contour) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, left_mondongo, sizeof(left_mondongo) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, right_mondongo, sizeof(right_mondongo) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, telefon, sizeof(telefon) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, spliter1, sizeof(spliter1) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, spliter2, sizeof(spliter2) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, spliter3, sizeof(spliter3) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, guacamole, sizeof(guacamole) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, top_hat, sizeof(top_hat) / sizeof(int)));
+	//walls.add(app->physics->createWall(0, 0, bottom_part, sizeof(bottom_part) / sizeof(int)));
+
+	bouncers.add(app->physics->createBouncer(404, 118, 11, 1.0f, 1.5f));
+	bouncers.add(app->physics->createBouncer(446, 112, 11, 1.0f, 1.5f));
+	bouncers.add(app->physics->createBouncer(433, 154, 11, 1.0f, 1.5f));
+	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse1, sizeof(hypotenuse1) / sizeof(int), 1.0f, 1.2f));
+	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse2, sizeof(hypotenuse2) / sizeof(int), 1.0f, 1.2f));
+	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse3, sizeof(hypotenuse3) / sizeof(int), 1.0f, 1.2f));
+	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse4, sizeof(hypotenuse4) / sizeof(int), 1.0f, 1.2f));
 	
 	propulsor = app->physics->createPropulsor(313, 484, propulsor_tex);
 
@@ -102,8 +114,7 @@ bool Scene::update(float dt)
 	while (flip_item != NULL)
 	{
 		flip_item->data->getPosition(x, y);
-		//LOG("%f", flip_item->data->getRotation());
-		app->render->blit(flip_item->data->texture, x, y, NULL, 1.0f, flip_item->data->getRotation(), 0 ,0);
+		app->render->blit(flip_item->data->texture, x, y, NULL, 1.0f, flip_item->data->getRotation(), 0, 0);
 		flip_item = flip_item->next;
 	}
 
@@ -182,22 +193,14 @@ bool Scene::postUpdate()
 
 void Scene::onCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	int x, y;
-
-	app->audio->playFx(bonus_fx);
-
-	/*
-	if(bodyA)
+	for (doubleNode<PhysBody*>* tmp = bouncers.getFirst(); tmp != NULL; tmp = tmp->next)
 	{
-	bodyA->GetPosition(x, y);
-	App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
+		if (bodyA == tmp->data)
+			app->player->score += 10;
+
+		else if (bodyB == tmp->data)
+			app->player->score += 10;
 	}
-
-	if(bodyB)
-	{
-	bodyB->GetPosition(x, y);
-	App->renderer->DrawCircle(x, y, 50, 100, 100, 100);
-	}*/
 }
 
 

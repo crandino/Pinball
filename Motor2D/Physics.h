@@ -64,6 +64,8 @@ public:
 	PhysBody *createRightFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle);
 	b2RevoluteJoint *createFlipperJoint(b2Body *rotor, b2Body *stick, float32 &lower_angle, float32 &upper_angle);
 
+	void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
+
 	void activateLeftFlippers();
 	void activateRightFlippers();
 	void deactivateLeftFlippers();

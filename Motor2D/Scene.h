@@ -35,6 +35,7 @@ public:
 	// ----------------
 
 	DList<PhysBody*> walls;
+	DList<PhysBody*> bouncers;
 	PhysBody *propulsor;
 	
 	PhysBody *sensor;

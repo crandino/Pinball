@@ -155,6 +155,7 @@ PhysBody* Physics::createBouncer(int x, int y, int radius, float density, float 
 	pbody->body = b;
 	pbody->body->SetUserData(pbody);
 	pbody->width = pbody->height = radius;
+	pbody->listener = app->scene;
 
 	return pbody;
 }
@@ -178,6 +179,7 @@ PhysBody* Physics::createBouncer(int x, int y, int *points, int size, float dens
 	pbody->body = b;
 	pbody->body->SetUserData(pbody);
 	pbody->width = pbody->height = 0;
+	pbody->listener = app->scene;
 
 	return pbody;
 }
@@ -665,4 +667,16 @@ void Physics::deactivateRightFlippers()
 		item->data->SetMotorSpeed(0.0f);
 		item = item->next;
 	}
+}
+
+void Physics::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
+{
+	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
+	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
+
+	if (physA && physA->listener != NULL)
+		physA->listener->onCollision(physA, physB);
+
+	if (physB && physB->listener != NULL)
+		physB->listener->onCollision(physB, physA);
 }
