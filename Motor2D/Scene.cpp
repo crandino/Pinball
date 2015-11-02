@@ -90,7 +90,7 @@ bool Scene::update(float dt)
 	while (flip_item != NULL)
 	{
 		flip_item->data->getPosition(x, y);
-		app->render->blit(flip_item->data->texture, x, y, NULL, 1.0f, flip_item->data->getRotation());
+		app->render->blit(flip_item->data->texture, x, y, NULL, 1.0f, flip_item->data->getRotation(), 0, 0);
 		flip_item = flip_item->next;
 	}	
 
@@ -98,7 +98,8 @@ bool Scene::update(float dt)
 	while (flip_item != NULL)
 	{
 		flip_item->data->getPosition(x, y);
-		app->render->blit(flip_item->data->texture, x, y, NULL, 1.0f, flip_item->data->getRotation());
+		//LOG("%f", flip_item->data->getRotation());
+		app->render->blit(flip_item->data->texture, x, y, NULL, 1.0f, flip_item->data->getRotation(), 0 ,0);
 		flip_item = flip_item->next;
 	}
 

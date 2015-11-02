@@ -93,7 +93,6 @@ bool Player::update(float dt)
 				playing = true;
 				gameover = false;
 			}
-				
 		}
 	}
 
@@ -106,6 +105,8 @@ bool Player::update(float dt)
 		score = 0;
 	}
 
+
+	// TODO : Move to Physics class
 	if (METERS_TO_PIXELS(ball->body->GetPosition().y) > 532)
 	{
 		ball->body->SetTransform(b2Vec2(PIXEL_TO_METERS(313), PIXEL_TO_METERS(472)), ball->body->GetAngle());
@@ -113,7 +114,20 @@ bool Player::update(float dt)
 		lifes--;
 	}
 
-	
+	if (playing)
+	{
+		if (app->input->getKey(SDL_SCANCODE_Z) == KEY_DOWN)
+			app->physics->activateLeftFlippers();
+
+		if (app->input->getKey(SDL_SCANCODE_M) == KEY_DOWN)
+			app->physics->activateRightFlippers();
+
+		if (app->input->getKey(SDL_SCANCODE_Z) == KEY_UP)
+			app->physics->deactivateLeftFlippers();
+
+		if (app->input->getKey(SDL_SCANCODE_M) == KEY_UP)
+			app->physics->deactivateRightFlippers();
+	}	
 
 	return true;
 }

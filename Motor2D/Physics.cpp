@@ -176,7 +176,37 @@ b2PolygonShape *Physics::polyFromPoints(b2PolygonShape *shape, int *points, int 
 	return shape;
 }
 
-PhysBody *Physics::createLeftFlipper(b2Vec2 rotation_point)
+void Physics::createFlippers()
+{
+	// First left three flippers, from left to right.
+	// Then, the remaining right three flippers, left to right
+	// too.
+
+	left_flippers.add(createLeftFlipper(b2Vec2(77, 301), 0.0f , 52.0f));
+	left_flippers.add(createLeftFlipper(b2Vec2(152, 479), -24.0f , 26.0f));
+	left_flippers.add(createLeftFlipper(b2Vec2(382, 479), -24.0f, 26.0f));
+
+	right_flippers.add(createRightFlipper(b2Vec2(244, 479), -26.0f, 24.0f));
+	right_flippers.add(createRightFlipper(b2Vec2(476, 479), -26.0f, 24.0f));
+	right_flippers.add(createRightFlipper(b2Vec2(552, 301), -52.0f, 0.0f));
+
+	/*DynArray<b2Vec2> rotor_pos;
+	rotor_pos.pushBack({  77, 301 });
+	rotor_pos.pushBack({ 150, 479 });
+	rotor_pos.pushBack({ 380, 479 });
+	rotor_pos.pushBack({ 245, 479 });
+	rotor_pos.pushBack({ 550, 301 });
+	rotor_pos.pushBack({ 476, 479});
+	DynArray<b2Vec2> stick_pos;
+	stick_pos.pushBack({  92, 313 });
+	stick_pos.pushBack({ 163, 477 });
+	stick_pos.pushBack({ 395, 477 });
+	stick_pos.pushBack({ 232, 477 });
+	stick_pos.pushBack({ 463, 477 });
+	stick_pos.pushBack({ 540, 313 });*/
+}
+
+PhysBody *Physics::createLeftFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle)
 {
 	// Rotor of the flipper
 	float32 radius = 5;
@@ -191,9 +221,8 @@ PhysBody *Physics::createLeftFlipper(b2Vec2 rotation_point)
 	rotor->CreateFixture(&rotor_fixture);
 
 	// Flipper
-	int delta_x = 15;
 	b2BodyDef stick_def;
-	stick_def.position.Set(PIXEL_TO_METERS(rotation_point.x + delta_x), PIXEL_TO_METERS(rotation_point.y));
+	stick_def.position.Set(PIXEL_TO_METERS(rotation_point.x), PIXEL_TO_METERS(rotation_point.y));
 	stick_def.type = b2_dynamicBody;
 	b2Body *stick = world->CreateBody(&stick_def);
 	
@@ -221,21 +250,12 @@ PhysBody *Physics::createLeftFlipper(b2Vec2 rotation_point)
 	pbody->width = 0;
 	pbody->height = 0;
 	
-	b2RevoluteJointDef revoluteJointDef;
-	revoluteJointDef.bodyA = rotor;
-	revoluteJointDef.bodyB = stick;
-	revoluteJointDef.collideConnected = false;
-	revoluteJointDef.enableLimit = false;
-	revoluteJointDef.lowerAngle = -30.0f * DEGTORAD;
-	revoluteJointDef.upperAngle = 50.0f * DEGTORAD;
-	revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
-	revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(5), PIXEL_TO_METERS(4));
-
-	left_joints_flippers.add((b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef));
+	left_joints_flippers.add(createFlipperJoint(rotor, stick, lower_angle, upper_angle));
+	
 	return pbody;
 }
 
-PhysBody *Physics::createRightFlipper(b2Vec2 rotation_point)
+PhysBody *Physics::createRightFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle)
 {
 	// Rotor of the flipper
 	float32 radius = 5;
@@ -250,9 +270,8 @@ PhysBody *Physics::createRightFlipper(b2Vec2 rotation_point)
 	rotor->CreateFixture(&rotor_fixture);
 
 	// Flipper
-	int delta_x = 15;
 	b2BodyDef stick_def;
-	stick_def.position.Set(PIXEL_TO_METERS(rotation_point.x - delta_x), PIXEL_TO_METERS(rotation_point.y));
+	stick_def.position.Set(PIXEL_TO_METERS(rotation_point.x), PIXEL_TO_METERS(rotation_point.y));
 	stick_def.type = b2_dynamicBody;
 	b2Body *stick = world->CreateBody(&stick_def);
 
@@ -280,48 +299,39 @@ PhysBody *Physics::createRightFlipper(b2Vec2 rotation_point)
 	pbody->width = 0;
 	pbody->height = 0;
 
+	right_joints_flippers.add(createFlipperJoint(rotor, stick, lower_angle, upper_angle));
+
+	return pbody;
+}
+
+b2RevoluteJoint *Physics::createFlipperJoint(b2Body *rotor, b2Body *stick, float32 &lower_angle, float32 &upper_angle)
+{
 	b2RevoluteJointDef revoluteJointDef;
 	revoluteJointDef.bodyA = rotor;
 	revoluteJointDef.bodyB = stick;
 	revoluteJointDef.collideConnected = false;
-	revoluteJointDef.enableLimit = false;
-	revoluteJointDef.lowerAngle = -30.0f * DEGTORAD;
-	revoluteJointDef.upperAngle = 50.0f * DEGTORAD;
+	revoluteJointDef.enableLimit = true;
+	revoluteJointDef.enableMotor = false;
+	revoluteJointDef.motorSpeed = 0.0f;
+	revoluteJointDef.maxMotorTorque = 720.0f * DEGTORAD;
+	revoluteJointDef.lowerAngle = lower_angle * DEGTORAD;
+	revoluteJointDef.upperAngle = upper_angle * DEGTORAD;
 	revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
-	revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(4));
+	
+	PhysBody *pb = (PhysBody*)(stick->GetUserData());
+	if (pb->texture != NULL && pb->texture == left_flip_tex)
+	{
+		// Local anchor for left flippers
+		revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(5), PIXEL_TO_METERS(4));
+	}
+	else
+	{
+		// Local anchor for right flippers
+		revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(45), PIXEL_TO_METERS(4));
+	}
+		
 
-	right_joints_flippers.add((b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef));
-	return pbody;
-}
-
-void Physics::createFlippers()
-{
-	// First left three flippers, from left to right.
-	// Then, the remaining right three flippers, left to right
-	// too.
-
-	left_flippers.add(createLeftFlipper(b2Vec2(77, 301)));
-	left_flippers.add(createLeftFlipper(b2Vec2(150, 479)));
-	left_flippers.add(createLeftFlipper(b2Vec2(380, 479)));
-
-	right_flippers.add(createRightFlipper(b2Vec2(245, 479)));
-	right_flippers.add(createRightFlipper(b2Vec2(550, 301)));
-	right_flippers.add(createRightFlipper(b2Vec2(476, 479)));
-
-	DynArray<b2Vec2> rotor_pos;
-	rotor_pos.pushBack({  77, 301 });
-	rotor_pos.pushBack({ 150, 479 });
-	rotor_pos.pushBack({ 380, 479 });
-	rotor_pos.pushBack({ 245, 479 });
-	rotor_pos.pushBack({ 550, 301 });
-	rotor_pos.pushBack({ 476, 479});
-	DynArray<b2Vec2> stick_pos;
-	stick_pos.pushBack({  92, 313 });
-	stick_pos.pushBack({ 163, 477 });
-	stick_pos.pushBack({ 395, 477 });
-	stick_pos.pushBack({ 232, 477 });
-	stick_pos.pushBack({ 463, 477 });
-	stick_pos.pushBack({ 540, 313 });
+	return (b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef);
 }
 
 PhysBody* Physics::createPropulsor(int x, int y, SDL_Texture* texture)
@@ -500,11 +510,8 @@ bool Physics::postUpdate()
 	// TODO 4: If the player releases the mouse button, destroy the joint
 	if (mouse_joint != NULL && app->input->getMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 	{
-		if (mouse_joint != NULL)
-		{
-			world->DestroyJoint(mouse_joint);
-			mouse_joint = NULL;
-		}
+		world->DestroyJoint(mouse_joint);
+		mouse_joint = NULL;
 	}
 
 	return true;
@@ -593,4 +600,47 @@ int PhysBody::rayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 void PhysBody::push(float x, float y)
 {
 	body->ApplyForceToCenter(b2Vec2(x, y), true);
+}
+
+void Physics::activateLeftFlippers()
+{
+	doubleNode<b2RevoluteJoint*> *item = app->physics->left_joints_flippers.getFirst();
+	while (item != NULL)
+	{
+		item->data->EnableMotor(true);
+		item->data->SetMotorSpeed(-1080 * DEGTORAD);
+		item = item->next;
+	}
+}
+void Physics::activateRightFlippers()
+{
+	doubleNode<b2RevoluteJoint*> *item = app->physics->right_joints_flippers.getFirst();
+	while (item != NULL)
+	{
+		item->data->EnableMotor(true);
+		item->data->SetMotorSpeed(1080 * DEGTORAD);
+		item = item->next;
+	}
+}
+
+void Physics::deactivateLeftFlippers()
+{
+	doubleNode<b2RevoluteJoint*> *item = app->physics->left_joints_flippers.getFirst();
+	while (item != NULL)
+	{
+		item->data->EnableMotor(false);
+		item->data->SetMotorSpeed(0.0f);
+		item = item->next;
+	}
+}
+
+void Physics::deactivateRightFlippers()
+{
+	doubleNode<b2RevoluteJoint*> *item = app->physics->right_joints_flippers.getFirst();
+	while (item != NULL)
+	{
+		item->data->EnableMotor(false);
+		item->data->SetMotorSpeed(0.0f);
+		item = item->next;
+	}
 }

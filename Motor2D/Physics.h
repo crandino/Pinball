@@ -59,10 +59,16 @@ public:
 
 	PhysBody* createPropulsor(int x, int y, SDL_Texture*);
 	void createFlippers();
-	PhysBody *Physics::createLeftFlipper(b2Vec2 rotation_point);
-	PhysBody *Physics::createRightFlipper(b2Vec2 rotation_point);
-	b2PolygonShape *Physics::polyFromPoints(b2PolygonShape *shape, int *points, int size);
+	PhysBody *createLeftFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle);
+	PhysBody *createRightFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle);
+	b2RevoluteJoint *createFlipperJoint(b2Body *rotor, b2Body *stick, float32 &lower_angle, float32 &upper_angle);
 
+	void activateLeftFlippers();
+	void activateRightFlippers();
+	void deactivateLeftFlippers();
+	void deactivateRightFlippers();
+
+	b2PolygonShape *polyFromPoints(b2PolygonShape *shape, int *points, int size);
 	void beginContact(b2Contact *contact);
 
 	DList<PhysBody*>			right_flippers;
