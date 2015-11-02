@@ -51,7 +51,11 @@ bool Scene::start()
 	//walls.add(app->physics->createWall(0, 0, left_L, sizeof(left_L) / sizeof(int)));
 	//walls.add(app->physics->createWall(0, 0, left_R, sizeof(left_R) / sizeof(int)));
 	//walls.add(app->physics->createWall(0, 0, contour, sizeof(contour) / sizeof(int)));
-
+	app->physics->createBouncer(404, 118, 11, 1.0f, 1.5f);
+	app->physics->createBouncer(446, 112, 11, 1.0f, 1.5f);
+	app->physics->createBouncer(433, 154, 11, 1.0f, 1.5f);
+	app->physics->createBouncer(113, 393, triangle_left, sizeof(triangle_left) / sizeof(int), 1.0f, 1.2f);
+	app->physics->createBouncer(236, 395, triangle_right, sizeof(triangle_right) / sizeof(int), 1.0f, 1.2f);
 	
 	propulsor = app->physics->createPropulsor(313, 484, propulsor_tex);
 
@@ -104,11 +108,11 @@ bool Scene::update(float dt)
 	}
 
 	//Point for update propulsor & ball
-	Point2d<int> upd;
+	Point2d<int> pos;
 
 	//Propulsor
-	propulsor->getPosition(upd.x, upd.y);
-	app->render->blit(propulsor->texture, upd.x, upd.y);
+	propulsor->getPosition(pos.x, pos.y);
+	app->render->blit(propulsor->texture, pos.x, pos.y);
 
 	// RayCast
 	if (app->input->getKey(SDL_SCANCODE_SPACE) == KEY_DOWN)

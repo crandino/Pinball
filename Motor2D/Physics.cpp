@@ -137,7 +137,6 @@ PhysBody* Physics::createWall(int x, int y, int *points, int size)
 
 PhysBody* Physics::createBouncer(int x, int y, int radius, float density, float restitution)
 {
-
 	b2BodyDef body_def;
 	body_def.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 	body_def.type = b2_staticBody;
@@ -156,6 +155,29 @@ PhysBody* Physics::createBouncer(int x, int y, int radius, float density, float 
 	pbody->body = b;
 	pbody->body->SetUserData(pbody);
 	pbody->width = pbody->height = radius;
+
+	return pbody;
+}
+
+PhysBody* Physics::createBouncer(int x, int y, int *points, int size, float density, float restitution)
+{
+	b2BodyDef body_def;
+	body_def.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body_def.type = b2_staticBody;
+
+	b2Body *b = world->CreateBody(&body_def);
+	b2PolygonShape poly_shape;
+
+	b2FixtureDef fixture_def;
+	fixture_def.shape = polyFromPoints(&poly_shape, points, size);;
+	fixture_def.density = density;
+	fixture_def.restitution = restitution;
+	b->CreateFixture(&fixture_def);
+
+	PhysBody *pbody = new PhysBody();
+	pbody->body = b;
+	pbody->body->SetUserData(pbody);
+	pbody->width = pbody->height = 0;
 
 	return pbody;
 }
