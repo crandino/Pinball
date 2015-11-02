@@ -60,11 +60,18 @@ bool Scene::start()
 	walls.add(app->physics->createWall(0, 0, spliter3, sizeof(spliter3) / sizeof(int)));
 	walls.add(app->physics->createWall(0, 0, guacamole, sizeof(guacamole) / sizeof(int)));
 	walls.add(app->physics->createWall(0, 0, top_hat, sizeof(top_hat) / sizeof(int)));
-	//walls.add(app->physics->createWall(0, 0, bottom_part, sizeof(bottom_part) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, bottom_part, sizeof(bottom_part) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, left_pipe, sizeof(left_pipe) / sizeof(int)));
+	walls.add(app->physics->createWall(0, 0, right_pipe, sizeof(right_pipe) / sizeof(int)));
 
-	bouncers.add(app->physics->createBouncer(404, 118, 11, 1.0f, 1.5f));
-	bouncers.add(app->physics->createBouncer(446, 112, 11, 1.0f, 1.5f));
-	bouncers.add(app->physics->createBouncer(433, 154, 11, 1.0f, 1.5f));
+	bouncers.add(app->physics->createBouncer(404, 118, 11, 1.0f, 1.2f));
+	bouncers.add(app->physics->createBouncer(446, 112, 11, 1.0f, 1.2f));
+	bouncers.add(app->physics->createBouncer(433, 154, 11, 1.0f, 1.2f));
+	bouncers.add(app->physics->createBouncer(286, 270, 11, 1.0f, 1.2f));
+	bouncers.add(app->physics->createBouncer(341, 271, 11, 1.0f, 1.2f));
+	bouncers.add(app->physics->createBouncer(290, 305, 11, 1.0f, 1.2f));
+	bouncers.add(app->physics->createBouncer(339, 308, 11, 1.0f, 1.2f));
+	bouncers.add(app->physics->createBouncer(179, 116, 11, 1.0f, 1.2f));
 	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse1, sizeof(hypotenuse1) / sizeof(int), 1.0f, 1.2f));
 	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse2, sizeof(hypotenuse2) / sizeof(int), 1.0f, 1.2f));
 	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse3, sizeof(hypotenuse3) / sizeof(int), 1.0f, 1.2f));
