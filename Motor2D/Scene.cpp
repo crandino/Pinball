@@ -129,7 +129,7 @@ bool Scene::update(float dt)
 
 	//Roulette
 	roulette->getPosition(pos.x, pos.y);
-	app->render->blit(roulette->texture, pos.x, pos.y, NULL, 1.0f, roulette->getRotation());
+	app->render->blit(roulette->texture, pos.x - 5, pos.y, NULL, 1.0f, roulette->getRotation());
 
 	// RayCast
 	if (app->input->getKey(SDL_SCANCODE_SPACE) == KEY_DOWN)

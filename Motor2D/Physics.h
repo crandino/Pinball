@@ -29,6 +29,8 @@ public:
 	bool contains(int x, int y) const;
 	int rayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const;
 	void push(float x, float y);
+	void setPosition(int x, int y);
+	void setLinearSpeed(int x, int y);
 
 public:
 	int				width, height;

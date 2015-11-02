@@ -125,6 +125,9 @@
     <ClInclude Include="Motor2D\Player.h">
       <Filter>Modules</Filter>
     </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Tools from Prog2</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Game\config.xml">

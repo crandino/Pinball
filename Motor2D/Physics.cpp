@@ -137,19 +137,6 @@ PhysBody *Physics::createRoulette(int x, int y, int width, int height, SDL_Textu
 	pbody->width = width * 0.5f;
 	pbody->height = height * 0.5f;
 
-	/*b2RevoluteJointDef revoluteJointDef;
-	revoluteJointDef.bodyA = rotor;
-	revoluteJointDef.bodyB = stick;
-	revoluteJointDef.collideConnected = false;
-	revoluteJointDef.enableLimit = false;
-	revoluteJointDef.enableMotor = true;
-	revoluteJointDef.motorSpeed = 120.0f * DEGTORAD;
-	revoluteJointDef.maxMotorTorque = 120.0f * DEGTORAD;
-	revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
-	revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
-
-	b2RevoluteJoint *rev = (b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef);*/
-
 	return pbody;
 }
 
@@ -528,12 +515,7 @@ bool Physics::postUpdate()
 		}
 	}
 
-	// If a body was selected we will attach a mouse joint to it
-	// so we can pull it around
-	// TODO 2: If a body was selected, create a mouse joint
-	// using mouse_joint class property
-
-	if (body_clicked != NULL)
+	if (body_clicked != NULL && body_clicked->GetType() != b2_kinematicBody)
 	{
 		b2MouseJointDef def;
 		def.bodyA = ground;
@@ -598,34 +580,6 @@ void Physics::beginContact(b2Contact *contact)
 	
 }
 
-void PhysBody::getPosition(int& x, int &y) const
-{
-	b2Vec2 pos = body->GetPosition();
-	x = METERS_TO_PIXELS(pos.x) - (width);
-	y = METERS_TO_PIXELS(pos.y) - (height);
-}
-
-float PhysBody::getRotation() const
-{
-	return RADTODEG * body->GetAngle();
-}
-
-bool PhysBody::contains(int x, int y) const
-{
-	// TODO 1: Write the code to return true in case the point
-	// is inside ANY of the shapes contained by this body
-	b2Fixture *fixt = body->GetFixtureList();
-	b2Vec2 vec(PIXEL_TO_METERS(x),PIXEL_TO_METERS(y));
-
-	for (fixt; fixt != NULL; fixt = fixt->GetNext())
-	{
-		if(fixt->GetShape()->TestPoint(body->GetTransform(), vec))
-			return true;
-	}
-
-	return false;
-}
-
 int PhysBody::rayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const
 {
 	// TODO 2: Write code to test a ray cast between both points provided. If not hit return -1
@@ -652,11 +606,6 @@ int PhysBody::rayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 	}
 
 	return ret;
-}
-
-void PhysBody::push(float x, float y)
-{
-	body->ApplyForceToCenter(b2Vec2(x, y), true);
 }
 
 void Physics::activateLeftFlippers()
@@ -712,4 +661,51 @@ void Physics::PreSolve(b2Contact* contact, const b2Manifold* oldManifold)
 
 	if (physB && physB->listener != NULL)
 		physB->listener->onCollision(physB, physA);
+}
+
+// -----------------------------
+// ---- Physbody methods -------
+// -----------------------------
+
+void PhysBody::push(float x, float y)
+{
+	body->ApplyForceToCenter(b2Vec2(x, y), true);
+}
+
+void PhysBody::setLinearSpeed(int x, int y)
+{
+	body->SetLinearVelocity(b2Vec2(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y)));
+}
+
+void PhysBody::setPosition(int x, int y)
+{
+	body->SetTransform(b2Vec2(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y)), 0.0f);
+}
+
+float PhysBody::getRotation() const
+{
+	return RADTODEG * body->GetAngle();
+}
+
+void PhysBody::getPosition(int& x, int &y) const
+{
+	b2Vec2 pos = body->GetPosition();
+	x = METERS_TO_PIXELS(pos.x) - (width);
+	y = METERS_TO_PIXELS(pos.y) - (height);
+}
+
+bool PhysBody::contains(int x, int y) const
+{
+	// TODO 1: Write the code to return true in case the point
+	// is inside ANY of the shapes contained by this body
+	b2Fixture *fixt = body->GetFixtureList();
+	b2Vec2 vec(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	for (fixt; fixt != NULL; fixt = fixt->GetNext())
+	{
+		if (fixt->GetShape()->TestPoint(body->GetTransform(), vec))
+			return true;
+	}
+
+	return false;
 }
