@@ -56,6 +56,7 @@ public:
 	PhysBody* createBall(int x, int y, int radius, SDL_Texture* texture);
 	PhysBody* createWall(int x, int y, int *points, int size);
 	PhysBody* createBouncer(int x, int y, int radius, float density, float restitution);
+	PhysBody* createBouncer(int x, int y, int *points, int size, float density, float restitution);
 
 	PhysBody* createPropulsor(int x, int y, SDL_Texture*);
 	void createFlippers();
