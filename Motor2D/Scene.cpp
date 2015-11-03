@@ -148,181 +148,9 @@ bool Scene::update(float dt)
 	if (app->input->getKey(SDL_SCANCODE_KP_MINUS) == KEY_UP)
 		app->audio->volumeDown();
 		
-	// Pinball level rendering
-	app->render->blit(pinball_level, 0, 0);
-
-	// Bouncer render's
-	doubleNode<Bouncer*> *bouncer_item = bouncers.getFirst();
-	Bouncer *bouncer;
-	iPoint pos;
-
-	while (bouncer_item != NULL)
-	{
-		bouncer = bouncer_item->data;
-		if (bouncer->timer.isActive() && bouncer->timer.readSec() < 0.1f)
-		{
-			app->audio->playFx(bumper_sound2);
-			switch (bouncer->type)
-			{
-				case(ROUND_BOUNCER) : 
-					{
-						bouncer->getPosition(pos.x, pos.y);
-						app->render->blit(bouncer->texture, pos.x - bouncer->width, pos.y - bouncer->height);
-						app->audio->playFx(bumper_sound);
-						break;
-					}
-
-				case(FIRST_TRIANGLE_BOUNCER) :
-					{
-						app->render->blit(bouncer->texture, 107, 389);
-						break;
-					}
-
-				case(SECOND_TRIANGLE_BOUNCER) :
-				{
-						app->render->blit(bouncer->texture, 234, 391);
-						break;
-				}
-
-				case(THIRD_TRIANGLE_BOUNCER) :
-				{
-						app->render->blit(bouncer->texture, 339, 391);
-						break;
-				}
-
-				case(FOURTH_TRIANGLE_BOUNCER) :
-				{
-						app->render->blit(bouncer->texture, 466, 390);
-						break;
-				}
-
-				default:
-					break;
-			}
-		}
-		else if (bouncer->timer.readSec() > 0.1f)
-		{
-			bouncer->timer.stop();
-		}
-		bouncer_item = bouncer_item->next;
-	}
-	
-	// Sensors render's
-	doubleNode<Sensor*> *sensor_item = lights_sensors.getFirst();
-	//Counter to know how much sensors are on
-	uint rect_count = 0;
-	uint star_count = 0;
-
-	while (sensor_item != NULL)
-	{
-		if (sensor_item->data->collided == true)
-		{
-			switch (sensor_item->data->type)
-			{
-				case(STAR) :
-				{
-					sensor_item->data->getPosition(pos.x, pos.y);
-					app->render->blit(sensor_item->data->texture, pos.x, pos.y);
-					star_count++;
-					break;
-				}
-
-				case(RECTANGLE_B) :
-				{
-					app->render->blit(sensor_item->data->texture, 139, 386);
-					rect_count++;
-					break;
-				}
-
-				case(RECTANGLE_O) :
-				{
-					app->render->blit(sensor_item->data->texture, 159, 372);
-					rect_count++;
-					break;
-				}
-
-				case(RECTANGLE_N) :
-				{
-					app->render->blit(sensor_item->data->texture, 186, 369);
-					rect_count++;
-					break;
-				}
-
-				case(RECTANGLE_U) :
-				{
-					app->render->blit(sensor_item->data->texture, 205, 372);
-					rect_count++;
-					break;
-				}
-
-				case(RECTANGLE_S) :
-				{
-					app->render->blit(sensor_item->data->texture, 217, 386);
-					rect_count++;
-					break;
-				}
-
-				default:
-					break;
-			}
-		}
-
-		//If we printed all stars, we reset all sensors and sum up 400 points
-		if (star_count == 5)
-		{
-			doubleNode<Sensor*> *star_item = lights_sensors.getFirst();
-			while (star_item != NULL)
-			{
-				if (star_item->data->type == STAR)
-					star_item->data->collided = false;
-				star_item = star_item->next;
-			}
-			app->player->score += 400;
-			app->audio->playFx(bonus);
-			star_count = 0;
-		}
-
-		//If we printed all rectangles, we reset all sensors and sum up 200 points
-		if (rect_count == 5)
-		{
-			doubleNode<Sensor*> *rect_item = lights_sensors.getFirst();
-			while (rect_item != NULL)
-			{
-				if (rect_item->data->type != STAR)
-					rect_item->data->collided = false;
-				rect_item = rect_item->next;
-			}
-			app->player->score += 200;
-			app->audio->playFx(bonus);
-			rect_count = 0;
-		}
-		sensor_item = sensor_item->next;
-	}
-
-	//// Flippers rendering
-	doubleNode<Flipper*> *flip_item = left_flippers.getFirst();
-	while (flip_item != NULL)
-	{
-		flip_item->data->getPosition(pos.x, pos.y);
-		app->render->blit(flip_item->data->texture, pos.x, pos.y, NULL, 1.0f, flip_item->data->getRotation(), 0, 0);
-		flip_item = flip_item->next;
-	}	
-
-	flip_item = right_flippers.getFirst();
-	while (flip_item != NULL)
-	{
-		flip_item->data->getPosition(pos.x, pos.y);
-		app->render->blit(flip_item->data->texture, pos.x, pos.y, NULL, 1.0f, flip_item->data->getRotation(), 0, 0);
-		flip_item = flip_item->next;
-	}
-
-	//Propulsor
-	propulsor->getPosition(pos.x, pos.y);
-	app->render->blit(propulsor->texture, pos.x, pos.y);
-
-	//Roulette
-	roulette->getPosition(pos.x, pos.y);
-	app->render->blit(roulette->texture, pos.x - 5, pos.y, NULL, 1.0f, roulette->getRotation());
+	// Rendering function blits all the textures including bumper
+	// and bonus feedback.
+	rendering();
 
 	// Ricard's code
 				
@@ -412,4 +240,167 @@ bool Scene::cleanUp()
 	app->tex->unloadTexture(right_flip_tex);
 
 	return true;
+}
+
+void Scene::rendering()
+{
+	iPoint pos;
+	// Simple rendering
+	app->render->blit(pinball_level, 0, 0);  // Pinball level
+	propulsor->getPosition(pos.x, pos.y);
+	app->render->blit(propulsor->texture, pos.x, pos.y); //Propulsor
+	roulette->getPosition(pos.x, pos.y);
+	app->render->blit(roulette->texture, pos.x - 5, pos.y, NULL, 1.0f, roulette->getRotation()); //Roulette
+
+	// Flippers
+	doubleNode<Flipper*> *flip_item = left_flippers.getFirst();
+	while (flip_item != NULL)
+	{
+		flip_item->data->getPosition(pos.x, pos.y);
+		app->render->blit(flip_item->data->texture, pos.x, pos.y, NULL, 1.0f, flip_item->data->getRotation(), 0, 0);
+		flip_item = flip_item->next;
+	}
+
+	flip_item = right_flippers.getFirst();
+	while (flip_item != NULL)
+	{
+		flip_item->data->getPosition(pos.x, pos.y);
+		app->render->blit(flip_item->data->texture, pos.x, pos.y, NULL, 1.0f, flip_item->data->getRotation(), 0, 0);
+		flip_item = flip_item->next;
+	}
+
+	// Bouncer
+	doubleNode<Bouncer*> *bouncer_item = bouncers.getFirst();
+	Bouncer *bouncer;
+
+	while (bouncer_item != NULL)
+	{
+		bouncer = bouncer_item->data;
+		if (bouncer->timer.isActive() && bouncer->timer.readSec() < 0.1f)
+		{
+			switch (bouncer->type)
+			{
+			case(ROUND_BOUNCER) :
+				bouncer->getPosition(pos.x, pos.y);
+				app->render->blit(bouncer->texture, pos.x - bouncer->width, pos.y - bouncer->height);
+				app->audio->playFx(bumper_sound);
+				break;
+
+			case(FIRST_TRIANGLE_BOUNCER) :
+				app->render->blit(bouncer->texture, 107, 389);
+				app->audio->playFx(bumper_sound2);
+				break;
+
+			case(SECOND_TRIANGLE_BOUNCER) :
+				app->render->blit(bouncer->texture, 234, 391);
+				app->audio->playFx(bumper_sound2);
+				break;
+
+			case(THIRD_TRIANGLE_BOUNCER) :
+				app->render->blit(bouncer->texture, 339, 391);
+				app->audio->playFx(bumper_sound2);
+				break;
+
+			case(FOURTH_TRIANGLE_BOUNCER) :
+				app->render->blit(bouncer->texture, 466, 390);
+				app->audio->playFx(bumper_sound2);
+				break;
+			}
+		}
+		else if (bouncer->timer.readSec() > 0.1f)
+			bouncer->timer.stop();
+
+		bouncer_item = bouncer_item->next;
+	}
+
+	// Sensors render's
+	doubleNode<Sensor*> *sensor_item = lights_sensors.getFirst();
+	//Counter to know how much sensors are on
+	uint rect_count = 0;
+	uint star_count = 0;
+
+	while (sensor_item != NULL)
+	{
+		if (sensor_item->data->collided == true)
+		{
+			switch (sensor_item->data->type)
+			{
+			case(STAR) :
+			{
+				sensor_item->data->getPosition(pos.x, pos.y);
+				app->render->blit(sensor_item->data->texture, pos.x, pos.y);
+				star_count++;
+				break;
+			}
+
+			case(RECTANGLE_B) :
+			{
+				app->render->blit(sensor_item->data->texture, 139, 386);
+				rect_count++;
+				break;
+			}
+
+			case(RECTANGLE_O) :
+			{
+				app->render->blit(sensor_item->data->texture, 159, 372);
+				rect_count++;
+				break;
+			}
+
+			case(RECTANGLE_N) :
+			{
+				app->render->blit(sensor_item->data->texture, 186, 369);
+				rect_count++;
+				break;
+			}
+
+			case(RECTANGLE_U) :
+			{
+				app->render->blit(sensor_item->data->texture, 205, 372);
+				rect_count++;
+				break;
+			}
+
+			case(RECTANGLE_S) :
+			{
+				app->render->blit(sensor_item->data->texture, 217, 386);
+				rect_count++;
+				break;
+			}
+
+			default:
+				break;
+			}
+		}
+
+		sensor_item = sensor_item->next;
+	}
+
+	//If we printed all stars, we reset all sensors and sum up 400 points
+	if (star_count == 5)
+	{
+		sensor_item = lights_sensors.getFirst();
+		while (sensor_item != NULL)
+		{
+			if (sensor_item->data->type == STAR)
+				sensor_item->data->collided = false;
+			sensor_item = sensor_item->next;
+		}
+		app->player->score += 400;
+		app->audio->playFx(bonus);
+	}
+
+	//If we printed all rectangles, we reset all sensors and sum up 400 points
+	if (rect_count == 5)
+	{
+		sensor_item = lights_sensors.getFirst();
+		while (sensor_item != NULL)
+		{
+			if (sensor_item->data->type != STAR)
+				sensor_item->data->collided = false;
+			sensor_item = sensor_item->next;
+		}
+		app->player->score += 400;
+		app->audio->playFx(bonus);
+	}
 }

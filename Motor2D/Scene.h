@@ -76,6 +76,10 @@ public:
 
 	iPoint ray;
 	bool ray_on;
+
+private:
+
+	void rendering();
 };
 
 #endif // __SCENE_H__
