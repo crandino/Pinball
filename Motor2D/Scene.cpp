@@ -40,6 +40,8 @@ bool Scene::start()
 	app->audio->playMusic("sounds/music/pinball_theme.ogg");
 
 	// Loading textures...
+	left_flip_tex = app->tex->loadTexture("textures/left_flipper.png");
+	right_flip_tex = app->tex->loadTexture("textures/right_flipper.png");
 	pinball_level = app->tex->loadTexture("textures/pinball_level.png");
 	propulsor_tex = app->tex->loadTexture("textures/propulsor.png");
 	roulette_tex = app->tex->loadTexture("textures/roulette.png");
@@ -58,7 +60,7 @@ bool Scene::start()
 	S_star = app->tex->loadTexture("textures/bonus_star_S.png");
 
 	//  ---- Creating scenario elements ----
-	app->physics->createFlippers(); // Flippers
+	app->physics->createFlippers(left_flippers, right_flippers, left_flip_tex, right_flip_tex); // Flippers
 
 	// Static walls
 	app->physics->createWall(0, 0, triangle1, sizeof(triangle1) / sizeof(int));
@@ -178,7 +180,7 @@ bool Scene::update(float dt)
 	}
 
 	//// Flippers rendering
-	doubleNode<Flipper*> *flip_item = app->physics->left_flippers.getFirst();
+	doubleNode<Flipper*> *flip_item = left_flippers.getFirst();
 	while (flip_item != NULL)
 	{
 		flip_item->data->getPosition(pos.x, pos.y);
@@ -186,7 +188,7 @@ bool Scene::update(float dt)
 		flip_item = flip_item->next;
 	}	
 
-	flip_item = app->physics->right_flippers.getFirst();
+	flip_item = right_flippers.getFirst();
 	while (flip_item != NULL)
 	{
 		flip_item->data->getPosition(pos.x, pos.y);
@@ -270,6 +272,24 @@ void Scene::onCollision(PhysBody* bodyA, PhysBody* bodyB)
 bool Scene::cleanUp()
 {
 	LOG("Freeing scene");
+	app->tex->unloadTexture(pinball_level); 
+	app->tex->unloadTexture(propulsor_tex);
+	app->tex->unloadTexture(roulette_tex); 
+	app->tex->unloadTexture(hit_bouncer_type1);
+	app->tex->unloadTexture(hit_bouncer_type2);
+	app->tex->unloadTexture(hit_bouncer_type3);
+	app->tex->unloadTexture(B_rect);
+	app->tex->unloadTexture(O_rect);
+	app->tex->unloadTexture(N_rect);
+	app->tex->unloadTexture(U_rect);
+	app->tex->unloadTexture(S_rect);
+	app->tex->unloadTexture(B_star);
+	app->tex->unloadTexture(O_star); 
+	app->tex->unloadTexture(N_star);
+	app->tex->unloadTexture(U_star);
+	app->tex->unloadTexture(S_star);
+	app->tex->unloadTexture(left_flip_tex);
+	app->tex->unloadTexture(right_flip_tex);
 
 	return true;
 }

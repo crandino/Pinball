@@ -78,7 +78,7 @@ SDL_Texture* const Textures::loadTexture(const char* path)
 }
 
 // Unload texture
-bool Textures::UnLoad(SDL_Texture* texture)
+bool Textures::unloadTexture(SDL_Texture* texture)
 {
 	doubleNode<SDL_Texture*>* item;
 

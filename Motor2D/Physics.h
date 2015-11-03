@@ -88,22 +88,27 @@ public:
 	bool postUpdate();
 	bool cleanUp();
 
-	// CRZ 
+	// Ball creation
 	PhysBody* createBall(int x, int y, int radius, SDL_Texture* texture);
+	// Static wall creation, suitable for contours
 	void createWall(int x, int y, int *points, int size);
 
+	// Sensor creation, for Bonus Letters
 	Sensor* createLightSensor(int x, int y, int radius, SDL_Texture *light_texture, SENSOR_TYPE type);
 	Sensor* createLightSensor(int x, int y, int *points, int size, SDL_Texture *light_texture, SENSOR_TYPE type);
+	// Bouncer creation
 	Bouncer* createBouncer(int x, int y, int radius, float restitution, SDL_Texture *hit_texture, BOUNCER_TYPE type);
 	Bouncer* createBouncer(int x, int y, int *points, int size, float restitution, SDL_Texture *hit_texture, BOUNCER_TYPE type);
 
+	// Ball launcher
 	PhysBody* createPropulsor(int x, int y, SDL_Texture*);
+	// Roulette
 	PhysBody* createRoulette(int x, int y, int width, int height, SDL_Texture*);
 	
 	// Flipper methods
-	void createFlippers();	
-	Flipper *createLeftFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle);
-	Flipper *createRightFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle);
+	void createFlippers(DList<Flipper*> &left_list, DList<Flipper*> &right_list, SDL_Texture *left_tex, SDL_Texture *right_tex);
+	Flipper *createLeftFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle,SDL_Texture *tex);
+	Flipper *createRightFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, SDL_Texture *tex);
 	b2RevoluteJoint *createFlipperJoint(b2Body *rotor, b2Body *stick, float32 &lower_angle, float32 &upper_angle, FLIPPER_TYPE type);
 	void activateLeftFlippers();
 	void activateRightFlippers();
@@ -116,8 +121,6 @@ public:
 	// Box2D overloaded methods
 	void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
 
-	DList<Flipper*>				right_flippers;
-	DList<Flipper*>				left_flippers;
 	DList<b2RevoluteJoint*>		right_joints_flippers;
 	DList<b2RevoluteJoint*>		left_joints_flippers;
 	b2PrismaticJoint*			propulsor_joint;
@@ -133,8 +136,5 @@ private:
 
 	float32			      time_step;
 	int32		      velocity_iter;
-	int32		      position_iter;
-
-	SDL_Texture*	  left_flip_tex;
-	SDL_Texture*	 right_flip_tex;	
+	int32		      position_iter;	
 };

@@ -154,6 +154,18 @@ bool Player::update(float dt)
 	return true;
 }
 
+bool Player::cleanUp()
+{
+	app->tex->unloadTexture(numbers);
+	app->tex->unloadTexture(numbers_hi);
+	app->tex->unloadTexture(intro_tex);
+	app->tex->unloadTexture(gameover_tex);
+	app->tex->unloadTexture(pinball_ball_tex);
+	app->tex->unloadTexture(life_tex);
+
+	return true;
+}
+
 void Player::blitScore()
 {
 	uint divisor = 10000000;

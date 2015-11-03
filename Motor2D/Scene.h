@@ -6,6 +6,7 @@
 class PhysBody;
 class Sensor;
 class Bouncer;
+class Flipper;
 
 class Scene : public Module
 {
@@ -38,12 +39,16 @@ public:
 
 	DList<Bouncer*>	    	 bouncers;
 	DList<Sensor*>     lights_sensors;
+	DList<Flipper*>	   right_flippers;
+	DList<Flipper*>		left_flippers;
 	PhysBody*				propulsor;
 	PhysBody*				 roulette;
 	
 	PhysBody*				   sensor;
 	bool					   sensed;
 
+	SDL_Texture*	    left_flip_tex;
+	SDL_Texture*	   right_flip_tex;
 	SDL_Texture*		pinball_level;
 	SDL_Texture*		propulsor_tex;
 	SDL_Texture*		 roulette_tex;

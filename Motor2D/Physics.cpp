@@ -49,10 +49,6 @@ bool Physics::start()
 	// Ground body is needed to create joints like mouse joint.
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
-
-	// We load textures for flippers and propulsor.
-	left_flip_tex = app->tex->loadTexture("textures/left_flipper.png");
-	right_flip_tex = app->tex->loadTexture("textures/right_flipper.png");
 			
 	return true;
 }
@@ -292,18 +288,18 @@ b2PolygonShape *Physics::polyFromPoints(b2PolygonShape *shape, int *points, int 
 	return shape;
 }
 
-void Physics::createFlippers()
+void Physics::createFlippers(DList<Flipper*> &left_list, DList<Flipper*> &right_list, SDL_Texture *left_tex, SDL_Texture *right_tex)
 {
-	left_flippers.add(createLeftFlipper(b2Vec2(78, 301), 0.0f , 52.0f));
-	left_flippers.add(createLeftFlipper(b2Vec2(152, 479), -24.0f , 26.0f));
-	left_flippers.add(createLeftFlipper(b2Vec2(382, 479), -24.0f, 26.0f));
+	left_list.add(createLeftFlipper(b2Vec2(78, 301), 0.0f , 52.0f, left_tex));
+	left_list.add(createLeftFlipper(b2Vec2(152, 479), -24.0f, 26.0f, left_tex));
+	left_list.add(createLeftFlipper(b2Vec2(382, 479), -24.0f, 26.0f, left_tex));
 
-	right_flippers.add(createRightFlipper(b2Vec2(244, 479), -26.0f, 24.0f));
-	right_flippers.add(createRightFlipper(b2Vec2(476, 479), -26.0f, 24.0f));
-	right_flippers.add(createRightFlipper(b2Vec2(552, 301), -52.0f, 0.0f));
+	right_list.add(createRightFlipper(b2Vec2(244, 479), -26.0f, 24.0f, right_tex));
+	right_list.add(createRightFlipper(b2Vec2(476, 479), -26.0f, 24.0f, right_tex));
+	right_list.add(createRightFlipper(b2Vec2(552, 301), -52.0f, 0.0f, right_tex));
 }
 
-Flipper *Physics::createLeftFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle)
+Flipper *Physics::createLeftFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, SDL_Texture *tex)
 {
 	// Rotor of the flipper
 	float32 radius = 5;
@@ -343,7 +339,7 @@ Flipper *Physics::createLeftFlipper(b2Vec2 rotation_point, float32 lower_angle, 
 	Flipper* flip = new Flipper();
 	flip->body = stick;
 	stick->SetUserData(flip);
-	flip->texture = left_flip_tex;
+	flip->texture = tex;
 	flip->type = LEFT_FLIPPER;
 	flip->width = 0;
 	flip->height = 0;
@@ -353,7 +349,7 @@ Flipper *Physics::createLeftFlipper(b2Vec2 rotation_point, float32 lower_angle, 
 	return flip;
 }
 
-Flipper *Physics::createRightFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle)
+Flipper *Physics::createRightFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle, SDL_Texture *tex)
 {
 	// Rotor of the flipper
 	float32 radius = 5;
@@ -393,7 +389,7 @@ Flipper *Physics::createRightFlipper(b2Vec2 rotation_point, float32 lower_angle,
 	Flipper* flip = new Flipper();
 	flip->body = stick;
 	stick->SetUserData(flip);
-	flip->texture = right_flip_tex;
+	flip->texture = tex;
 	flip->type = RIGHT_FLIPPER;
 	flip->width = 0;
 	flip->height = 0;
@@ -607,6 +603,29 @@ bool Physics::postUpdate()
 bool Physics::cleanUp()
 {
 	LOG("Destroying physics world");
+
+	b2Joint *j = world->GetJointList();
+	b2Joint *j_next;
+
+	while (j != NULL)
+	{
+		j_next = j->GetNext();
+		world->DestroyJoint(j);
+		j = j_next;
+	}
+
+	b2Body *b = world->GetBodyList();
+	b2Body *b_next;
+
+	while (b != NULL)
+	{
+		PhysBody *pb = (PhysBody*)b->GetUserData();
+		RELEASE(pb);
+
+		b_next = b->GetNext();
+		world->DestroyBody(b);
+		b = b_next;
+	}
 
 	// Delete the whole physics world!
 	delete world;
