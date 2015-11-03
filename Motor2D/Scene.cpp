@@ -46,6 +46,10 @@ bool Scene::start()
 	hit_bouncer_type1 = app->tex->loadTexture("textures/hit_bouncer1.png");
 	hit_bouncer_type2 = app->tex->loadTexture("textures/hit_bouncer2.png");
 	hit_bouncer_type3 = app->tex->loadTexture("textures/hit_bouncer3.png");
+	triangle1_hit = app->tex->loadTexture("textures/triangle1_hit.png");
+	triangle2_hit = app->tex->loadTexture("textures/triangle2_hit.png");
+	triangle3_hit = app->tex->loadTexture("textures/triangle3_hit.png");
+	triangle4_hit = app->tex->loadTexture("textures/triangle4_hit.png");
 	B_rect = app->tex->loadTexture("textures/bonus_rect_B.png");
 	O_rect = app->tex->loadTexture("textures/bonus_rect_O.png");
 	N_rect = app->tex->loadTexture("textures/bonus_rect_N.png");
@@ -94,10 +98,10 @@ bool Scene::start()
 	bouncers.add(app->physics->createBouncer(179, 116, 11, 1.2f, hit_bouncer_type3, ROUND_BOUNCER));
 
 	// ---- 4 bottom bouncers ----
-	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse1, sizeof(hypotenuse1) / sizeof(int), 1.2f, NULL, LEFT_TRIANGLE_BOUNCER));
-	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse2, sizeof(hypotenuse2) / sizeof(int), 1.2f, NULL, RIGHT_TRIANGLE_BOUNCER));
-	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse3, sizeof(hypotenuse3) / sizeof(int), 1.2f, NULL, LEFT_TRIANGLE_BOUNCER));
-	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse4, sizeof(hypotenuse4) / sizeof(int), 1.2f, NULL, RIGHT_TRIANGLE_BOUNCER));
+	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse1, sizeof(hypotenuse1) / sizeof(int), 1.2f, triangle1_hit, FIRST_TRIANGLE_BOUNCER));
+	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse2, sizeof(hypotenuse2) / sizeof(int), 1.2f, triangle2_hit, SECOND_TRIANGLE_BOUNCER));
+	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse3, sizeof(hypotenuse3) / sizeof(int), 1.2f, triangle3_hit, THIRD_TRIANGLE_BOUNCER));
+	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse4, sizeof(hypotenuse4) / sizeof(int), 1.2f, triangle4_hit, FOURTH_TRIANGLE_BOUNCER));
 
 	lights_sensors.add(app->physics->createLightSensor(393, 411, 9, B_star, STAR));
 	lights_sensors.add(app->physics->createLightSensor(404, 390, 9, O_star, STAR));
@@ -142,7 +146,7 @@ bool Scene::update(float dt)
 	// Pinball level rendering
 	app->render->blit(pinball_level, 0, 0);
 
-	// Bouncer timer's
+	// Bouncer render's
 	doubleNode<Bouncer*> *bouncer_item = bouncers.getFirst();
 	Bouncer *bouncer;
 	iPoint pos;
@@ -152,9 +156,42 @@ bool Scene::update(float dt)
 		bouncer = bouncer_item->data;
 		if (bouncer->timer.isActive() && bouncer->timer.readSec() < 0.2f)
 		{
-			bouncer->getPosition(pos.x, pos.y);
-			app->render->blit(bouncer->texture, pos.x - bouncer->width, pos.y - bouncer->height);
-			
+			switch (bouncer->type)
+			{
+				case(ROUND_BOUNCER) : 
+					{
+						bouncer->getPosition(pos.x, pos.y);
+						app->render->blit(bouncer->texture, pos.x - bouncer->width, pos.y - bouncer->height);
+						break;
+					}
+
+				case(FIRST_TRIANGLE_BOUNCER) :
+					{
+						app->render->blit(bouncer->texture, 107, 389);
+						break;
+					}
+
+				case(SECOND_TRIANGLE_BOUNCER) :
+				{
+						app->render->blit(bouncer->texture, 234, 391);
+						break;
+				}
+
+				case(THIRD_TRIANGLE_BOUNCER) :
+				{
+						app->render->blit(bouncer->texture, 339, 391);
+						break;
+				}
+
+				case(FOURTH_TRIANGLE_BOUNCER) :
+				{
+						app->render->blit(bouncer->texture, 466, 390);
+						break;
+				}
+
+				default:
+					break;
+			}
 		}
 		else if (bouncer->timer.readSec() > 0.2f)
 		{
@@ -163,17 +200,93 @@ bool Scene::update(float dt)
 		bouncer_item = bouncer_item->next;
 	}
 	
-	// Sensors timer's
+	// Sensors render's
 	doubleNode<Sensor*> *sensor_item = lights_sensors.getFirst();
+	//Counter to know how much sensors are on
+	uint rect_count = 0;
+	uint star_count = 0;
 
 	while (sensor_item != NULL)
 	{
 		if (sensor_item->data->collided == true)
 		{
-			sensor_item->data->getPosition(pos.x, pos.y);
-			app->render->blit(sensor_item->data->texture, pos.x , pos.y);
+			switch (sensor_item->data->type)
+			{
+				case(STAR) :
+				{
+					sensor_item->data->getPosition(pos.x, pos.y);
+					app->render->blit(sensor_item->data->texture, pos.x, pos.y);
+					star_count++;
+					break;
+				}
+
+				case(RECTANGLE_B) :
+				{
+					app->render->blit(sensor_item->data->texture, 139, 386);
+					rect_count++;
+					break;
+				}
+
+				case(RECTANGLE_O) :
+				{
+					app->render->blit(sensor_item->data->texture, 159, 372);
+					rect_count++;
+					break;
+				}
+
+				case(RECTANGLE_N) :
+				{
+					app->render->blit(sensor_item->data->texture, 186, 369);
+					rect_count++;
+					break;
+				}
+
+				case(RECTANGLE_U) :
+				{
+					app->render->blit(sensor_item->data->texture, 205, 372);
+					rect_count++;
+					break;
+				}
+
+				case(RECTANGLE_S) :
+				{
+					app->render->blit(sensor_item->data->texture, 217, 386);
+					rect_count++;
+					break;
+				}
+
+				default:
+					break;
+			}
 		}
 
+		//If we printed all stars, we reset all sensors and sum up 200 points
+		if (star_count == 5)
+		{
+			doubleNode<Sensor*> *star_item = lights_sensors.getFirst();
+			while (star_item != NULL)
+			{
+				if (star_item->data->type == STAR)
+					star_item->data->collided = false;
+				star_item = star_item->next;
+			}
+			app->player->score += 200;
+			star_count = 0;
+		}
+
+		//If we printed all rectangles, we reset all sensors and sum up 200 points
+		if (rect_count == 5)
+		{
+			doubleNode<Sensor*> *rect_item = lights_sensors.getFirst();
+			while (rect_item != NULL)
+			{
+				if (rect_item->data->type != STAR)
+					rect_item->data->collided = false;
+				rect_item = rect_item->next;
+			}
+			app->player->score += 200;
+			rect_count = 0;
+		}
 		sensor_item = sensor_item->next;
 	}
 

@@ -48,6 +48,10 @@ public:
 	SDL_Texture*	hit_bouncer_type1;
 	SDL_Texture*	hit_bouncer_type2;
 	SDL_Texture*	hit_bouncer_type3;
+	SDL_Texture*		triangle1_hit;
+	SDL_Texture*		triangle2_hit;
+	SDL_Texture*		triangle3_hit;
+	SDL_Texture*		triangle4_hit;
 	SDL_Texture*			   B_rect;
 	SDL_Texture*			   O_rect;
 	SDL_Texture*			   N_rect;
