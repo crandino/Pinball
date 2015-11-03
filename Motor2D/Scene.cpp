@@ -121,7 +121,6 @@ bool Scene::update(float dt)
 		bouncer = bouncer_item->data;
 		if (bouncer->timer.isActive() && bouncer->timer.readSec() < 0.2f)
 		{
-			LOG("%f", bouncer->timer.readSec());
 			bouncer->getPosition(pos.x, pos.y);
 			app->render->blit(bouncer->texture, pos.x - bouncer->width, pos.y - bouncer->height);
 			
