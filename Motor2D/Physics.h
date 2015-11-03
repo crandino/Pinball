@@ -11,13 +11,6 @@
 #define METERS_TO_PIXELS(m) ((int) floor(PIXELS_PER_METER * m))
 #define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
 
-enum BODY_TYPE
-{
-	DYNAMIC,
-	STATIC,
-	KINEMATIC
-};
-
 // Small class to return to other modules to track position and rotation of physics bodies
 class PhysBody
 {
@@ -33,13 +26,54 @@ public:
 	void setPosition(int x, int y);
 	void setLinearSpeed(int x, int y);
 
-public:
 	int				width, height;
 	b2Body*					 body;
 	Module*				 listener;	
 	SDL_Texture*		  texture;
 	Timer					timer;
 };
+
+enum BOUNCER_TYPE
+{
+	ROUND_BOUNCER,
+	LEFT_TRIANGLE_BOUNCER,
+	RIGHT_TRIANGLE_BOUNCER
+};
+
+class Bouncer : public PhysBody
+{
+public:
+	Timer				timer;
+	BOUNCER_TYPE		 type;
+};
+
+enum SENSOR_TYPE
+{
+	RECTANGLE1,
+	RECTANGLE2,
+	RECTANGLE3,
+	RECTANGLE4,
+	RECTANGLE5,
+	STAR
+};
+
+class Sensor : public PhysBody
+{
+public:
+	bool			 collided;
+	SENSOR_TYPE		 type;
+};
+
+enum FLIPPER_TYPE
+{
+	LEFT_FLIPPER,
+	RIGHT_FLIPPER
+};
+
+class Flipper : public PhysBody
+{
+	FLIPPER_TYPE	 type;
+}; 
 
 // Module --------------------------------------
 // TODO 3: Make module physics inherit from b2ContactListener
@@ -58,7 +92,7 @@ public:
 
 	// CRZ 
 	PhysBody* createBall(int x, int y, int radius, SDL_Texture* texture);
-	PhysBody* createWall(int x, int y, int *points, int size);
+	void createWall(int x, int y, int *points, int size);
 
 	PhysBody* createLightSensor(int x, int y, int radius);
 	PhysBody* createLightSensor(int x, int y, int *points, int size);
@@ -68,18 +102,20 @@ public:
 	PhysBody* createPropulsor(int x, int y, SDL_Texture*);
 	PhysBody* createRoulette(int x, int y, int width, int height, SDL_Texture*);
 	
+	// Flipper methods
 	void createFlippers();	
 	PhysBody *createLeftFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle);
 	PhysBody *createRightFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle);
 	b2RevoluteJoint *createFlipperJoint(b2Body *rotor, b2Body *stick, float32 &lower_angle, float32 &upper_angle);
-
 	void activateLeftFlippers();
 	void activateRightFlippers();
 	void deactivateLeftFlippers();
 	void deactivateRightFlippers();
 
+	// Tools
 	b2PolygonShape *polyFromPoints(b2PolygonShape *shape, int *points, int size);
-	void beginContact(b2Contact *contact);
+
+	// Box2D overloaded methods
 	void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
 
 	DList<PhysBody*>			right_flippers;

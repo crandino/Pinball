@@ -140,7 +140,7 @@ PhysBody *Physics::createRoulette(int x, int y, int width, int height, SDL_Textu
 	return pbody;
 }
 
-PhysBody* Physics::createWall(int x, int y, int *points, int size)
+void Physics::createWall(int x, int y, int *points, int size)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -158,20 +158,12 @@ PhysBody* Physics::createWall(int x, int y, int *points, int size)
 	}
 
 	shape.CreateLoop(p, size / 2);
-
+	
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 
 	b->CreateFixture(&fixture);
-
-	delete p;
-
-	PhysBody* pbody = new PhysBody();
-	pbody->body = b;
-	pbody->body->SetUserData(pbody);
-	pbody->width = pbody->height = 0;
-
-	return pbody;
+	delete p;	
 }
 
 PhysBody* Physics::createBouncer(int x, int y, int radius, float restitution, SDL_Texture *hit_texture)
@@ -619,19 +611,6 @@ bool Physics::cleanUp()
 	delete world;
 
 	return true;
-}
-
-void Physics::beginContact(b2Contact *contact)
-{
-	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
-	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
-
-	if (physA && physA->listener != NULL)
-		physA->listener->onCollision(physA, physB);
-
-	if (physB && physB->listener != NULL)
-		physB->listener->onCollision(physB, physA);
-	
 }
 
 int PhysBody::rayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const

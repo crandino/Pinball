@@ -29,10 +29,8 @@ bool Player::start()
 
 	// We set variables
 	lifes = 3;
-	score = 0;
-	hi_score = 0;
-	playing = false;
-	gameover = false;
+	score = hi_score = 0;
+	playing = gameover = false;
 
 	// We set buttons
 	play_button = { 242, 369, 155, 69 };
@@ -46,7 +44,7 @@ bool Player::start()
 		frames.pushBack(r);
 	}
 
-	ball = app->physics->createBall(313, 476, 6, pinball_ball_tex);
+	ball = app->physics->createBall(313, 450, 6, pinball_ball_tex);
 			
 	return ret;
 }
@@ -107,15 +105,19 @@ bool Player::update(float dt)
 
 
 	// TODO : Move to Physics class
-	if (METERS_TO_PIXELS(ball->body->GetPosition().y) > 532)
-	{
-		ball->body->SetTransform(b2Vec2(PIXEL_TO_METERS(313), PIXEL_TO_METERS(472)), ball->body->GetAngle());
-		ball->body->SetLinearVelocity(b2Vec2(0, 0));
-		lifes--;
-	}
+	
 
 	if (playing)
 	{
+		if (METERS_TO_PIXELS(ball->body->GetPosition().y) > 532)
+		{
+			ball->setLinearSpeed(0, 0);
+			ball->setPosition(313, 450);
+			/*ball->body->SetTransform(b2Vec2(PIXEL_TO_METERS(313), PIXEL_TO_METERS(472)), ball->body->GetAngle());
+			ball->body->SetLinearVelocity(b2Vec2(0, 0));*/
+			lifes--;
+		}
+
 		if (app->input->getKey(SDL_SCANCODE_Z) == KEY_DOWN)
 			app->physics->activateLeftFlippers();
 

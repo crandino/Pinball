@@ -39,6 +39,7 @@ bool Scene::start()
 {
 	app->audio->playMusic("sounds/music/pinball_theme.ogg");
 
+	// Loading textures...
 	pinball_level = app->tex->loadTexture("textures/pinball_level.png");
 	propulsor_tex = app->tex->loadTexture("textures/propulsor.png");
 	roulette_tex = app->tex->loadTexture("textures/roulette.png");
@@ -46,27 +47,28 @@ bool Scene::start()
 	hit_bouncer_type2 = app->tex->loadTexture("textures/hit_bouncer2.png");
 	hit_bouncer_type3 = app->tex->loadTexture("textures/hit_bouncer3.png");
 
-	app->physics->createFlippers();
+	//  ---- Creating scenario elements ----
+	app->physics->createFlippers(); // Flippers
 
-	walls.add(app->physics->createWall(0, 0, triangle1, sizeof(triangle1) / sizeof(int) ));
-	walls.add(app->physics->createWall(0, 0, triangle2, sizeof(triangle2) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, triangle3, sizeof(triangle3) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, triangle4, sizeof(triangle4) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, left_L, sizeof(left_L) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, left_R, sizeof(left_R) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, contour, sizeof(contour) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, left_mondongo, sizeof(left_mondongo) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, right_mondongo, sizeof(right_mondongo) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, telefon, sizeof(telefon) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, spliter1, sizeof(spliter1) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, spliter2, sizeof(spliter2) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, spliter3, sizeof(spliter3) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, guacamole, sizeof(guacamole) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, top_hat, sizeof(top_hat) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, bottom_part, sizeof(bottom_part) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, left_pipe, sizeof(left_pipe) / sizeof(int)));
-	walls.add(app->physics->createWall(0, 0, right_pipe, sizeof(right_pipe) / sizeof(int)));
-
+	// Static walls
+	app->physics->createWall(0, 0, triangle1, sizeof(triangle1) / sizeof(int));
+	app->physics->createWall(0, 0, triangle2, sizeof(triangle2) / sizeof(int));
+	app->physics->createWall(0, 0, triangle3, sizeof(triangle3) / sizeof(int));
+	app->physics->createWall(0, 0, triangle4, sizeof(triangle4) / sizeof(int));
+	app->physics->createWall(0, 0, left_L, sizeof(left_L) / sizeof(int));
+	app->physics->createWall(0, 0, left_R, sizeof(left_R) / sizeof(int));
+	app->physics->createWall(0, 0, contour, sizeof(contour) / sizeof(int));
+	app->physics->createWall(0, 0, left_mondongo, sizeof(left_mondongo) / sizeof(int));
+	app->physics->createWall(0, 0, right_mondongo, sizeof(right_mondongo) / sizeof(int));
+	app->physics->createWall(0, 0, telefon, sizeof(telefon) / sizeof(int));
+	app->physics->createWall(0, 0, spliter1, sizeof(spliter1) / sizeof(int));
+	app->physics->createWall(0, 0, spliter2, sizeof(spliter2) / sizeof(int));
+	app->physics->createWall(0, 0, spliter3, sizeof(spliter3) / sizeof(int));
+	app->physics->createWall(0, 0, guacamole, sizeof(guacamole) / sizeof(int));
+	app->physics->createWall(0, 0, top_hat, sizeof(top_hat) / sizeof(int));
+	app->physics->createWall(0, 0, bottom_part, sizeof(bottom_part) / sizeof(int));
+	app->physics->createWall(0, 0, left_pipe, sizeof(left_pipe) / sizeof(int));
+	app->physics->createWall(0, 0, right_pipe, sizeof(right_pipe) / sizeof(int));
 
 	// Bouncers
 	// ---- 3 top-right bouncers ----
@@ -98,8 +100,8 @@ bool Scene::start()
 	lights_sensors.add(app->physics->createLightSensor(0, 0, U, sizeof(U) / sizeof(int)));
 	lights_sensors.add(app->physics->createLightSensor(0, 0, S, sizeof(S) / sizeof(int)));
 	
-	propulsor = app->physics->createPropulsor(313, 484, propulsor_tex);
-	roulette = app->physics->createRoulette(313, 124, 4, 34, roulette_tex);
+	propulsor = app->physics->createPropulsor(313, 484, propulsor_tex);			// Ball launcher
+	roulette = app->physics->createRoulette(313, 124, 4, 34, roulette_tex);		// Spinning element
 
 	return true;
 }
@@ -119,6 +121,13 @@ bool Scene::update(float dt)
 
 	if (app->input->getKey(SDL_SCANCODE_S) == KEY_DOWN)
 		app->saveGame("save_game.xml");
+
+	// Keys to control volume of the game
+	if (app->input->getKey(SDL_SCANCODE_KP_PLUS) == KEY_UP)
+		app->audio->volumeUp();
+
+	if (app->input->getKey(SDL_SCANCODE_KP_MINUS) == KEY_UP)
+		app->audio->volumeDown();
 		
 	// Pinball level rendering
 	app->render->blit(pinball_level, 0, 0);
@@ -146,20 +155,19 @@ bool Scene::update(float dt)
 	
 
 	//// Flippers rendering
-	int x, y;
 	doubleNode<PhysBody*> *flip_item = app->physics->left_flippers.getFirst();
 	while (flip_item != NULL)
 	{
-		flip_item->data->getPosition(x, y);
-		app->render->blit(flip_item->data->texture, x, y, NULL, 1.0f, flip_item->data->getRotation(), 0, 0);
+		flip_item->data->getPosition(pos.x, pos.y);
+		app->render->blit(flip_item->data->texture, pos.x, pos.y, NULL, 1.0f, flip_item->data->getRotation(), 0, 0);
 		flip_item = flip_item->next;
 	}	
 
 	flip_item = app->physics->right_flippers.getFirst();
 	while (flip_item != NULL)
 	{
-		flip_item->data->getPosition(x, y);
-		app->render->blit(flip_item->data->texture, x, y, NULL, 1.0f, flip_item->data->getRotation(), 0, 0);
+		flip_item->data->getPosition(pos.x, pos.y);
+		app->render->blit(flip_item->data->texture, pos.x, pos.y, NULL, 1.0f, flip_item->data->getRotation(), 0, 0);
 		flip_item = flip_item->next;
 	}
 
@@ -214,12 +222,6 @@ bool Scene::update(float dt)
 		if (normal.x != 0.0f)
 			app->render->drawLine(ray.x + destination.x, ray.y + destination.y, ray.x + destination.x + normal.x * 25.0f, ray.y + destination.y + normal.y * 25.0f, 100, 255, 100);
 	}
-
-	if (app->input->getKey(SDL_SCANCODE_KP_PLUS) == KEY_UP)
-		app->audio->volumeUp();
-
-	if (app->input->getKey(SDL_SCANCODE_KP_MINUS) == KEY_UP)
-		app->audio->volumeDown();
 
 	return true;
 }

@@ -34,7 +34,6 @@ public:
 
 	// ----------------
 
-	DList<PhysBody*>			walls;
 	DList<PhysBody*>		 bouncers;
 	DList<PhysBody*>   lights_sensors;
 	PhysBody*				propulsor;
@@ -49,7 +48,6 @@ public:
 	SDL_Texture*	hit_bouncer_type1;
 	SDL_Texture*	hit_bouncer_type2;
 	SDL_Texture*	hit_bouncer_type3;
-
 
 	uint bonus_fx;
 	iPoint ray;
