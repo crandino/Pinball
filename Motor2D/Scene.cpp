@@ -76,6 +76,17 @@ bool Scene::start()
 	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse2, sizeof(hypotenuse2) / sizeof(int), 1.0f, 1.2f));
 	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse3, sizeof(hypotenuse3) / sizeof(int), 1.0f, 1.2f));
 	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse4, sizeof(hypotenuse4) / sizeof(int), 1.0f, 1.2f));
+
+	lights_sensors.add(app->physics->createLightSensor(393, 411, 9));
+	lights_sensors.add(app->physics->createLightSensor(404, 390, 9));
+	lights_sensors.add(app->physics->createLightSensor(429, 380, 9));
+	lights_sensors.add(app->physics->createLightSensor(454, 389, 9));
+	lights_sensors.add(app->physics->createLightSensor(465, 411, 9));
+	lights_sensors.add(app->physics->createLightSensor(0, 0, B, sizeof(B) / sizeof(int)));
+	lights_sensors.add(app->physics->createLightSensor(0, 0, O, sizeof(O) / sizeof(int)));
+	lights_sensors.add(app->physics->createLightSensor(0, 0, N, sizeof(N) / sizeof(int)));
+	lights_sensors.add(app->physics->createLightSensor(0, 0, U, sizeof(U) / sizeof(int)));
+	lights_sensors.add(app->physics->createLightSensor(0, 0, S, sizeof(S) / sizeof(int)));
 	
 	propulsor = app->physics->createPropulsor(313, 484, propulsor_tex);
 	roulette = app->physics->createRoulette(313, 124, 4, 34, roulette_tex);
@@ -199,6 +210,15 @@ bool Scene::postUpdate()
 
 void Scene::onCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
+	for (doubleNode<PhysBody*>* tmp = lights_sensors.getFirst(); tmp != NULL; tmp = tmp->next)
+	{
+		/*if (bodyA == tmp->data)
+			app->player->score += 10;
+
+		else if (bodyB == tmp->data)
+			app->player->score += 10;*/
+	}
+
 	for (doubleNode<PhysBody*>* tmp = bouncers.getFirst(); tmp != NULL; tmp = tmp->next)
 	{
 		if (bodyA == tmp->data)

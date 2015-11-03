@@ -34,17 +34,18 @@ public:
 
 	// ----------------
 
-	DList<PhysBody*>		walls;
-	DList<PhysBody*>	 bouncers;
-	PhysBody*		    propulsor;
-	PhysBody*		     roulette;
+	DList<PhysBody*>			walls;
+	DList<PhysBody*>		 bouncers;
+	DList<PhysBody*>		 lights_sensors;
+	PhysBody*				propulsor;
+	PhysBody*				 roulette;
 	
-	PhysBody *sensor;
+	PhysBody*				   sensor;
 	bool sensed;
 
-	SDL_Texture *pinball_level;
-	SDL_Texture *propulsor_tex;
-	SDL_Texture*	roulette_tex;
+	SDL_Texture*		pinball_level;
+	SDL_Texture*		propulsor_tex;
+	SDL_Texture*		 roulette_tex;
 
 	uint bonus_fx;
 	iPoint ray;

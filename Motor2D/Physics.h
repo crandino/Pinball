@@ -59,6 +59,8 @@ public:
 	PhysBody* createWall(int x, int y, int *points, int size);
 	PhysBody* createBouncer(int x, int y, int radius, float density, float restitution);
 	PhysBody* createBouncer(int x, int y, int *points, int size, float density, float restitution);
+	PhysBody* createLightSensor(int x, int y, int radius);
+	PhysBody* createLightSensor(int x, int y, int *points, int size);
 
 	PhysBody* createPropulsor(int x, int y, SDL_Texture*);
 	PhysBody* createRoulette(int x, int y, int width, int height, SDL_Texture*);
