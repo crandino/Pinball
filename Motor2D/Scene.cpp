@@ -239,11 +239,7 @@ void Scene::onCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	for (doubleNode<PhysBody*>* tmp = lights_sensors.getFirst(); tmp != NULL; tmp = tmp->next)
 	{
-		/*if (bodyA == tmp->data)
-			app->player->score += 10;
-
-		else if (bodyB == tmp->data)
-			app->player->score += 10;*/
+		tmp->data->timer.Start();
 	}
 
 	for (doubleNode<PhysBody*>* tmp = bouncers.getFirst(); tmp != NULL; tmp = tmp->next)
