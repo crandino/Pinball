@@ -46,6 +46,16 @@ bool Scene::start()
 	hit_bouncer_type1 = app->tex->loadTexture("textures/hit_bouncer1.png");
 	hit_bouncer_type2 = app->tex->loadTexture("textures/hit_bouncer2.png");
 	hit_bouncer_type3 = app->tex->loadTexture("textures/hit_bouncer3.png");
+	B_rect = app->tex->loadTexture("textures/bonus_rect_B.png");
+	O_rect = app->tex->loadTexture("textures/bonus_rect_O.png");
+	N_rect = app->tex->loadTexture("textures/bonus_rect_N.png");
+	U_rect = app->tex->loadTexture("textures/bonus_rect_U.png");
+	S_rect = app->tex->loadTexture("textures/bonus_rect_S.png");
+	B_star = app->tex->loadTexture("textures/bonus_star_B.png");
+	O_star = app->tex->loadTexture("textures/bonus_star_O.png");
+	N_star = app->tex->loadTexture("textures/bonus_star_N.png");
+	U_star = app->tex->loadTexture("textures/bonus_star_U.png");
+	S_star = app->tex->loadTexture("textures/bonus_star_S.png");
 
 	//  ---- Creating scenario elements ----
 	app->physics->createFlippers(); // Flippers
@@ -89,16 +99,16 @@ bool Scene::start()
 	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse3, sizeof(hypotenuse3) / sizeof(int), 1.2f, NULL));
 	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse4, sizeof(hypotenuse4) / sizeof(int), 1.2f, NULL));
 
-	lights_sensors.add(app->physics->createLightSensor(393, 411, 9));
-	lights_sensors.add(app->physics->createLightSensor(404, 390, 9));
-	lights_sensors.add(app->physics->createLightSensor(429, 380, 9));
-	lights_sensors.add(app->physics->createLightSensor(454, 389, 9));
-	lights_sensors.add(app->physics->createLightSensor(465, 411, 9));
-	lights_sensors.add(app->physics->createLightSensor(0, 0, B, sizeof(B) / sizeof(int)));
-	lights_sensors.add(app->physics->createLightSensor(0, 0, O, sizeof(O) / sizeof(int)));
-	lights_sensors.add(app->physics->createLightSensor(0, 0, N, sizeof(N) / sizeof(int)));
-	lights_sensors.add(app->physics->createLightSensor(0, 0, U, sizeof(U) / sizeof(int)));
-	lights_sensors.add(app->physics->createLightSensor(0, 0, S, sizeof(S) / sizeof(int)));
+	lights_sensors.add(app->physics->createLightSensor(393, 411, 9, B_star));
+	lights_sensors.add(app->physics->createLightSensor(404, 390, 9, O_star));
+	lights_sensors.add(app->physics->createLightSensor(429, 380, 9, N_star));
+	lights_sensors.add(app->physics->createLightSensor(454, 389, 9, U_star));
+	lights_sensors.add(app->physics->createLightSensor(465, 411, 9, S_star));
+	lights_sensors.add(app->physics->createLightSensor(0, 0, B, sizeof(B) / sizeof(int), B_rect));
+	lights_sensors.add(app->physics->createLightSensor(0, 0, O, sizeof(O) / sizeof(int), O_rect));
+	lights_sensors.add(app->physics->createLightSensor(0, 0, N, sizeof(N) / sizeof(int), N_rect));
+	lights_sensors.add(app->physics->createLightSensor(0, 0, U, sizeof(U) / sizeof(int), U_rect));
+	lights_sensors.add(app->physics->createLightSensor(0, 0, S, sizeof(S) / sizeof(int), S_rect));
 	
 	propulsor = app->physics->createPropulsor(313, 484, propulsor_tex);			// Ball launcher
 	roulette = app->physics->createRoulette(313, 124, 4, 34, roulette_tex);		// Spinning element
@@ -153,6 +163,19 @@ bool Scene::update(float dt)
 		bouncer_item = bouncer_item->next;
 	}
 	
+	// Sensors timer's
+	doubleNode<PhysBody*> *sensor_item = lights_sensors.getFirst();
+
+	while (sensor_item != NULL)
+	{
+		if (sensor_item->data->collided == true)
+		{
+			sensor_item->data->getPosition(pos.x, pos.y);
+			app->render->blit(sensor_item->data->texture, pos.x , pos.y);
+		}
+
+		sensor_item = sensor_item->next;
+	}
 
 	//// Flippers rendering
 	doubleNode<PhysBody*> *flip_item = app->physics->left_flippers.getFirst();
@@ -241,7 +264,11 @@ void Scene::onCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	for (doubleNode<PhysBody*>* tmp = lights_sensors.getFirst(); tmp != NULL; tmp = tmp->next)
 	{
-		tmp->data->timer.Start();
+		if (bodyA == tmp->data)
+		{
+			if (tmp->data->collided == false)
+				tmp->data->collided = true;
+		}
 	}
 
 	for (doubleNode<PhysBody*>* tmp = bouncers.getFirst(); tmp != NULL; tmp = tmp->next)

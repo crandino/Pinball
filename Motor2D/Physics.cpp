@@ -220,7 +220,7 @@ PhysBody* Physics::createBouncer(int x, int y, int *points, int size, float rest
 	return pbody;
 }
 
-PhysBody* Physics::createLightSensor(int x, int y, int radius)
+PhysBody* Physics::createLightSensor(int x, int y, int radius, SDL_Texture *light_texture)
 {
 	b2BodyDef body_def;
 	body_def.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
@@ -242,11 +242,12 @@ PhysBody* Physics::createLightSensor(int x, int y, int radius)
 	pbody->body->SetUserData(pbody);
 	pbody->width = pbody->height = radius;
 	pbody->listener = app->scene;
+	pbody->texture = light_texture;
 
 	return pbody;
 }
 
-PhysBody* Physics::createLightSensor(int x, int y, int *points, int size)
+PhysBody* Physics::createLightSensor(int x, int y, int *points, int size, SDL_Texture *light_texture)
 {
 	b2BodyDef body_def;
 	body_def.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
@@ -265,6 +266,7 @@ PhysBody* Physics::createLightSensor(int x, int y, int *points, int size)
 	pbody->body->SetUserData(pbody);
 	pbody->width = pbody->height = 0;
 	pbody->listener = app->scene;
+	pbody->texture = light_texture;
 
 	return pbody;
 }

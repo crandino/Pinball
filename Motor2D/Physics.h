@@ -15,7 +15,7 @@
 class PhysBody
 {
 public:
-	PhysBody() : body(NULL), listener(NULL), texture(NULL)
+	PhysBody() : body(NULL), listener(NULL), texture(NULL), collided(false)
 	{}
 
 	void getPosition(int& x, int &y) const;
@@ -31,6 +31,7 @@ public:
 	Module*				 listener;	
 	SDL_Texture*		  texture;
 	Timer					timer;
+	bool				 collided;
 };
 
 enum BOUNCER_TYPE
@@ -94,8 +95,8 @@ public:
 	PhysBody* createBall(int x, int y, int radius, SDL_Texture* texture);
 	void createWall(int x, int y, int *points, int size);
 
-	PhysBody* createLightSensor(int x, int y, int radius);
-	PhysBody* createLightSensor(int x, int y, int *points, int size);
+	PhysBody* createLightSensor(int x, int y, int radius, SDL_Texture *light_texture);
+	PhysBody* createLightSensor(int x, int y, int *points, int size, SDL_Texture *light_texture);
 	PhysBody* createBouncer(int x, int y, int radius, float restitution, SDL_Texture *hit_texture);
 	PhysBody* createBouncer(int x, int y, int *points, int size, float restitution, SDL_Texture *hit_texture);
 

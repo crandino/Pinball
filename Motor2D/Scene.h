@@ -48,6 +48,16 @@ public:
 	SDL_Texture*	hit_bouncer_type1;
 	SDL_Texture*	hit_bouncer_type2;
 	SDL_Texture*	hit_bouncer_type3;
+	SDL_Texture*			   B_rect;
+	SDL_Texture*			   O_rect;
+	SDL_Texture*			   N_rect;
+	SDL_Texture*		       U_rect;
+	SDL_Texture*		       S_rect;
+	SDL_Texture*		       B_star;
+	SDL_Texture*		       O_star;
+	SDL_Texture*		       N_star;
+	SDL_Texture*		       U_star;
+	SDL_Texture*		       S_star;
 
 	uint bonus_fx;
 	iPoint ray;
