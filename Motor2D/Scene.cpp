@@ -178,7 +178,7 @@ bool Scene::update(float dt)
 	}
 
 	//// Flippers rendering
-	doubleNode<PhysBody*> *flip_item = app->physics->left_flippers.getFirst();
+	doubleNode<Flipper*> *flip_item = app->physics->left_flippers.getFirst();
 	while (flip_item != NULL)
 	{
 		flip_item->data->getPosition(pos.x, pos.y);
