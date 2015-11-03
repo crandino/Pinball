@@ -42,6 +42,9 @@ bool Scene::start()
 	pinball_level = app->tex->loadTexture("textures/pinball_level.png");
 	propulsor_tex = app->tex->loadTexture("textures/propulsor.png");
 	roulette_tex = app->tex->loadTexture("textures/roulette.png");
+	hit_bouncer_type1 = app->tex->loadTexture("textures/hit_bouncer1.png");
+	hit_bouncer_type2 = app->tex->loadTexture("textures/hit_bouncer2.png");
+	hit_bouncer_type3 = app->tex->loadTexture("textures/hit_bouncer3.png");
 
 	app->physics->createFlippers();
 
@@ -64,18 +67,25 @@ bool Scene::start()
 	walls.add(app->physics->createWall(0, 0, left_pipe, sizeof(left_pipe) / sizeof(int)));
 	walls.add(app->physics->createWall(0, 0, right_pipe, sizeof(right_pipe) / sizeof(int)));
 
-	bouncers.add(app->physics->createBouncer(404, 118, 11, 1.0f, 1.2f));
-	bouncers.add(app->physics->createBouncer(446, 112, 11, 1.0f, 1.2f));
-	bouncers.add(app->physics->createBouncer(433, 154, 11, 1.0f, 1.2f));
-	bouncers.add(app->physics->createBouncer(286, 270, 11, 1.0f, 1.2f));
-	bouncers.add(app->physics->createBouncer(341, 271, 11, 1.0f, 1.2f));
-	bouncers.add(app->physics->createBouncer(290, 305, 11, 1.0f, 1.2f));
-	bouncers.add(app->physics->createBouncer(339, 308, 11, 1.0f, 1.2f));
-	bouncers.add(app->physics->createBouncer(179, 116, 11, 1.0f, 1.2f));
-	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse1, sizeof(hypotenuse1) / sizeof(int), 1.0f, 1.2f));
-	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse2, sizeof(hypotenuse2) / sizeof(int), 1.0f, 1.2f));
-	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse3, sizeof(hypotenuse3) / sizeof(int), 1.0f, 1.2f));
-	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse4, sizeof(hypotenuse4) / sizeof(int), 1.0f, 1.2f));
+
+	// Bouncers
+	// ---- 3 top-right bouncers ----
+	bouncers.add(app->physics->createBouncer(404, 118, 11, 1.2f, hit_bouncer_type1));
+	bouncers.add(app->physics->createBouncer(446, 112, 11, 1.2f, hit_bouncer_type1));
+	bouncers.add(app->physics->createBouncer(433, 154, 11, 1.2f, hit_bouncer_type1));
+	// ---- 4 top-right bouncers ----
+	bouncers.add(app->physics->createBouncer(286, 270, 11, 1.2f, hit_bouncer_type2));
+	bouncers.add(app->physics->createBouncer(341, 271, 11, 1.2f, hit_bouncer_type2));
+	bouncers.add(app->physics->createBouncer(290, 305, 11, 1.2f, hit_bouncer_type2));
+	bouncers.add(app->physics->createBouncer(339, 308, 11, 1.2f, hit_bouncer_type2));
+	// ---- 1 top - left bouncers----
+	bouncers.add(app->physics->createBouncer(179, 116, 11, 1.2f, hit_bouncer_type3));
+
+	// ---- 4 bottom bouncers ----
+	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse1, sizeof(hypotenuse1) / sizeof(int), 1.2f, NULL));
+	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse2, sizeof(hypotenuse2) / sizeof(int), 1.2f, NULL));
+	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse3, sizeof(hypotenuse3) / sizeof(int), 1.2f, NULL));
+	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse4, sizeof(hypotenuse4) / sizeof(int), 1.2f, NULL));
 
 	lights_sensors.add(app->physics->createLightSensor(393, 411, 9));
 	lights_sensors.add(app->physics->createLightSensor(404, 390, 9));
@@ -113,6 +123,28 @@ bool Scene::update(float dt)
 	// Pinball level rendering
 	app->render->blit(pinball_level, 0, 0);
 
+	// Bouncer timer's
+	doubleNode<PhysBody*> *bouncer_item = bouncers.getFirst();
+	PhysBody *bouncer;
+	iPoint pos;
+
+	while (bouncer_item != NULL)
+	{
+		bouncer = bouncer_item->data;
+		if (bouncer->timer.isActive() && bouncer->timer.readSec() < 0.2f)
+		{
+			bouncer->getPosition(pos.x, pos.y);
+			app->render->blit(bouncer->texture, pos.x - bouncer->width, pos.y - bouncer->height);
+			
+		}
+		else if (bouncer->timer.readSec() > 0.2f)
+		{
+			bouncer->timer.stop();
+		}
+		bouncer_item = bouncer_item->next;
+	}
+	
+
 	//// Flippers rendering
 	int x, y;
 	doubleNode<PhysBody*> *flip_item = app->physics->left_flippers.getFirst();
@@ -130,9 +162,6 @@ bool Scene::update(float dt)
 		app->render->blit(flip_item->data->texture, x, y, NULL, 1.0f, flip_item->data->getRotation(), 0, 0);
 		flip_item = flip_item->next;
 	}
-
-	//Point for update propulsor & ball
-	Point2d<int> pos;
 
 	//Propulsor
 	propulsor->getPosition(pos.x, pos.y);
@@ -164,9 +193,7 @@ bool Scene::update(float dt)
 	}
 
 	else
-		push_force = 0.0f;
-
-	
+		push_force = 0.0f;	
 	
 	//Mouse
 	iPoint mouse;
@@ -222,10 +249,10 @@ void Scene::onCollision(PhysBody* bodyA, PhysBody* bodyB)
 	for (doubleNode<PhysBody*>* tmp = bouncers.getFirst(); tmp != NULL; tmp = tmp->next)
 	{
 		if (bodyA == tmp->data)
-			app->player->score += 10;
-
-		else if (bodyB == tmp->data)
-			app->player->score += 10;
+		{
+			app->player->score += 25;
+			tmp->data->timer.Start();
+		}
 	}
 }
 

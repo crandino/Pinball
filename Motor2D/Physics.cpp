@@ -174,7 +174,7 @@ PhysBody* Physics::createWall(int x, int y, int *points, int size)
 	return pbody;
 }
 
-PhysBody* Physics::createBouncer(int x, int y, int radius, float density, float restitution)
+PhysBody* Physics::createBouncer(int x, int y, int radius, float restitution, SDL_Texture *hit_texture)
 {
 	b2BodyDef body_def;
 	body_def.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
@@ -186,7 +186,7 @@ PhysBody* Physics::createBouncer(int x, int y, int radius, float density, float 
 
 	b2FixtureDef fixture_def;
 	fixture_def.shape = &ball_shape;
-	fixture_def.density = density;
+	fixture_def.density = 1.0f;
 	fixture_def.restitution = restitution;
 	b->CreateFixture(&fixture_def);
 
@@ -195,11 +195,14 @@ PhysBody* Physics::createBouncer(int x, int y, int radius, float density, float 
 	pbody->body->SetUserData(pbody);
 	pbody->width = pbody->height = radius;
 	pbody->listener = app->scene;
+	if (hit_texture != NULL)
+		pbody->texture = hit_texture;
+
 
 	return pbody;
 }
 
-PhysBody* Physics::createBouncer(int x, int y, int *points, int size, float density, float restitution)
+PhysBody* Physics::createBouncer(int x, int y, int *points, int size, float restitution, SDL_Texture *hit_texture)
 {
 	b2BodyDef body_def;
 	body_def.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
@@ -210,7 +213,7 @@ PhysBody* Physics::createBouncer(int x, int y, int *points, int size, float dens
 
 	b2FixtureDef fixture_def;
 	fixture_def.shape = polyFromPoints(&poly_shape, points, size);;
-	fixture_def.density = density;
+	fixture_def.density = 1.0f;
 	fixture_def.restitution = restitution;
 	b->CreateFixture(&fixture_def);
 
@@ -219,6 +222,8 @@ PhysBody* Physics::createBouncer(int x, int y, int *points, int size, float dens
 	pbody->body->SetUserData(pbody);
 	pbody->width = pbody->height = 0;
 	pbody->listener = app->scene;
+	if (hit_texture != NULL)
+		pbody->texture = hit_texture;
 
 	return pbody;
 }
