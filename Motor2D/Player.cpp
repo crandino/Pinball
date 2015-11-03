@@ -111,7 +111,8 @@ bool Player::update(float dt)
 		gameover = true;
 		playing = false;
 		lifes = 3;
-		hi_score = score;
+		if (score > hi_score)
+			hi_score = score;
 		score = 0;
 		app->audio->stopMusic();
 		app->audio->playFx(loser_sound);
@@ -144,22 +145,22 @@ bool Player::update(float dt)
 			lifes--;
 		}
 
-		if (app->input->getKey(SDL_SCANCODE_Z) == KEY_DOWN)
+		if (app->input->getKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
 		{
 			app->physics->activateLeftFlippers();
 			app->audio->playFx(flipper_sound);
 		}			
 
-		if (app->input->getKey(SDL_SCANCODE_M) == KEY_DOWN)
+		if (app->input->getKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
 		{
 			app->physics->activateRightFlippers();
 			app->audio->playFx(flipper_sound);
 		}			
 
-		if (app->input->getKey(SDL_SCANCODE_Z) == KEY_UP)
+		if (app->input->getKey(SDL_SCANCODE_LEFT) == KEY_UP)
 			app->physics->deactivateLeftFlippers();
 
-		if (app->input->getKey(SDL_SCANCODE_M) == KEY_UP)
+		if (app->input->getKey(SDL_SCANCODE_RIGHT) == KEY_UP)
 			app->physics->deactivateRightFlippers();
 	}	
 
