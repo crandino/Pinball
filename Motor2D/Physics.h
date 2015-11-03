@@ -71,12 +71,11 @@ enum FLIPPER_TYPE
 
 class Flipper : public PhysBody
 {
+public:
 	FLIPPER_TYPE	 type;
 }; 
 
 // Module --------------------------------------
-// TODO 3: Make module physics inherit from b2ContactListener
-// then override void BeginContact(b2Contact* contact)
 class Physics : public Module, b2ContactListener
 {
 public:
@@ -103,9 +102,9 @@ public:
 	
 	// Flipper methods
 	void createFlippers();	
-	PhysBody *createLeftFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle);
-	PhysBody *createRightFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle);
-	b2RevoluteJoint *createFlipperJoint(b2Body *rotor, b2Body *stick, float32 &lower_angle, float32 &upper_angle);
+	Flipper *createLeftFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle);
+	Flipper *createRightFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle);
+	b2RevoluteJoint *createFlipperJoint(b2Body *rotor, b2Body *stick, float32 &lower_angle, float32 &upper_angle, FLIPPER_TYPE type);
 	void activateLeftFlippers();
 	void activateRightFlippers();
 	void deactivateLeftFlippers();
@@ -117,26 +116,25 @@ public:
 	// Box2D overloaded methods
 	void PreSolve(b2Contact* contact, const b2Manifold* oldManifold);
 
-	DList<PhysBody*>			right_flippers;
-	DList<PhysBody*>			left_flippers;
+	DList<Flipper*>				right_flippers;
+	DList<Flipper*>				left_flippers;
 	DList<b2RevoluteJoint*>		right_joints_flippers;
 	DList<b2RevoluteJoint*>		left_joints_flippers;
 	b2PrismaticJoint*			propulsor_joint;
 
 private:
 
-	bool				 debug;
-	b2World*			 world;
+	bool				      debug;
+	b2World*			      world;
 
-	b2MouseJoint*  mouse_joint;
-	b2Body* 			ground;
-	b2Body*		  body_clicked;
+	b2MouseJoint*		mouse_joint;
+	b2Body* 				 ground;
+	b2Body*			   body_clicked;
 
-	float32			 time_step;
-	int32		 velocity_iter;
-	int32		 position_iter;
+	float32			      time_step;
+	int32		      velocity_iter;
+	int32		      position_iter;
 
-	SDL_Texture*	left_flip_tex;
-	SDL_Texture*	right_flip_tex;
-	
+	SDL_Texture*	  left_flip_tex;
+	SDL_Texture*	 right_flip_tex;	
 };

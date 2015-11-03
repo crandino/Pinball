@@ -303,7 +303,7 @@ void Physics::createFlippers()
 	right_flippers.add(createRightFlipper(b2Vec2(552, 301), -52.0f, 0.0f));
 }
 
-PhysBody *Physics::createLeftFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle)
+Flipper *Physics::createLeftFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle)
 {
 	// Rotor of the flipper
 	float32 radius = 5;
@@ -340,19 +340,20 @@ PhysBody *Physics::createLeftFlipper(b2Vec2 rotation_point, float32 lower_angle,
 	stick->CreateFixture(&left_flip_fixture);
 
 	// PhysBody declaration
-	PhysBody* pbody = new PhysBody();
-	pbody->body = stick;
-	stick->SetUserData(pbody);
-	pbody->texture = left_flip_tex;
-	pbody->width = 0;
-	pbody->height = 0;
+	Flipper* flip = new Flipper();
+	flip->body = stick;
+	stick->SetUserData(flip);
+	flip->texture = left_flip_tex;
+	flip->type = LEFT_FLIPPER;
+	flip->width = 0;
+	flip->height = 0;
 	
-	left_joints_flippers.add(createFlipperJoint(rotor, stick, lower_angle, upper_angle));
+	left_joints_flippers.add(createFlipperJoint(rotor, stick, lower_angle, upper_angle, LEFT_FLIPPER));
 	
-	return pbody;
+	return flip;
 }
 
-PhysBody *Physics::createRightFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle)
+Flipper *Physics::createRightFlipper(b2Vec2 rotation_point, float32 lower_angle, float32 upper_angle)
 {
 	// Rotor of the flipper
 	float32 radius = 5;
@@ -389,19 +390,20 @@ PhysBody *Physics::createRightFlipper(b2Vec2 rotation_point, float32 lower_angle
 	stick->CreateFixture(&right_flip_fixture);
 
 	// PhysBody declaration
-	PhysBody* pbody = new PhysBody();
-	pbody->body = stick;
-	stick->SetUserData(pbody);
-	pbody->texture = right_flip_tex;
-	pbody->width = 0;
-	pbody->height = 0;
+	Flipper* flip = new Flipper();
+	flip->body = stick;
+	stick->SetUserData(flip);
+	flip->texture = right_flip_tex;
+	flip->type = RIGHT_FLIPPER;
+	flip->width = 0;
+	flip->height = 0;
 
-	right_joints_flippers.add(createFlipperJoint(rotor, stick, lower_angle, upper_angle));
+	right_joints_flippers.add(createFlipperJoint(rotor, stick, lower_angle, upper_angle, RIGHT_FLIPPER));
 
-	return pbody;
+	return flip;
 }
 
-b2RevoluteJoint *Physics::createFlipperJoint(b2Body *rotor, b2Body *stick, float32 &lower_angle, float32 &upper_angle)
+b2RevoluteJoint *Physics::createFlipperJoint(b2Body *rotor, b2Body *stick, float32 &lower_angle, float32 &upper_angle, FLIPPER_TYPE type)
 {
 	b2RevoluteJointDef revoluteJointDef;
 	revoluteJointDef.bodyA = rotor;
@@ -415,19 +417,11 @@ b2RevoluteJoint *Physics::createFlipperJoint(b2Body *rotor, b2Body *stick, float
 	revoluteJointDef.upperAngle = upper_angle * DEGTORAD;
 	revoluteJointDef.localAnchorA.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
 	
-	PhysBody *pb = (PhysBody*)(stick->GetUserData());
-	if (pb->texture != NULL && pb->texture == left_flip_tex)
-	{
-		// Local anchor for left flippers
+	if (type == LEFT_FLIPPER)
 		revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(5), PIXEL_TO_METERS(4));
-	}
 	else
-	{
-		// Local anchor for right flippers
 		revoluteJointDef.localAnchorB.Set(PIXEL_TO_METERS(45), PIXEL_TO_METERS(4));
-	}
 		
-
 	return (b2RevoluteJoint*)world->CreateJoint(&revoluteJointDef);
 }
 
