@@ -34,8 +34,8 @@ public:
 
 	// ----------------
 
-	DList<PhysBody*>		 bouncers;
-	DList<PhysBody*>   lights_sensors;
+	DList<Bouncer*>	    	 bouncers;
+	DList<Sensor*>     lights_sensors;
 	PhysBody*				propulsor;
 	PhysBody*				 roulette;
 	

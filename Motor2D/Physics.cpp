@@ -166,7 +166,7 @@ void Physics::createWall(int x, int y, int *points, int size)
 	delete p;	
 }
 
-PhysBody* Physics::createBouncer(int x, int y, int radius, float restitution, SDL_Texture *hit_texture)
+Bouncer* Physics::createBouncer(int x, int y, int radius, float restitution, SDL_Texture *hit_texture, BOUNCER_TYPE type)
 {
 	b2BodyDef body_def;
 	body_def.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
@@ -182,19 +182,19 @@ PhysBody* Physics::createBouncer(int x, int y, int radius, float restitution, SD
 	fixture_def.restitution = restitution;
 	b->CreateFixture(&fixture_def);
 
-	PhysBody *pbody = new PhysBody();
-	pbody->body = b;
-	pbody->body->SetUserData(pbody);
-	pbody->width = pbody->height = radius;
-	pbody->listener = app->scene;
-	if (hit_texture != NULL)
-		pbody->texture = hit_texture;
+	Bouncer *bouncer = new Bouncer();
+	bouncer->body = b;
+	bouncer->body->SetUserData(bouncer);
+	bouncer->width = bouncer->height = radius;
+	bouncer->listener = app->scene;
+	bouncer->texture = hit_texture;
+	bouncer->type = type;
 
 
-	return pbody;
+	return bouncer;
 }
 
-PhysBody* Physics::createBouncer(int x, int y, int *points, int size, float restitution, SDL_Texture *hit_texture)
+Bouncer* Physics::createBouncer(int x, int y, int *points, int size, float restitution, SDL_Texture *hit_texture, BOUNCER_TYPE type)
 {
 	b2BodyDef body_def;
 	body_def.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
@@ -209,18 +209,19 @@ PhysBody* Physics::createBouncer(int x, int y, int *points, int size, float rest
 	fixture_def.restitution = restitution;
 	b->CreateFixture(&fixture_def);
 
-	PhysBody *pbody = new PhysBody();
-	pbody->body = b;
-	pbody->body->SetUserData(pbody);
-	pbody->width = pbody->height = 0;
-	pbody->listener = app->scene;
-	if (hit_texture != NULL)
-		pbody->texture = hit_texture;
+	Bouncer *bouncer = new Bouncer();
+	bouncer->body = b;
+	bouncer->body->SetUserData(bouncer);
+	bouncer->width = bouncer->height = 0;
+	bouncer->listener = app->scene;
+	bouncer->texture = hit_texture;
+	bouncer->type = type;
 
-	return pbody;
+
+	return bouncer;
 }
 
-PhysBody* Physics::createLightSensor(int x, int y, int radius, SDL_Texture *light_texture)
+Sensor* Physics::createLightSensor(int x, int y, int radius, SDL_Texture *light_texture, SENSOR_TYPE type)
 {
 	b2BodyDef body_def;
 	body_def.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
@@ -237,17 +238,19 @@ PhysBody* Physics::createLightSensor(int x, int y, int radius, SDL_Texture *ligh
 	fixture_def.isSensor = true;
 	b->CreateFixture(&fixture_def);
 
-	PhysBody *pbody = new PhysBody();
-	pbody->body = b;
-	pbody->body->SetUserData(pbody);
-	pbody->width = pbody->height = radius;
-	pbody->listener = app->scene;
-	pbody->texture = light_texture;
+	Sensor *sensor = new Sensor();
+	sensor->body = b;
+	sensor->body->SetUserData(sensor);
+	sensor->width = sensor->height = radius;
+	sensor->listener = app->scene;
+	sensor->texture = light_texture;
+	sensor->type = type;
 
-	return pbody;
+
+	return sensor;
 }
 
-PhysBody* Physics::createLightSensor(int x, int y, int *points, int size, SDL_Texture *light_texture)
+Sensor* Physics::createLightSensor(int x, int y, int *points, int size, SDL_Texture *light_texture, SENSOR_TYPE type)
 {
 	b2BodyDef body_def;
 	body_def.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
@@ -261,14 +264,16 @@ PhysBody* Physics::createLightSensor(int x, int y, int *points, int size, SDL_Te
 	fixture_def.isSensor = true;
 	b->CreateFixture(&fixture_def);
 
-	PhysBody *pbody = new PhysBody();
-	pbody->body = b;
-	pbody->body->SetUserData(pbody);
-	pbody->width = pbody->height = 0;
-	pbody->listener = app->scene;
-	pbody->texture = light_texture;
+	Sensor *sensor = new Sensor();
+	sensor->body = b;
+	sensor->body->SetUserData(sensor);
+	sensor->width = sensor->height = 0;
+	sensor->listener = app->scene;
+	sensor->texture = light_texture;
+	sensor->type = type;
 
-	return pbody;
+
+	return sensor;
 }
 
 b2PolygonShape *Physics::polyFromPoints(b2PolygonShape *shape, int *points, int size)

@@ -82,33 +82,33 @@ bool Scene::start()
 
 	// Bouncers
 	// ---- 3 top-right bouncers ----
-	bouncers.add(app->physics->createBouncer(404, 118, 11, 1.2f, hit_bouncer_type1));
-	bouncers.add(app->physics->createBouncer(446, 112, 11, 1.2f, hit_bouncer_type1));
-	bouncers.add(app->physics->createBouncer(433, 154, 11, 1.2f, hit_bouncer_type1));
+	bouncers.add(app->physics->createBouncer(404, 118, 11, 1.2f, hit_bouncer_type1, ROUND_BOUNCER));
+	bouncers.add(app->physics->createBouncer(446, 112, 11, 1.2f, hit_bouncer_type1, ROUND_BOUNCER));
+	bouncers.add(app->physics->createBouncer(433, 154, 11, 1.2f, hit_bouncer_type1, ROUND_BOUNCER));
 	// ---- 4 top-right bouncers ----
-	bouncers.add(app->physics->createBouncer(286, 270, 11, 1.2f, hit_bouncer_type2));
-	bouncers.add(app->physics->createBouncer(341, 271, 11, 1.2f, hit_bouncer_type2));
-	bouncers.add(app->physics->createBouncer(290, 305, 11, 1.2f, hit_bouncer_type2));
-	bouncers.add(app->physics->createBouncer(339, 308, 11, 1.2f, hit_bouncer_type2));
+	bouncers.add(app->physics->createBouncer(286, 270, 11, 1.2f, hit_bouncer_type2, ROUND_BOUNCER));
+	bouncers.add(app->physics->createBouncer(341, 271, 11, 1.2f, hit_bouncer_type2, ROUND_BOUNCER));
+	bouncers.add(app->physics->createBouncer(290, 305, 11, 1.2f, hit_bouncer_type2, ROUND_BOUNCER));
+	bouncers.add(app->physics->createBouncer(339, 308, 11, 1.2f, hit_bouncer_type2, ROUND_BOUNCER));
 	// ---- 1 top - left bouncers----
-	bouncers.add(app->physics->createBouncer(179, 116, 11, 1.2f, hit_bouncer_type3));
+	bouncers.add(app->physics->createBouncer(179, 116, 11, 1.2f, hit_bouncer_type3, ROUND_BOUNCER));
 
 	// ---- 4 bottom bouncers ----
-	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse1, sizeof(hypotenuse1) / sizeof(int), 1.2f, NULL));
-	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse2, sizeof(hypotenuse2) / sizeof(int), 1.2f, NULL));
-	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse3, sizeof(hypotenuse3) / sizeof(int), 1.2f, NULL));
-	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse4, sizeof(hypotenuse4) / sizeof(int), 1.2f, NULL));
+	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse1, sizeof(hypotenuse1) / sizeof(int), 1.2f, NULL, LEFT_TRIANGLE_BOUNCER));
+	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse2, sizeof(hypotenuse2) / sizeof(int), 1.2f, NULL, RIGHT_TRIANGLE_BOUNCER));
+	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse3, sizeof(hypotenuse3) / sizeof(int), 1.2f, NULL, LEFT_TRIANGLE_BOUNCER));
+	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse4, sizeof(hypotenuse4) / sizeof(int), 1.2f, NULL, RIGHT_TRIANGLE_BOUNCER));
 
-	lights_sensors.add(app->physics->createLightSensor(393, 411, 9, B_star));
-	lights_sensors.add(app->physics->createLightSensor(404, 390, 9, O_star));
-	lights_sensors.add(app->physics->createLightSensor(429, 380, 9, N_star));
-	lights_sensors.add(app->physics->createLightSensor(454, 389, 9, U_star));
-	lights_sensors.add(app->physics->createLightSensor(465, 411, 9, S_star));
-	lights_sensors.add(app->physics->createLightSensor(0, 0, B, sizeof(B) / sizeof(int), B_rect));
-	lights_sensors.add(app->physics->createLightSensor(0, 0, O, sizeof(O) / sizeof(int), O_rect));
-	lights_sensors.add(app->physics->createLightSensor(0, 0, N, sizeof(N) / sizeof(int), N_rect));
-	lights_sensors.add(app->physics->createLightSensor(0, 0, U, sizeof(U) / sizeof(int), U_rect));
-	lights_sensors.add(app->physics->createLightSensor(0, 0, S, sizeof(S) / sizeof(int), S_rect));
+	lights_sensors.add(app->physics->createLightSensor(393, 411, 9, B_star, STAR));
+	lights_sensors.add(app->physics->createLightSensor(404, 390, 9, O_star, STAR));
+	lights_sensors.add(app->physics->createLightSensor(429, 380, 9, N_star, STAR));
+	lights_sensors.add(app->physics->createLightSensor(454, 389, 9, U_star, STAR));
+	lights_sensors.add(app->physics->createLightSensor(465, 411, 9, S_star, STAR));
+	lights_sensors.add(app->physics->createLightSensor(0, 0, B, sizeof(B) / sizeof(int), B_rect, RECTANGLE_B));
+	lights_sensors.add(app->physics->createLightSensor(0, 0, O, sizeof(O) / sizeof(int), O_rect, RECTANGLE_O));
+	lights_sensors.add(app->physics->createLightSensor(0, 0, N, sizeof(N) / sizeof(int), N_rect, RECTANGLE_N));
+	lights_sensors.add(app->physics->createLightSensor(0, 0, U, sizeof(U) / sizeof(int), U_rect, RECTANGLE_U));
+	lights_sensors.add(app->physics->createLightSensor(0, 0, S, sizeof(S) / sizeof(int), S_rect, RECTANGLE_S));
 	
 	propulsor = app->physics->createPropulsor(313, 484, propulsor_tex);			// Ball launcher
 	roulette = app->physics->createRoulette(313, 124, 4, 34, roulette_tex);		// Spinning element
@@ -143,8 +143,8 @@ bool Scene::update(float dt)
 	app->render->blit(pinball_level, 0, 0);
 
 	// Bouncer timer's
-	doubleNode<PhysBody*> *bouncer_item = bouncers.getFirst();
-	PhysBody *bouncer;
+	doubleNode<Bouncer*> *bouncer_item = bouncers.getFirst();
+	Bouncer *bouncer;
 	iPoint pos;
 
 	while (bouncer_item != NULL)
@@ -164,7 +164,7 @@ bool Scene::update(float dt)
 	}
 	
 	// Sensors timer's
-	doubleNode<PhysBody*> *sensor_item = lights_sensors.getFirst();
+	doubleNode<Sensor*> *sensor_item = lights_sensors.getFirst();
 
 	while (sensor_item != NULL)
 	{
@@ -262,7 +262,7 @@ bool Scene::postUpdate()
 
 void Scene::onCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	for (doubleNode<PhysBody*>* tmp = lights_sensors.getFirst(); tmp != NULL; tmp = tmp->next)
+	for (doubleNode<Sensor*>* tmp = lights_sensors.getFirst(); tmp != NULL; tmp = tmp->next)
 	{
 		if (bodyA == tmp->data)
 		{
@@ -271,7 +271,7 @@ void Scene::onCollision(PhysBody* bodyA, PhysBody* bodyB)
 		}
 	}
 
-	for (doubleNode<PhysBody*>* tmp = bouncers.getFirst(); tmp != NULL; tmp = tmp->next)
+	for (doubleNode<Bouncer*>* tmp = bouncers.getFirst(); tmp != NULL; tmp = tmp->next)
 	{
 		if (bodyA == tmp->data)
 		{
