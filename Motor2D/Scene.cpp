@@ -119,6 +119,8 @@ bool Scene::start()
 
 	// ---- Sounds ----
 	bumper_sound = app->audio->loadFx("sounds/fx/bumper.ogg");
+	bumper_sound2 = app->audio->loadFx("sounds/fx/bumper2.ogg");
+	bonus = app->audio->loadFx("sounds/fx/bonus.ogg");
 
 	return true;
 }
@@ -157,8 +159,9 @@ bool Scene::update(float dt)
 	while (bouncer_item != NULL)
 	{
 		bouncer = bouncer_item->data;
-		if (bouncer->timer.isActive() && bouncer->timer.readSec() < 0.2f)
+		if (bouncer->timer.isActive() && bouncer->timer.readSec() < 0.1f)
 		{
+			app->audio->playFx(bumper_sound2);
 			switch (bouncer->type)
 			{
 				case(ROUND_BOUNCER) : 
@@ -197,7 +200,7 @@ bool Scene::update(float dt)
 					break;
 			}
 		}
-		else if (bouncer->timer.readSec() > 0.2f)
+		else if (bouncer->timer.readSec() > 0.1f)
 		{
 			bouncer->timer.stop();
 		}
@@ -264,7 +267,7 @@ bool Scene::update(float dt)
 			}
 		}
 
-		//If we printed all stars, we reset all sensors and sum up 200 points
+		//If we printed all stars, we reset all sensors and sum up 400 points
 		if (star_count == 5)
 		{
 			doubleNode<Sensor*> *star_item = lights_sensors.getFirst();
@@ -274,7 +277,8 @@ bool Scene::update(float dt)
 					star_item->data->collided = false;
 				star_item = star_item->next;
 			}
-			app->player->score += 200;
+			app->player->score += 400;
+			app->audio->playFx(bonus);
 			star_count = 0;
 		}
 
@@ -289,6 +293,7 @@ bool Scene::update(float dt)
 				rect_item = rect_item->next;
 			}
 			app->player->score += 200;
+			app->audio->playFx(bonus);
 			rect_count = 0;
 		}
 		sensor_item = sensor_item->next;

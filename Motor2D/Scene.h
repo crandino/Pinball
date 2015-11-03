@@ -71,6 +71,8 @@ public:
 	SDL_Texture*		       S_star;
 
 	uint bumper_sound;
+	uint bumper_sound2;
+	uint bonus;
 
 	iPoint ray;
 	bool ray_on;
