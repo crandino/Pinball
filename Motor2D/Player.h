@@ -40,6 +40,8 @@ private:
 	SDL_Rect				play_button;
 	SDL_Rect				replay_button;
 
+	uint flipper_sound;
+
 	void blitScore();
 	void blitLifes();
 };

@@ -3,6 +3,8 @@
 #include "Textures.h"
 #include "Render.h"
 #include "Input.h"
+#include "Audio.h"
+#include "Scene.h"
 #include "Physics.h"
 #include "p2Log.h"
 #include "SDL\include\SDL.h"
@@ -26,6 +28,9 @@ bool Player::start()
 	gameover_tex = app->tex->loadTexture("textures/gameover_splash.png");
 	pinball_ball_tex = app->tex->loadTexture("textures/pinball_ball.png");
 	life_tex = app->tex->loadTexture("textures/life.png");
+
+	// Sounds
+	flipper_sound = app->audio->loadFx("sounds/fx/flipper_sound.ogg");
 
 	// We set variables
 	lifes = 3;
@@ -102,27 +107,42 @@ bool Player::update(float dt)
 		hi_score = score;
 		score = 0;
 	}
-
-
-	// TODO : Move to Physics class
 	
-
 	if (playing)
 	{
+		static float push_force = 0.0f;
+
+		if (app->input->getKey(SDL_SCANCODE_DOWN) == KEY_DOWN || app->input->getKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		{
+			push_force += 175.0f;
+			app->scene->propulsor->push(0, push_force);
+		}
+		else if (app->input->getKey(SDL_SCANCODE_DOWN) == KEY_UP)
+		{
+			push_force = -500.0f;
+			app->scene->propulsor->push(0, push_force);
+		}
+		else
+			push_force = 0.0f;
+
 		if (METERS_TO_PIXELS(ball->body->GetPosition().y) > 532)
 		{
 			ball->setLinearSpeed(0, 0);
 			ball->setPosition(313, 450);
-			/*ball->body->SetTransform(b2Vec2(PIXEL_TO_METERS(313), PIXEL_TO_METERS(472)), ball->body->GetAngle());
-			ball->body->SetLinearVelocity(b2Vec2(0, 0));*/
 			lifes--;
 		}
 
 		if (app->input->getKey(SDL_SCANCODE_Z) == KEY_DOWN)
+		{
 			app->physics->activateLeftFlippers();
+			app->audio->playFx(flipper_sound);
+		}			
 
 		if (app->input->getKey(SDL_SCANCODE_M) == KEY_DOWN)
+		{
 			app->physics->activateRightFlippers();
+			app->audio->playFx(flipper_sound);
+		}			
 
 		if (app->input->getKey(SDL_SCANCODE_Z) == KEY_UP)
 			app->physics->deactivateLeftFlippers();
