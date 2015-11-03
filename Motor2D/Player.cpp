@@ -106,6 +106,8 @@ bool Player::update(float dt)
 		lifes = 3;
 		hi_score = score;
 		score = 0;
+		for (doubleNode<Sensor*> *sensor_item = app->scene->lights_sensors.getFirst(); sensor_item != NULL; sensor_item = sensor_item->next)
+			sensor_item->data->collided = false;
 	}
 	
 	if (playing)
