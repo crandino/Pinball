@@ -175,6 +175,12 @@ bool Audio::playFx(unsigned int id, int repeat)
 	return ret;
 }
 
+bool Audio::stopMusic()
+{
+	Mix_HaltMusic();
+	return true;
+}
+
 void Audio::volumeUp()
 {
 	Mix_VolumeMusic(Mix_VolumeMusic(-1) + 8);

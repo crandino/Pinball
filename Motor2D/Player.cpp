@@ -31,6 +31,8 @@ bool Player::start()
 
 	// Sounds
 	flipper_sound = app->audio->loadFx("sounds/fx/flipper_sound.ogg");
+	loser_sound = app->audio->loadFx("sounds/fx/loser.ogg");
+	launcher_sound = app->audio->loadFx("sounds/fx/launcher.ogg");
 
 	// We set variables
 	lifes = 3;
@@ -81,7 +83,11 @@ bool Player::update(float dt)
 		{
 			app->input->getMousePosition(pos.x, pos.y);
 			if (isInside(pos, play_button))
+			{
 				playing = true;
+				app->audio->playMusic("sounds/music/pinball_theme.ogg");
+			}
+				
 		}	
 	}
 
@@ -95,6 +101,7 @@ bool Player::update(float dt)
 			{
 				playing = true;
 				gameover = false;
+				app->audio->playMusic("sounds/music/pinball_theme.ogg");
 			}
 		}
 	}
@@ -106,6 +113,8 @@ bool Player::update(float dt)
 		lifes = 3;
 		hi_score = score;
 		score = 0;
+		app->audio->stopMusic();
+		app->audio->playFx(loser_sound);
 		for (doubleNode<Sensor*> *sensor_item = app->scene->lights_sensors.getFirst(); sensor_item != NULL; sensor_item = sensor_item->next)
 			sensor_item->data->collided = false;
 	}
@@ -123,6 +132,7 @@ bool Player::update(float dt)
 		{
 			push_force = -500.0f;
 			app->scene->propulsor->push(0, push_force);
+			app->audio->playFx(launcher_sound);
 		}
 		else
 			push_force = 0.0f;

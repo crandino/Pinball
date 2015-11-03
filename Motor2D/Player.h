@@ -42,6 +42,8 @@ private:
 	SDL_Rect				replay_button;
 
 	uint flipper_sound;
+	uint loser_sound;
+	uint launcher_sound;
 
 	void blitScore();
 	void blitLifes();

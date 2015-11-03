@@ -37,8 +37,6 @@ bool Scene::awake(pugi::xml_node &node)
 // Called before the first frame
 bool Scene::start()
 {
-	app->audio->playMusic("sounds/music/pinball_theme.ogg");
-
 	// Loading textures...
 	left_flip_tex = app->tex->loadTexture("textures/left_flipper.png");
 	right_flip_tex = app->tex->loadTexture("textures/right_flipper.png");
@@ -119,6 +117,9 @@ bool Scene::start()
 	propulsor = app->physics->createPropulsor(313, 484, propulsor_tex);			// Ball launcher
 	roulette = app->physics->createRoulette(313, 124, 4, 34, roulette_tex);		// Spinning element
 
+	// ---- Sounds ----
+	bumper_sound = app->audio->loadFx("sounds/fx/bumper.ogg");
+
 	return true;
 }
 
@@ -164,6 +165,7 @@ bool Scene::update(float dt)
 					{
 						bouncer->getPosition(pos.x, pos.y);
 						app->render->blit(bouncer->texture, pos.x - bouncer->width, pos.y - bouncer->height);
+						app->audio->playFx(bumper_sound);
 						break;
 					}
 
