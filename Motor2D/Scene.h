@@ -4,6 +4,8 @@
 #include "Module.h"
 
 class PhysBody;
+class Sensor;
+class Bouncer;
 
 class Scene : public Module
 {
@@ -59,7 +61,6 @@ public:
 	SDL_Texture*		       U_star;
 	SDL_Texture*		       S_star;
 
-	uint bonus_fx;
 	iPoint ray;
 	bool ray_on;
 };

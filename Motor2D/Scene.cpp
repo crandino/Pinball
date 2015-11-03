@@ -202,38 +202,22 @@ bool Scene::update(float dt)
 	roulette->getPosition(pos.x, pos.y);
 	app->render->blit(roulette->texture, pos.x - 5, pos.y, NULL, 1.0f, roulette->getRotation());
 
-	// RayCast
-	if (app->input->getKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-	{
-		ray_on = !ray_on;
-		app->input->getMousePosition(ray.x, ray.y);
-	}
-
-	static float push_force = 0.0f;
-
-	if (app->input->getKey(SDL_SCANCODE_DOWN) == KEY_DOWN || app->input->getKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-	{
-		push_force += 175.0f;
-		propulsor->push(0, push_force);
-	}
-
-	else if (app->input->getKey(SDL_SCANCODE_DOWN) == KEY_UP)
-	{
-		push_force = -500.0f;
-		propulsor->push(0, push_force);
-	}
-
-	else
-		push_force = 0.0f;	
-	
-	//Mouse
+	// Ricard's code
+				
+			//Mouse
 	iPoint mouse;
 	app->input->getMousePosition(mouse.x, mouse.y);
 	int ray_hit = ray.distanceTo(mouse);
 
 	fVector normal(0.0f, 0.0f);
 
-	// ray -----------------
+			// RayCast
+	if (app->input->getKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	{
+		ray_on = !ray_on;
+		app->input->getMousePosition(ray.x, ray.y);
+	}
+
 	if (ray_on == true)
 	{
 		fVector destination(mouse.x - ray.x, mouse.y - ray.y);
