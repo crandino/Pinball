@@ -627,6 +627,10 @@ bool Physics::cleanUp()
 		b = b_next;
 	}
 
+	// Cleaning lists
+	right_joints_flippers.clear();
+	left_joints_flippers.clear();
+
 	// Delete the whole physics world!
 	delete world;
 

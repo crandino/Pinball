@@ -239,6 +239,12 @@ bool Scene::cleanUp()
 	app->tex->unloadTexture(left_flip_tex);
 	app->tex->unloadTexture(right_flip_tex);
 
+	// Cleaning lists
+	bouncers.clear();
+	lights_sensors.clear();
+	right_flippers.clear();
+	left_flippers.clear();
+
 	return true;
 }
 

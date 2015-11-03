@@ -158,6 +158,8 @@ public:
 		if (data != NULL)
 		{
 			num_elements = 0;
+			delete data;
+			data = NULL;			
 			return true;
 		}
 		return false;

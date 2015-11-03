@@ -176,6 +176,8 @@ bool Player::cleanUp()
 	app->tex->unloadTexture(pinball_ball_tex);
 	app->tex->unloadTexture(life_tex);
 
+	frames.clear();
+
 	return true;
 }
 
