@@ -67,6 +67,7 @@ bool Scene::start()
 	walls.add(app->physics->createWall(0, 0, left_pipe, sizeof(left_pipe) / sizeof(int)));
 	walls.add(app->physics->createWall(0, 0, right_pipe, sizeof(right_pipe) / sizeof(int)));
 
+
 	// Bouncers
 	// ---- 3 top-right bouncers ----
 	bouncers.add(app->physics->createBouncer(404, 118, 11, 1.2f, hit_bouncer_type1));
@@ -85,6 +86,17 @@ bool Scene::start()
 	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse2, sizeof(hypotenuse2) / sizeof(int), 1.2f, NULL));
 	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse3, sizeof(hypotenuse3) / sizeof(int), 1.2f, NULL));
 	bouncers.add(app->physics->createBouncer(0, 0, hypotenuse4, sizeof(hypotenuse4) / sizeof(int), 1.2f, NULL));
+
+	lights_sensors.add(app->physics->createLightSensor(393, 411, 9));
+	lights_sensors.add(app->physics->createLightSensor(404, 390, 9));
+	lights_sensors.add(app->physics->createLightSensor(429, 380, 9));
+	lights_sensors.add(app->physics->createLightSensor(454, 389, 9));
+	lights_sensors.add(app->physics->createLightSensor(465, 411, 9));
+	lights_sensors.add(app->physics->createLightSensor(0, 0, B, sizeof(B) / sizeof(int)));
+	lights_sensors.add(app->physics->createLightSensor(0, 0, O, sizeof(O) / sizeof(int)));
+	lights_sensors.add(app->physics->createLightSensor(0, 0, N, sizeof(N) / sizeof(int)));
+	lights_sensors.add(app->physics->createLightSensor(0, 0, U, sizeof(U) / sizeof(int)));
+	lights_sensors.add(app->physics->createLightSensor(0, 0, S, sizeof(S) / sizeof(int)));
 	
 	propulsor = app->physics->createPropulsor(313, 484, propulsor_tex);
 	roulette = app->physics->createRoulette(313, 124, 4, 34, roulette_tex);
@@ -225,6 +237,15 @@ bool Scene::postUpdate()
 
 void Scene::onCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
+	for (doubleNode<PhysBody*>* tmp = lights_sensors.getFirst(); tmp != NULL; tmp = tmp->next)
+	{
+		/*if (bodyA == tmp->data)
+			app->player->score += 10;
+
+		else if (bodyB == tmp->data)
+			app->player->score += 10;*/
+	}
+
 	for (doubleNode<PhysBody*>* tmp = bouncers.getFirst(); tmp != NULL; tmp = tmp->next)
 	{
 		if (bodyA == tmp->data)

@@ -59,6 +59,9 @@ public:
 	// CRZ 
 	PhysBody* createBall(int x, int y, int radius, SDL_Texture* texture);
 	PhysBody* createWall(int x, int y, int *points, int size);
+
+	PhysBody* createLightSensor(int x, int y, int radius);
+	PhysBody* createLightSensor(int x, int y, int *points, int size);
 	PhysBody* createBouncer(int x, int y, int radius, float restitution, SDL_Texture *hit_texture);
 	PhysBody* createBouncer(int x, int y, int *points, int size, float restitution, SDL_Texture *hit_texture);
 
