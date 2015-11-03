@@ -1,4 +1,5 @@
 #include "Module.h"
+#include "Timer.h"
 #include "Box2D/Box2D/Box2D.h"
 
 #define GRAVITY_X 0.0f
@@ -37,6 +38,7 @@ public:
 	b2Body*					 body;
 	Module*				 listener;	
 	SDL_Texture*		  texture;
+	Timer					timer;
 };
 
 // Module --------------------------------------
@@ -57,8 +59,8 @@ public:
 	// CRZ 
 	PhysBody* createBall(int x, int y, int radius, SDL_Texture* texture);
 	PhysBody* createWall(int x, int y, int *points, int size);
-	PhysBody* createBouncer(int x, int y, int radius, float density, float restitution);
-	PhysBody* createBouncer(int x, int y, int *points, int size, float density, float restitution);
+	PhysBody* createBouncer(int x, int y, int radius, float restitution, SDL_Texture *hit_texture);
+	PhysBody* createBouncer(int x, int y, int *points, int size, float restitution, SDL_Texture *hit_texture);
 
 	PhysBody* createPropulsor(int x, int y, SDL_Texture*);
 	PhysBody* createRoulette(int x, int y, int width, int height, SDL_Texture*);

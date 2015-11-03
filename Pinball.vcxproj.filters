@@ -125,7 +125,7 @@
     <ClInclude Include="Motor2D\Player.h">
       <Filter>Modules</Filter>
     </ClInclude>
-    <ClInclude Include="Timer.h">
+    <ClInclude Include="Motor2D\Timer.h">
       <Filter>Tools from Prog2</Filter>
     </ClInclude>
   </ItemGroup>

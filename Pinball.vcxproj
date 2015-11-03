@@ -109,8 +109,8 @@
     <ClInclude Include="Motor2D\Render.h" />
     <ClInclude Include="Motor2D\Scene.h" />
     <ClInclude Include="Motor2D\Textures.h" />
+    <ClInclude Include="Motor2D\Timer.h" />
     <ClInclude Include="Motor2D\Window.h" />
-    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="Game\config.xml" />

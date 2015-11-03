@@ -45,6 +45,9 @@ public:
 	SDL_Texture *pinball_level;
 	SDL_Texture *propulsor_tex;
 	SDL_Texture*	roulette_tex;
+	SDL_Texture*	hit_bouncer_type1;
+	SDL_Texture*	hit_bouncer_type2;
+	SDL_Texture*	hit_bouncer_type3;
 
 	uint bonus_fx;
 	iPoint ray;
